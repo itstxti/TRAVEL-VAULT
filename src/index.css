@@ -312,12 +312,12 @@
     position:fixed;
     right:26px;
     bottom:26px;
-    width:60px;height:60px;
+    width:40px;height:40px;
     border-radius:50%;
     background:var(--red);
     color:var(--paper);
     border:1.5px solid var(--ink);
-    font-size:28px;
+    font-size:20px;
     line-height:1;
     cursor:pointer;
     box-shadow: 0 8px 20px rgba(27,42,61,0.35);
