@@ -20,7 +20,7 @@ A React + TypeScript travel planner for saving destinations, planning trips, and
 
 — React 18 + TypeScript<br>
 — Vite<br>
-— Supabase
+— Supabase<br>
 — Google OAuth
 
 ## Getting started
