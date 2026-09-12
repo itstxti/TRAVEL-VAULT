@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Destination, Status, Photo } from './types';
 import { load, save, hydrate } from './storage';
-import { exportData, importData } from './backup';
 import { migrateIfNeeded, MigrationStatus } from './migrate';
 import { pushDestination, pushDeleteDestination, pushDeletePhoto, PushStatus } from './sync';
 import { pullChanges } from './pull';
@@ -14,7 +13,7 @@ import DestinationModal from './components/DestinationModal';
 import GalleryModal from './components/GalleryModal';
 import JournalModal from './components/JournalModal';
 import Lightbox from './components/Lightbox';
-import { IconExport, IconImport, IconLogOut, IconSpinner } from './icons';
+import { IconLogOut } from './icons';
 
 const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
 
@@ -160,51 +159,7 @@ export default function App() {
   };
 
   const importRef = useRef<HTMLInputElement>(null);
-  const [busy, setBusy] = useState<'export' | 'import' | null>(null);
 
-  const handleExport = async () => {
-    setBusy('export');
-    try {
-      const blob = await exportData(dest);
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `travel-vault-backup-${new Date().toISOString().slice(0, 10)}.zip`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      console.error('Export failed', e);
-      alert('Could not export the backup.');
-    } finally {
-      setBusy(null);
-    }
-  };
-
-  const handleImportFile = async (file: File) => {
-    if (!confirm('This will merge the backup with your current data (destinations with the same id get overwritten). Continue?')) return;
-    setBusy('import');
-    try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        throw new Error('You must be logged in to import data');
-      }
-
-      const imported = await importData(file);
-      setDest(current => {
-        const byId = new Map(current.map(d => [d.id, d]));
-        imported.forEach(d => byId.set(d.id, d));
-        return [...byId.values()];
-      });
-    } catch (e) {
-      console.error('Import failed', e);
-      alert('Could not read the backup. Is it a .zip exported from Travel Vault?');
-    } finally {
-      setBusy(null);
-    }
-  };
 
   // Gallery/notes are looked up by id from `dest` on every render, so the
   // modals always reflect the latest state (no stale copies).
@@ -225,31 +180,6 @@ export default function App() {
         </div>
         <div className="header-actions">
           <div className="icon-toolbar">
-            <button
-              className="icon-btn"
-              aria-label={busy === 'export' ? 'Exporting backup' : 'Export backup'}
-              data-tooltip={busy === 'export' ? 'Exporting…' : 'Export backup'}
-              disabled={busy !== null}
-              onClick={handleExport}
-            >
-              {busy === 'export' ? <IconSpinner size={16} /> : <IconExport size={16} />}
-            </button>
-            <button
-              className="icon-btn"
-              aria-label={busy === 'import' ? 'Importing backup' : 'Import backup'}
-              data-tooltip={busy === 'import' ? 'Importing…' : 'Import backup'}
-              disabled={busy !== null}
-              onClick={() => importRef.current?.click()}
-            >
-              {busy === 'import' ? <IconSpinner size={16} /> : <IconImport size={16} />}
-            </button>
-            <input
-              ref={importRef}
-              type="file"
-              accept=".zip"
-              hidden
-              onChange={e => { const f = e.target.files?.[0]; if (f) handleImportFile(f); e.target.value = ''; }}
-            />
             <button
               className="icon-btn"
               aria-label="Sign out"

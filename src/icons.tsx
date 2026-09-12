@@ -74,15 +74,6 @@ export const IconLogOut = ({ size = 16, className }: IconProps) => (
   </svg>
 );
 
-export const IconExport = ({ size = 16, className }: IconProps) => (
-  <svg width={size} height={size} viewBox="0 0 1920 1920" fill="currentColor" className={className} aria-hidden="true">
-    <path
-      fillRule="evenodd"
-      d="m0 1016.081 409.186 409.073 79.85-79.736-272.867-272.979h1136.415V959.611H216.169l272.866-272.866-79.85-79.85L0 1016.082ZM1465.592 305.32l315.445 315.445h-315.445V305.32Zm402.184 242.372-329.224-329.11C1507.042 187.07 1463.334 169 1418.835 169h-743.83v677.647h112.94V281.941h564.706v451.765h451.765v903.53H787.946V1185.47H675.003v564.705h1242.353V667.522c0-44.498-18.07-88.207-49.581-119.83Z"
-    />
-  </svg>
-);
-
 export const IconEdit = ({ size = 16, className }: IconProps) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
     <path
@@ -95,15 +86,6 @@ export const IconEdit = ({ size = 16, className }: IconProps) => (
   </svg>
 );
 
-export const IconImport = ({ size = 16, className }: IconProps) => (
-  <svg width={size} height={size} viewBox="0 0 1920 1920" fill="currentColor" className={className} aria-hidden="true">
-    <path
-      fillRule="evenodd"
-      d="m807.186 686.592 272.864 272.864H0v112.94h1080.05l-272.864 272.978 79.736 79.849 409.296-409.183-409.296-409.184-79.736 79.736ZM1870.419 434.69l-329.221-329.11C1509.688 74.07 1465.979 56 1421.48 56H451.773v730.612h112.94V168.941h790.584v451.762h451.762v1129.405H564.714v-508.233h-112.94v621.173H1920V554.52c0-45.176-17.619-87.754-49.58-119.83Zm-402.181-242.37 315.443 315.442h-315.443V192.319Z"
-    />
-  </svg>
-);
-
 export const IconStampEmpty = ({ size = 30, className }: IconProps) => (
   <svg {...base(size)} className={className} aria-hidden="true">
     <rect x="3" y="6" width="18" height="13" rx="1.5" strokeDasharray="2.4 2.4" />
@@ -111,11 +93,4 @@ export const IconStampEmpty = ({ size = 30, className }: IconProps) => (
   </svg>
 );
 
-export const IconSpinner = ({ size = 13, className }: IconProps) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" className={className} aria-hidden="true">
-    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2.5" opacity="0.25" />
-    <path d="M21 12a9 9 0 0 0-9-9" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-      <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite" />
-    </path>
-  </svg>
-);
+
