@@ -460,6 +460,10 @@
   .search-results button:hover, .search-results button:focus-visible{ background:var(--paper-dark); color:var(--ink); }
 
   .hint{ font-size:11.5px; color:var(--muted); margin-top:6px; transition:color .15s ease; }
+  .hint button{
+    background:none; border:none; padding:0; font:inherit; color:var(--teal-dark);
+    text-decoration:underline; cursor:pointer;
+  }
   .hint.hint-searching{ color:var(--ink-soft); }
   .hint.hint-found{ color:var(--teal-dark); }
   .hint.hint-notfound{ color:var(--red); }
