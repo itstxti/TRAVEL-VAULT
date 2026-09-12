@@ -16,13 +16,13 @@ A React + TypeScript travel planner for saving destinations, planning trips, and
 | **Gallery**         | Attach photos to destinations and browse them in a lightbox                                  |
 | **Statistics**      | View live totals for destinations, visited and planned trips, and countries visited          |
 
+## Tech Stack
 
-## Stack
-
-— React 18 + TypeScript<br>
-— Vite<br>
-— Supabase<br>
-— Google OAuth + email/password
+— **Frontend:** React, TypeScript, Vite<br>
+— **Backend & Database:** Supabase, PostgreSQL<br>
+— **Authentication:** Supabase Auth, Google OAuth<br>
+— **Maps:** Leaflet, React Leaflet<br>
+— **Deployment:** Vercel
 
 ## License
 
