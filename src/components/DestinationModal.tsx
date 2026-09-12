@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Destination, Status } from '../types';
 import { COUNTRIES, countryData } from '../data';
 import { id, debounce } from '../utils';
-import { searchPlace, GeocodeResult } from '../geocode';
+import { searchPlace, reverseGeocode, GeocodeResult } from '../geocode';
 import { IconSearch, IconSpinner, IconClose } from '../icons';
 import LocationPicker from './LocationPicker';
 
@@ -62,48 +62,26 @@ export default function DestinationModal({
     if (c) { setLat(c[2]); setLng(c[3]); setZoom(5); }
   };
 
-  const handleLocationChange = async (newLat: number, newLng: number) => {
+  const reverseAbortRef = useRef<AbortController | null>(null);
+  const runReverse = useRef(
+    debounce(async (revLat: number, revLng: number) => {
+      reverseAbortRef.current?.abort();
+      const controller = new AbortController();
+      reverseAbortRef.current = controller;
+      try {
+        const { city, country: revCountry } = await reverseGeocode(revLat, revLng, controller.signal);
+        if (city) setName(city);
+        if (revCountry) setCountry(revCountry);
+      } catch (e) {
+        if ((e as any)?.name !== 'AbortError') console.error('Error obtaining location:', e);
+      }
+    }, 400)
+  ).current;
+
+  const handleLocationChange = (newLat: number, newLng: number) => {
     setLat(newLat);
     setLng(newLng);
-
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?lat=${newLat}&lon=${newLng}&format=json&addressdetails=1`,
-        {
-          headers: {
-            'Accept-Language': 'en',
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Reverse geocoding failed');
-      }
-
-      const data = await response.json();
-
-      const address = data.address || {};
-
-      const city =
-        address.city ||
-        address.town ||
-        address.village ||
-        address.municipality ||
-        address.county ||
-        '';
-
-      const country = address.country || '';
-
-      if (city) {
-        setName(city);
-      }
-
-      if (country) {
-        setCountry(country);
-      }
-    } catch (error) {
-      console.error('Error obtaining location:', error);
-    }
+    runReverse(newLat, newLng);
   };
 
   return (

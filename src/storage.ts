@@ -89,7 +89,8 @@ export function save(destinations: Destination[]) {
       photos: photos.map(({ dataUrl, ...meta }) => meta),
     }));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(compact));
-    destinations.forEach(d => d.photos.forEach(putPhoto));
+    // Photos are persisted individually where they're created (GalleryModal.add)
+    // and removed where they're deleted (deletePhoto), so no bulk re-put here.
   } catch (e) {
     console.warn('Could not save trip data', e);
   }
