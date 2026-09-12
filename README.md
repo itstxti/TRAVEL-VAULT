@@ -20,10 +20,8 @@ A React + TypeScript travel planner for saving destinations, planning trips, and
 
 — React 18 + TypeScript<br>
 — Vite<br>
-— Leaflet / react-leaflet (map rendering)<br>
-— OpenStreetMap Nominatim (free, no-API-key geocoding)<br>
-— Browser localStorage + IndexedDB (all data stays on-device)
-
+— Supabase<br>
+— Google OAuth
 
 ## Getting started
  
@@ -36,8 +34,7 @@ npm run dev
 
 ## Known limitations
 
-— **No sync.** Data lives in one browser on one device; there's no account system or cloud backup.<br>
-— **No export/import yet.** There's currently no way to back up or transfer your data outside the browser.<br>
+— **Google-only auth.** There's no email/password or other OAuth provider yet.<<br>
 — **Geocoding depends on Nominatim's public API**, which is rate-limited and requires an internet connection to search for new places.
 
 ## License
