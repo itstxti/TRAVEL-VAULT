@@ -509,6 +509,7 @@ main {
 .card-actions .mini-btn,
 .card-actions select.status-select {
   width: 100%;
+  justify-content: center;
 }
 
 .card-actions select.status-select {
