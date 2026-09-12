@@ -83,6 +83,18 @@ export const IconExport = ({ size = 16, className }: IconProps) => (
   </svg>
 );
 
+export const IconEdit = ({ size = 16, className }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+    <path
+      d="M14 6L8 12V16H12L18 10M14 6L17 3L21 7L18 10M14 6L18 10M10 4L4 4L4 20L20 20V14"
+      stroke="currentColor"
+      strokeWidth="0.504"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const IconImport = ({ size = 16, className }: IconProps) => (
   <svg width={size} height={size} viewBox="0 0 1920 1920" fill="currentColor" className={className} aria-hidden="true">
     <path

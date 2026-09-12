@@ -1,7 +1,7 @@
 import React from 'react';
 import { Destination, Status } from '../types';
 import { formatDate, tripDays } from '../utils';
-import { IconCalendar, IconCamera, IconNotebook } from '../icons';
+import { IconCalendar, IconCamera, IconNotebook, IconEdit } from '../icons';
 
 const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
 
@@ -55,7 +55,7 @@ export default function Card({
         <button className="mini-btn" onClick={() => openNotes(d)}>
           <IconNotebook /> Notes {noteCount ? `(${noteCount})` : ''}
         </button>
-        <button className="mini-btn primary" onClick={() => openEdit(d)}>Edit</button>
+        <button className="mini-btn primary" onClick={() => openEdit(d)}> <IconEdit /> Edit</button>
         <button className="mini-btn danger" onClick={() => remove(d)}>Delete</button>
       </div>
     </div>
