@@ -66,6 +66,22 @@ export const IconClose = ({ size = 15, className }: IconProps) => (
   </svg>
 );
 
+export const IconDownload = ({ size = 16, className }: IconProps) => (
+  <svg {...base(size)} className={className} aria-hidden="true">
+    <path d="M12 3.5v11" />
+    <path d="M7.2 10.8 12 15.6l4.8-4.8" />
+    <path d="M4 18.5h16" />
+  </svg>
+);
+
+export const IconLogOut = ({ size = 16, className }: IconProps) => (
+  <svg {...base(size)} className={className} aria-hidden="true">
+    <path d="M9.5 4H6.2A2.2 2.2 0 0 0 4 6.2v11.6A2.2 2.2 0 0 0 6.2 20H9.5" />
+    <path d="M14.5 8l4 4-4 4" />
+    <path d="M18 12H9" />
+  </svg>
+);
+
 export const IconStampEmpty = ({ size = 30, className }: IconProps) => (
   <svg {...base(size)} className={className} aria-hidden="true">
     <rect x="3" y="6" width="18" height="13" rx="1.5" strokeDasharray="2.4 2.4" />

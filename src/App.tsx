@@ -14,6 +14,7 @@ import DestinationModal from './components/DestinationModal';
 import GalleryModal from './components/GalleryModal';
 import JournalModal from './components/JournalModal';
 import Lightbox from './components/Lightbox';
+import { IconDownload, IconUpload, IconLogOut, IconSpinner } from './icons';
 
 const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
 
@@ -215,6 +216,41 @@ export default function App() {
           </p>
         </div>
         <div className="header-actions">
+          <div className="icon-toolbar">
+            <button
+              className="icon-btn"
+              aria-label={busy === 'export' ? 'Exporting backup' : 'Export backup'}
+              data-tooltip={busy === 'export' ? 'Exporting…' : 'Export backup'}
+              disabled={busy !== null}
+              onClick={handleExport}
+            >
+              {busy === 'export' ? <IconSpinner size={16} /> : <IconDownload size={16} />}
+            </button>
+            <button
+              className="icon-btn"
+              aria-label={busy === 'import' ? 'Importing backup' : 'Import backup'}
+              data-tooltip={busy === 'import' ? 'Importing…' : 'Import backup'}
+              disabled={busy !== null}
+              onClick={() => importRef.current?.click()}
+            >
+              {busy === 'import' ? <IconSpinner size={16} /> : <IconUpload size={16} />}
+            </button>
+            <input
+              ref={importRef}
+              type="file"
+              accept=".zip"
+              hidden
+              onChange={e => { const f = e.target.files?.[0]; if (f) handleImportFile(f); e.target.value = ''; }}
+            />
+            <button
+              className="icon-btn"
+              aria-label="Sign out"
+              data-tooltip="Sign out"
+              onClick={() => supabase.auth.signOut()}
+            >
+              <IconLogOut size={16} />
+            </button>
+          </div>
           <div className="stats-row">
             {([
               ['Destinations', stats.total],
@@ -226,20 +262,6 @@ export default function App() {
             ))}
           </div>
           <div className="backup-row">
-            <button className="mini-btn" disabled={busy !== null} onClick={handleExport}>
-              {busy === 'export' ? 'Exporting…' : 'Export backup'}
-            </button>
-            <button className="mini-btn" disabled={busy !== null} onClick={() => importRef.current?.click()}>
-              {busy === 'import' ? 'Importing…' : 'Import backup'}
-            </button>
-            <input
-              ref={importRef}
-              type="file"
-              accept=".zip"
-              hidden
-              onChange={e => { const f = e.target.files?.[0]; if (f) handleImportFile(f); e.target.value = ''; }}
-            />
-            <button className="mini-btn" onClick={() => supabase.auth.signOut()}>Sign out</button>
             {migration === 'running' && <span className="sync-status">Uploading your vault to the cloud…</span>}
             {migration === 'done' && <span className="sync-status">Initial cloud copy ✓</span>}
             {migration === 'error' && (
