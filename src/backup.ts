@@ -14,8 +14,7 @@ const mimeFromExt: Record<string, string> = {
 };
 
 // Bundles destinations + full-resolution photos into a single .zip:
-// a data.json manifest plus one image file per photo (not base64-in-JSON,
-// which would bloat the export ~33% for no reason).
+// a data.json manifest plus one image file per photo.
 export async function exportData(
   destinations: Destination[]
 ): Promise<Blob> {
@@ -24,23 +23,26 @@ export async function exportData(
 
   const manifest = await Promise.all(
     destinations.map(async d => ({
-      // Export only user data — user_id is intentionally excluded
-      // so backups are not tied to the original account.
+      // user_id is intentionally excluded so the backup
+      // is portable between different accounts.
       id: d.id,
       name: d.name,
       country: d.country,
-      country_code: d.country_code,
       type: d.type,
       status: d.status,
-      companions: d.companions,
-      trip_start: d.trip_start,
-      trip_end: d.trip_end,
+      companions: Array.isArray(d.companions) ? d.companions : [],
+      tripStart: d.tripStart,
+      tripEnd: d.tripEnd,
       lat: d.lat,
       lng: d.lng,
 
+      // Always export journal as an array.
+      journal: Array.isArray(d.journal) ? d.journal : [],
+
       photos: await Promise.all(
-        d.photos.map(async p => {
+        (d.photos || []).map(async p => {
           const dataUrl = p.dataUrl || (await getPhoto(p.id)) || '';
+
           const match = /^data:(.+);base64,(.*)$/.exec(dataUrl);
 
           if (!match) {
@@ -54,7 +56,9 @@ export async function exportData(
           const [, mime, base64] = match;
           const filename = `${p.id}.${extFromMime(mime)}`;
 
-          photosFolder.file(filename, base64, { base64: true });
+          photosFolder.file(filename, base64, {
+            base64: true,
+          });
 
           return {
             id: p.id,
@@ -79,20 +83,19 @@ export async function exportData(
     )
   );
 
-  return zip.generateAsync({ type: 'blob' });
+  return zip.generateAsync({
+    type: 'blob',
+  });
 }
 
-// Restores a .zip produced by exportData(): parses the manifest, decodes each
-// photo back into a data URL, writes it to IndexedDB, and returns the
-// destinations array ready to drop into app state.
-//
-// userId is supplied by the currently authenticated Supabase user.
-// The user_id from the backup is never trusted or restored.
+// Restores a .zip produced by exportData().
+// The backup does not contain user_id because it should be
+// portable between different authenticated accounts.
 export async function importData(
-  file: File | Blob,
-  userId: string
+  file: File | Blob
 ): Promise<Destination[]> {
   const zip = await JSZip.loadAsync(file);
+
   const manifestFile = zip.file('data.json');
 
   if (!manifestFile) {
@@ -101,44 +104,70 @@ export async function importData(
 
   const raw = JSON.parse(await manifestFile.async('string'));
 
+  if (!Array.isArray(raw.destinations)) {
+    throw new Error('Invalid backup file: destinations must be an array');
+  }
+
   return Promise.all(
-    (raw.destinations || []).map(async (d: any) => {
+    raw.destinations.map(async (d: any) => {
       const photos = await Promise.all(
-        (d.photos || []).map(async (p: any) => {
-          let dataUrl = '';
+        (Array.isArray(d.photos) ? d.photos : []).map(
+          async (p: any) => {
+            let dataUrl = '';
 
-          if (p.file) {
-            const entry = zip.file(`photos/${p.file}`);
+            if (p.file) {
+              const entry = zip.file(`photos/${p.file}`);
 
-            if (entry) {
-              const base64 = await entry.async('base64');
-              const ext = (p.file.split('.').pop() || 'jpg').toLowerCase();
+              if (entry) {
+                const base64 = await entry.async('base64');
 
-              dataUrl = `data:${
-                mimeFromExt[ext] || 'image/jpeg'
-              };base64,${base64}`;
+                const ext = (
+                  p.file.split('.').pop() || 'jpg'
+                ).toLowerCase();
+
+                dataUrl = `data:${
+                  mimeFromExt[ext] || 'image/jpeg'
+                };base64,${base64}`;
+              }
             }
-          }
 
-          if (dataUrl) {
-            await putPhoto({
+            if (dataUrl) {
+              await putPhoto({
+                id: p.id,
+                dataUrl,
+                caption: p.caption || '',
+              });
+            }
+
+            return {
               id: p.id,
+              caption: p.caption || '',
               dataUrl,
-              caption: p.caption,
-            });
+            };
           }
-
-          return {
-            id: p.id,
-            caption: p.caption,
-            dataUrl,
-          };
-        })
+        )
       );
 
       return {
-        ...d,
-        user_id: userId,
+        id: d.id,
+        name: d.name || '',
+        country: d.country || '',
+        type: d.type,
+        status: d.status,
+        companions: Array.isArray(d.companions)
+          ? d.companions
+          : [],
+        tripStart: d.tripStart,
+        tripEnd: d.tripEnd,
+        lat: typeof d.lat === 'number' ? d.lat : 0,
+        lng: typeof d.lng === 'number' ? d.lng : 0,
+
+        // Important: prevents errors such as
+        // "Cannot read properties of undefined (reading 'length')".
+        journal: Array.isArray(d.journal)
+          ? d.journal
+          : [],
+
         photos,
       };
     })
