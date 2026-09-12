@@ -147,13 +147,6 @@ export default function DestinationModal({
             </div>
           </div>
 
-          <div className="field">
-            <label>Location on the map</label>
-            <LocationPicker lat={lat} lng={lng} zoom={zoom} onChange={handleLocationChange} />
-            <div className="coord-readout">
-              <span>{lat.toFixed(4)}, {lng.toFixed(4)}</span>
-            </div>
-          </div>
 
           <div className="modal-footer">
             <button className="btn btn-ghost" onClick={close}>Cancel</button>
