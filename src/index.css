@@ -241,8 +241,8 @@ nav.tabs {
 }
 
 .tab-btn:hover {
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--teal-dark);
+  color: var(--card);
 }
 
 .tab-btn.active {
@@ -283,8 +283,8 @@ nav.tabs {
 }
 
 .filter-chip:hover {
-  background: var(--line);
-  color: var(--ink);
+  background: var(--teal-dark);
+  color: var(--card);
 }
 
 
