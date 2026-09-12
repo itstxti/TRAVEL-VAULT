@@ -50,10 +50,10 @@ export default function LocationPicker({
         <Recenter lat={lat} lng={lng} zoom={zoom} />
       </MapContainer>
       <div className="bottom-bar-map">
+        <p className="picker-hint">Click the map or drag the pin to set the exact spot.</p>
         <div className="coord-readout">
           <span>{lat.toFixed(4)}, {lng.toFixed(4)}</span>
         </div>
-        <p className="picker-hint">Click the map or drag the pin to set the exact spot.</p>
       </div>
     </div>
 
