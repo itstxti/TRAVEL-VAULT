@@ -19,6 +19,7 @@ A React + TypeScript travel planner for saving destinations, planning trips, and
 ## Tech Stack
 
 — **Frontend:** React, TypeScript, Vite<br>
+— **Build Tool:** Vite<br>
 — **Backend & Database:** Supabase, PostgreSQL<br>
 — **Authentication:** Supabase Auth, Google OAuth<br>
 — **Maps:** Leaflet, React Leaflet<br>
