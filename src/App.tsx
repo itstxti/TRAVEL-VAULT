@@ -184,7 +184,15 @@ export default function App() {
     if (!confirm('This will merge the backup with your current data (destinations with the same id get overwritten). Continue?')) return;
     setBusy('import');
     try {
-      const imported = await importData(file);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        throw new Error('You must be logged in to import data');
+      }
+
+      const imported = await importData(file, user.id);
       setDest(current => {
         const byId = new Map(current.map(d => [d.id, d]));
         imported.forEach(d => byId.set(d.id, d));
