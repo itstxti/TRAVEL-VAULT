@@ -147,6 +147,10 @@ export default function DestinationModal({
             </div>
           </div>
 
+          <div className="field">
+            <label>Location on the map</label>
+            <LocationPicker lat={lat} lng={lng} zoom={zoom} onChange={handleLocationChange} />
+          </div>
 
           <div className="modal-footer">
             <button className="btn btn-ghost" onClick={close}>Cancel</button>
