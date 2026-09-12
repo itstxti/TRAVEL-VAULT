@@ -21,7 +21,7 @@ A React + TypeScript travel planner for saving destinations, planning trips, and
 — React 18 + TypeScript<br>
 — Vite<br>
 — Supabase<br>
-— Google OAuth
+— Google OAuth + email/password
 
 ## Getting started
  
@@ -32,9 +32,11 @@ npm install
 npm run dev
 ```
 
+Email/password login uses Supabase's built-in Email provider — it's on by default, but double-check under Authentication → Providers in your Supabase project. If "Confirm email" is enabled there, new sign-ups won't get a session until they click the confirmation link.
+
 ## Known limitations
 
-— **Google-only auth.** There's no email/password or other OAuth provider yet.<<br>
+— **No other OAuth providers.** Only Google is wired up; adding GitHub/Apple/etc. would follow the same `signInWithOAuth` pattern.<br>
 — **Geocoding depends on Nominatim's public API**, which is rate-limited and requires an internet connection to search for new places.
 
 ## License
