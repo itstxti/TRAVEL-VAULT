@@ -3,8 +3,9 @@ import { Destination } from './types';
 
 const SYNCED_PHOTOS_KEY_PREFIX = 'travel-vault-synced-photo-ids';
 
-// También por cuenta: si no, subir una foto con la cuenta 1 hace que la
-// cuenta 2 la crea "ya subida" y nunca la sube a su propio storage.
+// Also per account: otherwise uploading a photo with account 1 makes
+// account 2 think it's "already uploaded" and it never gets uploaded to
+// account 2's own storage.
 function getSyncedPhotoIds(userId: string): Set<string> {
   try {
     return new Set(JSON.parse(localStorage.getItem(`${SYNCED_PHOTOS_KEY_PREFIX}:${userId}`) || '[]'));
@@ -29,10 +30,11 @@ function base64ToBytes(base64: string): Uint8Array {
 
 export type PushStatus = 'idle' | 'pushing' | 'synced' | 'error';
 
-// Sube UN destino (y sus notas y fotos) a Supabase. Solo sube el binario de
-// una foto si no está ya marcada como subida — igual que se arregló en local,
-// no queremos volver a subir megabytes de foto sin cambios cada vez que se
-// edita otra cosa del mismo destino.
+// Uploads ONE destination (and its notes and photos) to Supabase. Only
+// uploads a photo's binary if it isn't already marked as uploaded — same
+// fix as on the local side, we don't want to re-upload megabytes of an
+// unchanged photo every time something else about the same destination
+// gets edited.
 export async function pushDestination(d: Destination, userId: string): Promise<void> {
   const { error: destErr } = await supabase.from('destinations').upsert({
     id: d.id,
@@ -65,7 +67,7 @@ export async function pushDestination(d: Destination, userId: string): Promise<v
   const synced = getSyncedPhotoIds(userId);
   for (const p of d.photos) {
     const match = /^data:(.+);base64,(.*)$/.exec(p.dataUrl || '');
-    if (!match) continue; // sin datos en memoria todavía; se subirá en el próximo push
+    if (!match) continue; // no data in memory yet; will be uploaded on the next push
     const [, mime, base64] = match;
     const path = `${userId}/${p.id}.${extFromMime(mime)}`;
 
@@ -77,8 +79,9 @@ export async function pushDestination(d: Destination, userId: string): Promise<v
       markPhotoSynced(userId, p.id);
     }
 
-    // El caption puede cambiar aunque el binario ya esté subido, así que la
-    // fila se actualiza siempre; lo caro (el binario) es lo que se salta.
+    // The caption can change even if the binary is already uploaded, so
+    // the row is always updated; it's the expensive part (the binary)
+    // that's skipped.
     const { error: pErr } = await supabase.from('photos').upsert({
       id: p.id,
       destination_id: d.id,

@@ -5,9 +5,9 @@ import { supabase } from '../supabaseClient';
 export function useSession() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  // Cuando alguien abre el enlace de "recuperar contraseña", Supabase crea
-  // una sesión temporal y dispara este evento — hay que interceptarla y
-  // pedir la contraseña nueva en vez de dejar pasar directo a la app.
+  // When someone opens the "reset password" email link, Supabase creates a
+  // temporary session and fires this event — we need to intercept it and
+  // ask for the new password instead of letting them straight into the app.
   const [recovery, setRecovery] = useState(false);
 
   useEffect(() => {
@@ -26,11 +26,11 @@ export function useSession() {
 }
 
 const PASSWORD_MIN_LENGTH = 8;
-// Debe coincidir con "Password requirements" en Supabase → Authentication →
-// Policies: minúscula, mayúscula, dígito y símbolo, para no dejar que el
-// usuario envíe el formulario y se entere del error recién en el servidor.
+// Must match "Password requirements" in Supabase → Authentication →
+// Policies: lowercase, uppercase, digit and symbol — so the user doesn't
+// submit the form and only find out about the error from the server.
 const PASSWORD_REQUIREMENTS_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/;
-const PASSWORD_HINT = `Mínimo ${PASSWORD_MIN_LENGTH} caracteres, con mayúsculas, minúsculas, números y símbolos.`;
+const PASSWORD_HINT = `At least ${PASSWORD_MIN_LENGTH} characters, with uppercase, lowercase, numbers and symbols.`;
 
 function validatePassword(password: string): string | null {
   if (password.length < PASSWORD_MIN_LENGTH) return PASSWORD_HINT;
@@ -55,7 +55,7 @@ function GoogleButton() {
         })
       }
     >
-      Continuar con Google
+      Continue with Google
     </button>
   );
 }
@@ -77,7 +77,7 @@ function ForgotPasswordForm({ onBack }: { onBack: () => void }) {
       if (error) throw error;
       setSent(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Algo ha ido mal. Inténtalo de nuevo.');
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
       setBusy(false);
     }
@@ -86,7 +86,7 @@ function ForgotPasswordForm({ onBack }: { onBack: () => void }) {
   if (sent) {
     return (
       <p className="auth-toggle" style={{ marginTop: 0 }}>
-        Si <strong>{email}</strong> tiene una cuenta, te hemos enviado un enlace para elegir una contraseña nueva.
+        If <strong>{email}</strong> has an account, we've sent a link to pick a new password.
       </p>
     );
   }
@@ -106,10 +106,10 @@ function ForgotPasswordForm({ onBack }: { onBack: () => void }) {
         />
       </div>
       <button className="btn btn-primary" style={{ width: '100%' }} type="submit" disabled={busy}>
-        {busy ? 'Un momento…' : 'Enviar enlace de recuperación'}
+        {busy ? 'One moment…' : 'Send reset link'}
       </button>
       <p className="auth-toggle">
-        <button type="button" onClick={onBack}>Volver a iniciar sesión</button>
+        <button type="button" onClick={onBack}>Back to sign in</button>
       </p>
     </form>
   );
@@ -142,13 +142,13 @@ function EmailPasswordForm({ mode }: { mode: Mode }) {
           options: { emailRedirectTo: window.location.origin },
         });
         if (error) throw error;
-        // Si el proyecto de Supabase exige confirmar el email, signUp no
-        // devuelve sesión todavía: hay que avisar en vez de dejar el
-        // formulario como si no hubiera pasado nada.
+        // If the Supabase project requires email confirmation, signUp
+        // won't return a session yet — tell the user instead of leaving
+        // the form looking like nothing happened.
         if (data.user && !data.session) setConfirmSent(true);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Algo ha ido mal. Inténtalo de nuevo.');
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
       setBusy(false);
     }
@@ -159,7 +159,7 @@ function EmailPasswordForm({ mode }: { mode: Mode }) {
   if (confirmSent) {
     return (
       <p className="auth-toggle" style={{ marginTop: 0 }}>
-        Te hemos enviado un enlace de confirmación a <strong>{email}</strong>. Ábrelo para activar tu cuenta.
+        We've sent a confirmation link to <strong>{email}</strong>. Open it to activate your account.
       </p>
     );
   }
@@ -179,7 +179,7 @@ function EmailPasswordForm({ mode }: { mode: Mode }) {
         />
       </div>
       <div className="field">
-        <label htmlFor="auth-password">Contraseña</label>
+        <label htmlFor="auth-password">Password</label>
         <input
           id="auth-password"
           type="password"
@@ -192,12 +192,12 @@ function EmailPasswordForm({ mode }: { mode: Mode }) {
         {mode === 'signup' && <p className="hint">{PASSWORD_HINT}</p>}
         {mode === 'signin' && (
           <p className="hint">
-            <button type="button" onClick={() => setForgot(true)}>¿Olvidaste tu contraseña?</button>
+            <button type="button" onClick={() => setForgot(true)}>Forgot your password?</button>
           </p>
         )}
       </div>
       <button className="btn btn-primary" style={{ width: '100%' }} type="submit" disabled={busy}>
-        {busy ? 'Un momento…' : mode === 'signin' ? 'Iniciar sesión' : 'Crear cuenta'}
+        {busy ? 'One moment…' : mode === 'signin' ? 'Sign in' : 'Create account'}
       </button>
     </form>
   );
@@ -219,7 +219,7 @@ function ResetPasswordScreen({ onDone }: { onDone: () => void }) {
       if (error) throw error;
       onDone();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Algo ha ido mal. Inténtalo de nuevo.');
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
     } finally {
       setBusy(false);
     }
@@ -235,13 +235,13 @@ function ResetPasswordScreen({ onDone }: { onDone: () => void }) {
     >
       <div>
         <p className="brand-eyebrow">Personal travel log</p>
-        <h1 className="brand-title">Elige una <em>contraseña nueva</em></h1>
+        <h1 className="brand-title">Choose a <em>new password</em></h1>
       </div>
       <div className="auth-card">
         <form onSubmit={submit}>
           {error && <p className="auth-error">{error}</p>}
           <div className="field">
-            <label htmlFor="auth-new-password">Contraseña nueva</label>
+            <label htmlFor="auth-new-password">New password</label>
             <input
               id="auth-new-password"
               type="password"
@@ -254,7 +254,7 @@ function ResetPasswordScreen({ onDone }: { onDone: () => void }) {
             <p className="hint">{PASSWORD_HINT}</p>
           </div>
           <button className="btn btn-primary" style={{ width: '100%' }} type="submit" disabled={busy}>
-            {busy ? 'Un momento…' : 'Guardar contraseña'}
+            {busy ? 'One moment…' : 'Save password'}
           </button>
         </form>
       </div>
@@ -295,13 +295,13 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
 
         <div className="auth-card">
           <GoogleButton />
-          <div className="auth-divider">o con email</div>
+          <div className="auth-divider">or with email</div>
           <EmailPasswordForm key={mode} mode={mode} />
           <p className="auth-toggle">
             {mode === 'signin' ? (
-              <>¿No tienes cuenta? <button type="button" onClick={() => setMode('signup')}>Regístrate</button></>
+              <>Don't have an account? <button type="button" onClick={() => setMode('signup')}>Sign up</button></>
             ) : (
-              <>¿Ya tienes cuenta? <button type="button" onClick={() => setMode('signin')}>Inicia sesión</button></>
+              <>Already have an account? <button type="button" onClick={() => setMode('signin')}>Sign in</button></>
             )}
           </p>
         </div>

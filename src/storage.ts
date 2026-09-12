@@ -4,9 +4,9 @@ const STORAGE_KEY_PREFIX = 'my-travels-destinations';
 const PHOTO_DB = 'my-travels-photos';
 const PHOTO_STORE = 'photos';
 
-// Cada cuenta tiene su propia clave de localStorage. Sin esto, dos cuentas
-// de Google abiertas en el mismo navegador (mismo origen) comparten
-// literalmente el mismo localStorage y se pisan los datos entre sí.
+// Each account gets its own localStorage key. Without this, two accounts
+// signed in on the same browser (same origin) literally share the same
+// localStorage and overwrite each other's data.
 function storageKey(userId: string): string {
   return `${STORAGE_KEY_PREFIX}:${userId}`;
 }

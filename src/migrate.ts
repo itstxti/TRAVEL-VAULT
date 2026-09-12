@@ -29,8 +29,9 @@ export async function migrateIfNeeded(
   const user = userData?.user;
   if (userErr || !user) return;
 
-  // Por cuenta: si no, la cuenta 2 hereda el "ya migrado" de la cuenta 1 y
-  // nunca sube su propio vault local la primera vez que inicia sesión.
+  // Per account: otherwise account 2 inherits account 1's "already
+  // migrated" flag and never uploads its own local vault the first time
+  // it signs in.
   const migratedKey = `${MIGRATED_KEY_PREFIX}:${user.id}`;
   if (localStorage.getItem(migratedKey) === 'true') return;
 
@@ -40,19 +41,19 @@ export async function migrateIfNeeded(
     .eq('user_id', user.id);
 
   if (countError) {
-    console.error('No se pudo comprobar el estado del servidor antes de migrar', countError);
+    console.error('Could not check the server state before migrating', countError);
     return;
   }
   if ((count ?? 0) > 0) {
-    // El servidor ya tiene datos de este usuario (otro dispositivo, o una
-    // migración anterior) — no hay nada que subir, y esto sí es definitivo.
+    // The server already has data for this user (another device, or a
+    // previous migration) — nothing to upload, and this is final.
     localStorage.setItem(migratedKey, 'true');
     onStatus?.('skipped');
     return;
   }
   if (destinations.length === 0) {
-    // Vault local vacío por ahora: no marcamos MIGRATED_KEY, para volver a
-    // comprobarlo la próxima vez por si luego se añaden destinos aquí mismo.
+    // Local vault is empty for now: don't set MIGRATED_KEY, so we check
+    // again next time in case destinations get added right here.
     onStatus?.('skipped');
     return;
   }
@@ -88,7 +89,7 @@ export async function migrateIfNeeded(
 
       for (const p of d.photos) {
         const match = /^data:(.+);base64,(.*)$/.exec(p.dataUrl || '');
-        if (!match) continue; // sin datos en memoria: no bloquea el resto de la migración
+        if (!match) continue; // no data in memory: doesn't block the rest of the migration
         const [, mime, base64] = match;
         const path = `${user.id}/${p.id}.${extFromMime(mime)}`;
         const { error: upErr } = await supabase.storage
@@ -109,8 +110,8 @@ export async function migrateIfNeeded(
     localStorage.setItem(migratedKey, 'true');
     onStatus?.('done');
   } catch (e) {
-    // No marcamos MIGRATED_KEY: se reintenta en el próximo inicio de sesión.
-    console.error('La migración a Supabase falló, se reintentará más tarde', e);
+    // Don't set MIGRATED_KEY: it retries on the next sign-in.
+    console.error('Migration to Supabase failed, will retry later', e);
     onStatus?.('error');
   }
 }

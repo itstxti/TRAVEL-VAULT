@@ -6,8 +6,8 @@ const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 if (!url || !anonKey) {
   // eslint-disable-next-line no-console
   console.warn(
-    'Faltan VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY — copia .env.example a .env y rellénalas ' +
-    'con los datos de tu proyecto Supabase (Project Settings → API).'
+    'Missing VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY — copy .env.example to .env and fill them ' +
+    'in with your Supabase project details (Project Settings → API).'
   );
 }
 

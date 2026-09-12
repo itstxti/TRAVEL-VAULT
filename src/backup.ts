@@ -42,7 +42,7 @@ export async function exportData(destinations: Destination[]): Promise<Blob> {
 export async function importData(file: File | Blob): Promise<Destination[]> {
   const zip = await JSZip.loadAsync(file);
   const manifestFile = zip.file('data.json');
-  if (!manifestFile) throw new Error('Archivo de backup inválido: falta data.json');
+  if (!manifestFile) throw new Error('Invalid backup file: missing data.json');
   const raw = JSON.parse(await manifestFile.async('string'));
 
   return Promise.all(

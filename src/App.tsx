@@ -18,8 +18,8 @@ import Lightbox from './components/Lightbox';
 const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
 
 export default function App() {
-  // Empieza vacío: no podemos elegir la clave de localStorage correcta hasta
-  // saber qué cuenta ha iniciado sesión (ver el efecto de carga más abajo).
+  // Starts empty: we can't pick the right localStorage key until we know
+  // which account is signed in (see the loading effect further down).
   const [dest, setDest] = useState<Destination[]>([]);
   const [ready, setReady] = useState(false);
   const [tab, setTab] = useState<'list' | 'map'>('list');
@@ -57,16 +57,16 @@ export default function App() {
         }
         setPushStatus('synced');
       } catch (e) {
-        console.error('No se pudo sincronizar con Supabase, se reintentará en el próximo cambio', e);
+        console.error('Could not sync with Supabase, will retry on the next change', e);
         idsToPush.forEach(id => dirtyIds.current.add(id));
         setPushStatus('error');
       }
     }, 900)
   ).current;
 
-  // Carga el vault local de ESTA cuenta en cuanto sabemos quién ha iniciado
-  // sesión. Cada cuenta tiene su propia clave de localStorage (ver storage.ts),
-  // así que dos cuentas en el mismo navegador ya no comparten destinos.
+  // Loads THIS account's local vault as soon as we know who signed in.
+  // Each account has its own localStorage key (see storage.ts), so two
+  // accounts in the same browser no longer share destinations.
   const userId = session?.user.id;
   useEffect(() => {
     if (!userId) return;
@@ -78,8 +78,8 @@ export default function App() {
     return () => { cancelled = true; };
   }, [userId]);
   useEffect(() => { if (ready && userId) save(userId, dest); }, [dest, ready, userId]);
-  // Sube el vault local a Supabase la primera vez que hay sesión y datos
-  // locales sin nada aún en el servidor (fase 2: solo subida, sin merge).
+  // Uploads the local vault to Supabase the first time there's a session
+  // with nothing yet on the server (phase 2: upload only, no merge).
   useEffect(() => { if (ready) migrateIfNeeded(dest, setMigration); }, [ready]);
 
   const pulling = useRef(false);
@@ -117,9 +117,10 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, session]);
 
-  // Las fotos nuevas llegadas de otro dispositivo se descargan en segundo
-  // plano (ver pull.ts); esto refresca el dataUrl en cuanto termina, sin
-  // pasar por update() (no hace falta volver a subir lo que acabamos de bajar).
+  // New photos arriving from another device are downloaded in the
+  // background (see pull.ts); this refreshes the dataUrl as soon as it's
+  // done, without going through update() (no need to re-upload what we
+  // just downloaded).
   useEffect(() => {
     const handler = (e: Event) => {
       const { photoId, dataUrl } = (e as CustomEvent).detail;
@@ -172,14 +173,14 @@ export default function App() {
       URL.revokeObjectURL(url);
     } catch (e) {
       console.error('Export failed', e);
-      alert('No se pudo exportar el backup.');
+      alert('Could not export the backup.');
     } finally {
       setBusy(null);
     }
   };
 
   const handleImportFile = async (file: File) => {
-    if (!confirm('Esto combinará el backup con tus datos actuales (los destinos con el mismo id se sobrescriben). ¿Continuar?')) return;
+    if (!confirm('This will merge the backup with your current data (destinations with the same id get overwritten). Continue?')) return;
     setBusy('import');
     try {
       const imported = await importData(file);
@@ -190,7 +191,7 @@ export default function App() {
       });
     } catch (e) {
       console.error('Import failed', e);
-      alert('No se pudo leer el backup. ¿Es un .zip exportado desde Travel Vault?');
+      alert('Could not read the backup. Is it a .zip exported from Travel Vault?');
     } finally {
       setBusy(null);
     }
@@ -226,10 +227,10 @@ export default function App() {
           </div>
           <div className="backup-row">
             <button className="mini-btn" disabled={busy !== null} onClick={handleExport}>
-              {busy === 'export' ? 'Exportando…' : 'Exportar backup'}
+              {busy === 'export' ? 'Exporting…' : 'Export backup'}
             </button>
             <button className="mini-btn" disabled={busy !== null} onClick={() => importRef.current?.click()}>
-              {busy === 'import' ? 'Importando…' : 'Importar backup'}
+              {busy === 'import' ? 'Importing…' : 'Import backup'}
             </button>
             <input
               ref={importRef}
@@ -238,17 +239,17 @@ export default function App() {
               hidden
               onChange={e => { const f = e.target.files?.[0]; if (f) handleImportFile(f); e.target.value = ''; }}
             />
-            <button className="mini-btn" onClick={() => supabase.auth.signOut()}>Cerrar sesión</button>
-            {migration === 'running' && <span className="sync-status">Subiendo tu vault a la nube…</span>}
-            {migration === 'done' && <span className="sync-status">Copia inicial en la nube ✓</span>}
+            <button className="mini-btn" onClick={() => supabase.auth.signOut()}>Sign out</button>
+            {migration === 'running' && <span className="sync-status">Uploading your vault to the cloud…</span>}
+            {migration === 'done' && <span className="sync-status">Initial cloud copy ✓</span>}
             {migration === 'error' && (
               <span className="sync-status sync-status-error">
-                No se pudo subir a la nube.{' '}
-                <button className="mini-btn" onClick={() => migrateIfNeeded(dest, setMigration)}>Reintentar</button>
+                Could not upload to the cloud.{' '}
+                <button className="mini-btn" onClick={() => migrateIfNeeded(dest, setMigration)}>Retry</button>
               </span>
             )}
-            {pushStatus === 'pushing' && <span className="sync-status">Sincronizando…</span>}
-            {pushStatus === 'error' && <span className="sync-status sync-status-error">Cambios pendientes de subir</span>}
+            {pushStatus === 'pushing' && <span className="sync-status">Syncing…</span>}
+            {pushStatus === 'error' && <span className="sync-status sync-status-error">Changes pending upload</span>}
           </div>
         </div>
       </header>

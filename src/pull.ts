@@ -7,8 +7,8 @@ const BASE_KEY_PREFIX = 'travel-vault-sync-base';
 const SCALAR_FIELDS = ['name', 'country', 'type', 'status', 'companions', 'tripStart', 'tripEnd', 'lat', 'lng'] as const;
 type ScalarFields = Pick<Destination, (typeof SCALAR_FIELDS)[number]>;
 
-// Igual que en storage.ts: esta "base" tiene que ser por cuenta, si no el
-// merge de una cuenta usa como punto de partida los datos de otra.
+// Same as storage.ts: this "base" has to be per account, otherwise one
+// account's merge starts from another account's data.
 function loadBase(userId: string): Record<string, ScalarFields> {
   try { return JSON.parse(localStorage.getItem(`${BASE_KEY_PREFIX}:${userId}`) || '{}'); } catch { return {}; }
 }
@@ -16,11 +16,11 @@ function saveBase(userId: string, b: Record<string, ScalarFields>) {
   localStorage.setItem(`${BASE_KEY_PREFIX}:${userId}`, JSON.stringify(b));
 }
 
-// Merge de 3 vías para un solo campo: si solo cambió en un lado, gana ese
-// lado sin pérdida. Si cambió en ambos (conflicto real, raro entre tus
-// propios dispositivos), gana el local — es el dispositivo que tienes
-// delante ahora mismo. No hay timestamp por campo, así que esto es una
-// simplificación deliberada, no un LWW perfecto.
+// Three-way merge for a single field: if it only changed on one side, that
+// side wins without loss. If it changed on both (a real conflict, rare
+// between your own devices), local wins — it's the device in front of you
+// right now. There's no per-field timestamp, so this is a deliberate
+// simplification, not a proper LWW.
 function mergeField<T>(base: T, local: T, remote: T): T {
   const localChanged = JSON.stringify(local) !== JSON.stringify(base);
   const remoteChanged = JSON.stringify(remote) !== JSON.stringify(base);
@@ -43,15 +43,15 @@ async function downloadPhotoInBackground(photoId: string, storagePath: string) {
     await putPhoto({ id: photoId, dataUrl, caption: '' });
     window.dispatchEvent(new CustomEvent('travel-vault-photo-ready', { detail: { photoId, dataUrl } }));
   } catch (e) {
-    console.error('No se pudo descargar la foto', photoId, e);
+    console.error('Could not download the photo', photoId, e);
   }
 }
 
 export interface PullResult {
   destinations: Destination[];
-  // Destinos cuyo resultado fusionado quedó distinto de lo que había en el
-  // servidor (ganó el local en algún campo, o hay notas/fotos locales que el
-  // servidor aún no tiene) — hay que volver a subirlos para converger.
+  // Destinations whose merged result ended up different from what the
+  // server had (local won on some field, or there are local notes/photos
+  // the server doesn't have yet) — these need to be re-uploaded to converge.
   dirtyIds: string[];
 }
 
@@ -89,8 +89,8 @@ export async function pullChanges(
   const dirtyIds: string[] = [];
 
   for (const rd of rDest || []) {
-    if (rd.deleted_at) continue; // borrado en el servidor: se cae también en local
-    if (pendingLocalDeletes.has(rd.id)) continue; // borrado aquí mismo, aún no confirmado en el servidor
+    if (rd.deleted_at) continue; // deleted on the server: drop it locally too
+    if (pendingLocalDeletes.has(rd.id)) continue; // deleted right here, not yet confirmed on the server
 
     const local = byId.get(rd.id);
     const remoteScalar: ScalarFields = {
@@ -108,7 +108,7 @@ export async function pullChanges(
     let mergedScalar: ScalarFields;
     let scalarDiffersFromRemote = false;
     if (!local) {
-      mergedScalar = remoteScalar; // nuevo desde otro dispositivo
+      mergedScalar = remoteScalar; // new from another device
     } else {
       const b = base[rd.id] || remoteScalar;
       mergedScalar = {} as ScalarFields;
@@ -118,9 +118,9 @@ export async function pullChanges(
       }
     }
 
-    // Journal: unión por id + tombstones. Sin edición de notas en la UI hoy,
-    // así que un conflicto real (mismo id cambiado en ambos lados) no puede
-    // ocurrir todavía; esto es efectivamente solo altas/bajas.
+    // Journal: union by id + tombstones. There's no note editing in the UI
+    // today, so a real conflict (same id changed on both sides) can't
+    // happen yet; this is effectively just additions/removals.
     const remoteJournalRows = journalByDest.get(rd.id) || [];
     const journalById = new Map<string, JournalEntry>();
     (local?.journal || []).forEach(j => journalById.set(j.id, j));
@@ -131,9 +131,9 @@ export async function pullChanges(
     const remoteJournalIds = new Set(remoteJournalRows.filter(j => !j.deleted_at).map(j => j.id));
     const journalDiffers = journalById.size !== remoteJournalIds.size || [...journalById.keys()].some(id => !remoteJournalIds.has(id));
 
-    // Fotos: unión por id + tombstones. Si el destino tiene un push local
-    // pendiente, no dejamos que el caption remoto (posiblemente más viejo)
-    // pise el caption que se acaba de editar aquí y aún no ha subido.
+    // Photos: union by id + tombstones. If the destination has a pending
+    // local push, don't let the (possibly older) remote caption overwrite
+    // one that was just edited here and hasn't uploaded yet.
     const remotePhotoRows = photosByDest.get(rd.id) || [];
     const photoById = new Map<string, Photo>();
     (local?.photos || []).forEach(p => photoById.set(p.id, p));
@@ -156,8 +156,8 @@ export async function pullChanges(
     if (scalarDiffersFromRemote || journalDiffers || photosDiffer) dirtyIds.push(rd.id);
   }
 
-  // Destinos que solo existen en local (aún no llegaron al servidor): se
-  // conservan tal cual, la fase 3 ya se encarga de subirlos.
+  // Destinations that only exist locally (haven't reached the server yet):
+  // keep them as-is, phase 3 already takes care of uploading them.
   const remoteIds = new Set((rDest || []).map(d => d.id));
   for (const d of current) if (!remoteIds.has(d.id)) result.push(d);
 
