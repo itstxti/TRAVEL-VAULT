@@ -56,7 +56,15 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
             className="btn btn-primary"
             style={{ width: '260px' }}
             onClick={() =>
-              supabase.auth.signInWithOAuth({ provider: 'google' })
+              supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                  redirectTo: window.location.origin,
+                  queryParams: {
+                    prompt: 'select_account',
+                  },
+                },
+              })
             }
           >
             Continuar con Google
