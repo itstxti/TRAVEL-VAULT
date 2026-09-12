@@ -66,19 +66,38 @@ export const IconClose = ({ size = 15, className }: IconProps) => (
   </svg>
 );
 
-export const IconDownload = ({ size = 16, className }: IconProps) => (
-  <svg {...base(size)} className={className} aria-hidden="true">
-    <path d="M12 3.5v11" />
-    <path d="M7.2 10.8 12 15.6l4.8-4.8" />
-    <path d="M4 18.5h16" />
+export const IconLogOut = ({ size = 16, className }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M8.25 5.25L9 4.5H18L18.75 5.25V18.75L18 19.5H9L8.25 18.75V16.5H9.75V18H17.25V6H9.75V7.5H8.25V5.25Z"
+      fill="currentColor"
+    />
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M7.06068 12.7499L14.25 12.7499L14.25 11.2499L7.06068 11.2499L8.78035 9.53027L7.71969 8.46961L4.18936 11.9999L7.71969 15.5303L8.78035 14.4696L7.06068 12.7499Z"
+      fill="currentColor"
+    />
   </svg>
 );
 
-export const IconLogOut = ({ size = 16, className }: IconProps) => (
-  <svg {...base(size)} className={className} aria-hidden="true">
-    <path d="M9.5 4H6.2A2.2 2.2 0 0 0 4 6.2v11.6A2.2 2.2 0 0 0 6.2 20H9.5" />
-    <path d="M14.5 8l4 4-4 4" />
-    <path d="M18 12H9" />
+export const IconExport = ({ size = 16, className }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 1920 1920" fill="currentColor" className={className} aria-hidden="true">
+    <path
+      fillRule="evenodd"
+      d="m0 1016.081 409.186 409.073 79.85-79.736-272.867-272.979h1136.415V959.611H216.169l272.866-272.866-79.85-79.85L0 1016.082ZM1465.592 305.32l315.445 315.445h-315.445V305.32Zm402.184 242.372-329.224-329.11C1507.042 187.07 1463.334 169 1418.835 169h-743.83v677.647h112.94V281.941h564.706v451.765h451.765v903.53H787.946V1185.47H675.003v564.705h1242.353V667.522c0-44.498-18.07-88.207-49.581-119.83Z"
+    />
+  </svg>
+);
+
+export const IconImport = ({ size = 16, className }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 1920 1920" fill="currentColor" className={className} aria-hidden="true">
+    <path
+      fillRule="evenodd"
+      d="m807.186 686.592 272.864 272.864H0v112.94h1080.05l-272.864 272.978 79.736 79.849 409.296-409.183-409.296-409.184-79.736 79.736ZM1870.419 434.69l-329.221-329.11C1509.688 74.07 1465.979 56 1421.48 56H451.773v730.612h112.94V168.941h790.584v451.762h451.762v1129.405H564.714v-508.233h-112.94v621.173H1920V554.52c0-45.176-17.619-87.754-49.58-119.83Zm-402.181-242.37 315.443 315.442h-315.443V192.319Z"
+    />
   </svg>
 );
 

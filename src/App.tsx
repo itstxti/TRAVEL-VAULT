@@ -14,7 +14,7 @@ import DestinationModal from './components/DestinationModal';
 import GalleryModal from './components/GalleryModal';
 import JournalModal from './components/JournalModal';
 import Lightbox from './components/Lightbox';
-import { IconDownload, IconUpload, IconLogOut, IconSpinner } from './icons';
+import { IconExport, IconImport, IconLogOut, IconSpinner } from './icons';
 
 const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
 
@@ -224,7 +224,7 @@ export default function App() {
               disabled={busy !== null}
               onClick={handleExport}
             >
-              {busy === 'export' ? <IconSpinner size={16} /> : <IconDownload size={16} />}
+              {busy === 'export' ? <IconSpinner size={16} /> : <IconExport size={16} />}
             </button>
             <button
               className="icon-btn"
@@ -233,7 +233,7 @@ export default function App() {
               disabled={busy !== null}
               onClick={() => importRef.current?.click()}
             >
-              {busy === 'import' ? <IconSpinner size={16} /> : <IconUpload size={16} />}
+              {busy === 'import' ? <IconSpinner size={16} /> : <IconImport size={16} />}
             </button>
             <input
               ref={importRef}
