@@ -40,15 +40,23 @@ export default function LocationPicker({
     <div className="location-picker">
       <MapContainer center={[lat, lng]} zoom={zoom} scrollWheelZoom={false} className="picker-map">
         <TileLayer attribution="&copy; OpenStreetMap contributors" url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <Marker position={[lat, lng]} icon={pinIcon} draggable eventHandlers={{ dragend: e => {
-          const p = (e.target as L.Marker).getLatLng();
-          onChange(p.lat, p.lng);
-        } }} />
+        <Marker position={[lat, lng]} icon={pinIcon} draggable eventHandlers={{
+          dragend: e => {
+            const p = (e.target as L.Marker).getLatLng();
+            onChange(p.lat, p.lng);
+          }
+        }} />
         <ClickHandler onPick={onChange} />
         <Recenter lat={lat} lng={lng} zoom={zoom} />
       </MapContainer>
-      <p className="picker-hint">Click the map or drag the pin to set the exact spot.</p>
+      <div className="bottom-bar-map">
+        <div className="coord-readout">
+          <span>{lat.toFixed(4)}, {lng.toFixed(4)}</span>
+        </div>
+        <p className="picker-hint">Click the map or drag the pin to set the exact spot.</p>
+      </div>
     </div>
-    
+
   );
 }
+
