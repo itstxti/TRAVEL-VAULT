@@ -23,22 +23,6 @@ A React + TypeScript travel planner for saving destinations, planning trips, and
 — Supabase<br>
 — Google OAuth + email/password
 
-## Getting started
- 
-```bash
-git clone https://github.com/itstxti/TRAVEL-VAULT
-cd TRAVEL-VAULT
-npm install
-npm run dev
-```
-
-Email/password login uses Supabase's built-in Email provider — it's on by default, but double-check under Authentication → Providers in your Supabase project. If "Confirm email" is enabled there, new sign-ups won't get a session until they click the confirmation link.
-
-## Known limitations
-
-— **No other OAuth providers.** Only Google is wired up; adding GitHub/Apple/etc. would follow the same `signInWithOAuth` pattern.<br>
-— **Geocoding depends on Nominatim's public API**, which is rate-limited and requires an internet connection to search for new places.
-
 ## License
 
 MIT — see [LICENSE](./LICENSE).
