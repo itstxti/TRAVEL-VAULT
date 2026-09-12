@@ -42,6 +42,7 @@ export default function Card({
       <div className="card-actions">
         <select
           className="status-select"
+          aria-label={`Status for ${d.name}`}
           value={d.status}
           onChange={e => update({ ...d, status: e.target.value as Status })}
         >

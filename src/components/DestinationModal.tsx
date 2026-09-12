@@ -129,7 +129,7 @@ export default function DestinationModal({
 
           <div className="field">
             <label>Status</label>
-            <select value={status} onChange={e => setStatus(e.target.value as Status)}>
+            <select aria-label="Status" value={status} onChange={e => setStatus(e.target.value as Status)}>
               {Object.entries(statusLabels).map(([v, l]) => <option value={v} key={v}>{l}</option>)}
             </select>
           </div>
