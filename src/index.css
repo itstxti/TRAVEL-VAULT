@@ -593,8 +593,8 @@ select.status-select {
 }
 
 select.status-select:hover {
-  background: var(--paper-dark);
-  border-color: var(--ink-soft);
+  background: var(--teal-dark);
+  color: var(--card);
 }
 
 .date-row {
