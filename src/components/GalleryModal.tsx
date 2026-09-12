@@ -34,7 +34,7 @@ export default function GalleryModal({
           <label className="upload-zone">
             <div className="upload-icon-badge"><IconUpload /></div>
             <div className="upload-text">Click to upload photos</div>
-            <div className="upload-subtext">or drag your images here · saved locally in this browser</div>
+            <div className="upload-subtext">or drag your images here</div>
             <input type="file" accept="image/*" multiple hidden onChange={e => add(e.target.files)} />
           </label>
 
