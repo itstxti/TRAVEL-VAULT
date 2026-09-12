@@ -18,7 +18,9 @@ import Lightbox from './components/Lightbox';
 const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
 
 export default function App() {
-  const [dest, setDest] = useState<Destination[]>(load);
+  // Empieza vacío: no podemos elegir la clave de localStorage correcta hasta
+  // saber qué cuenta ha iniciado sesión (ver el efecto de carga más abajo).
+  const [dest, setDest] = useState<Destination[]>([]);
   const [ready, setReady] = useState(false);
   const [tab, setTab] = useState<'list' | 'map'>('list');
   const [filter, setFilter] = useState<'all' | Status>('all');
@@ -62,8 +64,20 @@ export default function App() {
     }, 900)
   ).current;
 
-  useEffect(() => { hydrate(dest).then(h => { setDest(h); setReady(true); }).catch(() => setReady(true)); }, []);
-  useEffect(() => { if (ready) save(dest); }, [dest, ready]);
+  // Carga el vault local de ESTA cuenta en cuanto sabemos quién ha iniciado
+  // sesión. Cada cuenta tiene su propia clave de localStorage (ver storage.ts),
+  // así que dos cuentas en el mismo navegador ya no comparten destinos.
+  const userId = session?.user.id;
+  useEffect(() => {
+    if (!userId) return;
+    let cancelled = false;
+    setReady(false);
+    hydrate(load(userId))
+      .then(h => { if (!cancelled) { setDest(h); setReady(true); } })
+      .catch(() => { if (!cancelled) setReady(true); });
+    return () => { cancelled = true; };
+  }, [userId]);
+  useEffect(() => { if (ready && userId) save(userId, dest); }, [dest, ready, userId]);
   // Sube el vault local a Supabase la primera vez que hay sesión y datos
   // locales sin nada aún en el servidor (fase 2: solo subida, sin merge).
   useEffect(() => { if (ready) migrateIfNeeded(dest, setMigration); }, [ready]);

@@ -1,8 +1,15 @@
 import { Destination, Photo } from './types';
 
-const STORAGE_KEY = 'my-travels-destinations';
+const STORAGE_KEY_PREFIX = 'my-travels-destinations';
 const PHOTO_DB = 'my-travels-photos';
 const PHOTO_STORE = 'photos';
+
+// Cada cuenta tiene su propia clave de localStorage. Sin esto, dos cuentas
+// de Google abiertas en el mismo navegador (mismo origen) comparten
+// literalmente el mismo localStorage y se pisan los datos entre sí.
+function storageKey(userId: string): string {
+  return `${STORAGE_KEY_PREFIX}:${userId}`;
+}
 
 function openPhotoDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -74,21 +81,21 @@ export async function hydrate(raw: Destination[]): Promise<Destination[]> {
   );
 }
 
-export function load(): Destination[] {
+export function load(userId: string): Destination[] {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null') || [];
+    return JSON.parse(localStorage.getItem(storageKey(userId)) || 'null') || [];
   } catch {
     return [];
   }
 }
 
-export function save(destinations: Destination[]) {
+export function save(userId: string, destinations: Destination[]) {
   try {
     const compact = destinations.map(({ photos, ...rest }) => ({
       ...rest,
       photos: photos.map(({ dataUrl, ...meta }) => meta),
     }));
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(compact));
+    localStorage.setItem(storageKey(userId), JSON.stringify(compact));
     // Photos are persisted individually where they're created (GalleryModal.add)
     // and removed where they're deleted (deletePhoto), so no bulk re-put here.
   } catch (e) {

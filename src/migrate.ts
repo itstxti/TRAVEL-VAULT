@@ -1,7 +1,7 @@
 import { supabase } from './supabaseClient';
 import { Destination } from './types';
 
-const MIGRATED_KEY = 'travel-vault-migrated-v1';
+const MIGRATED_KEY_PREFIX = 'travel-vault-migrated-v1';
 
 const extFromMime = (mime: string) => (mime.split('/')[1] || 'jpg').split('+')[0];
 
@@ -25,11 +25,14 @@ export async function migrateIfNeeded(
   destinations: Destination[],
   onStatus?: (s: MigrationStatus) => void
 ): Promise<void> {
-  if (localStorage.getItem(MIGRATED_KEY) === 'true') return;
-
   const { data: userData, error: userErr } = await supabase.auth.getUser();
   const user = userData?.user;
   if (userErr || !user) return;
+
+  // Por cuenta: si no, la cuenta 2 hereda el "ya migrado" de la cuenta 1 y
+  // nunca sube su propio vault local la primera vez que inicia sesión.
+  const migratedKey = `${MIGRATED_KEY_PREFIX}:${user.id}`;
+  if (localStorage.getItem(migratedKey) === 'true') return;
 
   const { count, error: countError } = await supabase
     .from('destinations')
@@ -43,7 +46,7 @@ export async function migrateIfNeeded(
   if ((count ?? 0) > 0) {
     // El servidor ya tiene datos de este usuario (otro dispositivo, o una
     // migración anterior) — no hay nada que subir, y esto sí es definitivo.
-    localStorage.setItem(MIGRATED_KEY, 'true');
+    localStorage.setItem(migratedKey, 'true');
     onStatus?.('skipped');
     return;
   }
@@ -103,7 +106,7 @@ export async function migrateIfNeeded(
         if (pErr) throw pErr;
       }
     }
-    localStorage.setItem(MIGRATED_KEY, 'true');
+    localStorage.setItem(migratedKey, 'true');
     onStatus?.('done');
   } catch (e) {
     // No marcamos MIGRATED_KEY: se reintenta en el próximo inicio de sesión.

@@ -1,19 +1,21 @@
 import { supabase } from './supabaseClient';
 import { Destination } from './types';
 
-const SYNCED_PHOTOS_KEY = 'travel-vault-synced-photo-ids';
+const SYNCED_PHOTOS_KEY_PREFIX = 'travel-vault-synced-photo-ids';
 
-function getSyncedPhotoIds(): Set<string> {
+// También por cuenta: si no, subir una foto con la cuenta 1 hace que la
+// cuenta 2 la crea "ya subida" y nunca la sube a su propio storage.
+function getSyncedPhotoIds(userId: string): Set<string> {
   try {
-    return new Set(JSON.parse(localStorage.getItem(SYNCED_PHOTOS_KEY) || '[]'));
+    return new Set(JSON.parse(localStorage.getItem(`${SYNCED_PHOTOS_KEY_PREFIX}:${userId}`) || '[]'));
   } catch {
     return new Set();
   }
 }
-function markPhotoSynced(id: string) {
-  const s = getSyncedPhotoIds();
+function markPhotoSynced(userId: string, id: string) {
+  const s = getSyncedPhotoIds(userId);
   s.add(id);
-  localStorage.setItem(SYNCED_PHOTOS_KEY, JSON.stringify([...s]));
+  localStorage.setItem(`${SYNCED_PHOTOS_KEY_PREFIX}:${userId}`, JSON.stringify([...s]));
 }
 
 const extFromMime = (mime: string) => (mime.split('/')[1] || 'jpg').split('+')[0];
@@ -60,7 +62,7 @@ export async function pushDestination(d: Destination, userId: string): Promise<v
     if (error) throw error;
   }
 
-  const synced = getSyncedPhotoIds();
+  const synced = getSyncedPhotoIds(userId);
   for (const p of d.photos) {
     const match = /^data:(.+);base64,(.*)$/.exec(p.dataUrl || '');
     if (!match) continue; // sin datos en memoria todavía; se subirá en el próximo push
@@ -72,7 +74,7 @@ export async function pushDestination(d: Destination, userId: string): Promise<v
         .from('photos')
         .upload(path, base64ToBytes(base64), { contentType: mime, upsert: true });
       if (upErr) throw upErr;
-      markPhotoSynced(p.id);
+      markPhotoSynced(userId, p.id);
     }
 
     // El caption puede cambiar aunque el binario ya esté subido, así que la

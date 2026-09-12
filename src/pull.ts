@@ -2,16 +2,18 @@ import { supabase } from './supabaseClient';
 import { Destination, JournalEntry, Photo } from './types';
 import { putPhoto } from './storage';
 
-const BASE_KEY = 'travel-vault-sync-base';
+const BASE_KEY_PREFIX = 'travel-vault-sync-base';
 
 const SCALAR_FIELDS = ['name', 'country', 'type', 'status', 'companions', 'tripStart', 'tripEnd', 'lat', 'lng'] as const;
 type ScalarFields = Pick<Destination, (typeof SCALAR_FIELDS)[number]>;
 
-function loadBase(): Record<string, ScalarFields> {
-  try { return JSON.parse(localStorage.getItem(BASE_KEY) || '{}'); } catch { return {}; }
+// Igual que en storage.ts: esta "base" tiene que ser por cuenta, si no el
+// merge de una cuenta usa como punto de partida los datos de otra.
+function loadBase(userId: string): Record<string, ScalarFields> {
+  try { return JSON.parse(localStorage.getItem(`${BASE_KEY_PREFIX}:${userId}`) || '{}'); } catch { return {}; }
 }
-function saveBase(b: Record<string, ScalarFields>) {
-  localStorage.setItem(BASE_KEY, JSON.stringify(b));
+function saveBase(userId: string, b: Record<string, ScalarFields>) {
+  localStorage.setItem(`${BASE_KEY_PREFIX}:${userId}`, JSON.stringify(b));
 }
 
 // Merge de 3 vías para un solo campo: si solo cambió en un lado, gana ese
@@ -68,7 +70,7 @@ export async function pullChanges(
   if (e2) throw e2;
   if (e3) throw e3;
 
-  const base = loadBase();
+  const base = loadBase(userId);
   const byId = new Map(current.map(d => [d.id, d]));
 
   const journalByDest = new Map<string, any[]>();
@@ -159,6 +161,6 @@ export async function pullChanges(
   const remoteIds = new Set((rDest || []).map(d => d.id));
   for (const d of current) if (!remoteIds.has(d.id)) result.push(d);
 
-  saveBase(newBase);
+  saveBase(userId, newBase);
   return { destinations: result, dirtyIds };
 }
