@@ -24,7 +24,7 @@ export default function List({
       {!list.length ? (
         <div className="empty-state">
           <IconStampEmpty className="empty-state-icon" />
-          <h3>Your vault is empty</h3>
+          <h1>Your vault is empty</h1>
           <p>Add the first place you'd like to travel to.</p>
         </div>
       ) : (
