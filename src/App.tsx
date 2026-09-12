@@ -13,7 +13,7 @@ import DestinationModal from './components/DestinationModal';
 import GalleryModal from './components/GalleryModal';
 import JournalModal from './components/JournalModal';
 import Lightbox from './components/Lightbox';
-import { IconLogOut } from './icons';
+import { IconLogOut, IconSpinner } from './icons';
 
 const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
 
