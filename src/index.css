@@ -589,6 +589,12 @@ select.status-select {
   padding: 6px 6px;
   border-radius: 3px;
   cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+select.status-select:hover {
+  background: var(--paper-dark);
+  border-color: var(--ink-soft);
 }
 
 .date-row {
