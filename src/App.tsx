@@ -192,7 +192,7 @@ export default function App() {
         throw new Error('You must be logged in to import data');
       }
 
-      const imported = await importData(file, user.id);
+      const imported = await importData(file);
       setDest(current => {
         const byId = new Map(current.map(d => [d.id, d]));
         imported.forEach(d => byId.set(d.id, d));
