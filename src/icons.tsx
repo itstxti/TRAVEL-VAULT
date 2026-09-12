@@ -88,7 +88,7 @@ export const IconEdit = ({ size = 16, className }: IconProps) => (
     <path
       d="M14 6L8 12V16H12L18 10M14 6L17 3L21 7L18 10M14 6L18 10M10 4L4 4L4 20L20 20V14"
       stroke="currentColor"
-      strokeWidth="1"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
