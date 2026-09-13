@@ -329,32 +329,119 @@ export default function StatsView({
       <div className="stats-section">
         <SectionTitle>Destination Status</SectionTitle>
 
-        <div className="stats-card">
-          <div className="bar-chart">
-            {([
-              ['Visited', stats.visited, 'visited'],
-              ['Planned', stats.planned, 'planned'],
-              ['Want to go', stats.wantToGo, 'want_to_go'],
-            ] as const).map(
-              ([label, value, statusKey]) => (
-                <div className="bar-row" key={label}>
-                  <span className="bar-label">
-                    {label}
-                  </span>
+        <div className="stats-card destination-status-card">
+          <div className="status-donut">
+            <svg viewBox="0 0 120 120" className="status-donut-svg">
+              {(() => {
+                const total =
+                  stats.visited +
+                  stats.planned +
+                  stats.wantToGo;
 
-                  <div className="bar-track">
-                    <div
-                      className={`bar-fill bar-${statusKey}`}
-                      style={{ width: '100%' }}
+                if (total === 0) {
+                  return (
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="45"
+                      fill="none"
+                      stroke="var(--paper-dark)"
+                      strokeWidth="14"
                     />
-                  </div>
+                  );
+                }
 
-                  <span className="bar-value">
-                    {value}
-                  </span>
-                </div>
-              )
-            )}
+                const circumference = 2 * Math.PI * 45;
+
+                const visitedLength =
+                  (stats.visited / total) * circumference;
+
+                const plannedLength =
+                  (stats.planned / total) * circumference;
+
+                const wantToGoLength =
+                  (stats.wantToGo / total) * circumference;
+
+                let offset = 0;
+
+                const segments = [
+                  {
+                    value: stats.visited,
+                    length: visitedLength,
+                    className: 'donut-visited',
+                  },
+                  {
+                    value: stats.planned,
+                    length: plannedLength,
+                    className: 'donut-planned',
+                  },
+                  {
+                    value: stats.wantToGo,
+                    length: wantToGoLength,
+                    className: 'donut-want-to-go',
+                  },
+                ];
+
+                return segments.map((segment) => {
+                  const currentOffset = offset;
+                  offset += segment.length;
+
+                  if (segment.value === 0) return null;
+
+                  return (
+                    <circle
+                      key={segment.className}
+                      cx="60"
+                      cy="60"
+                      r="45"
+                      fill="none"
+                      className={segment.className}
+                      strokeWidth="14"
+                      strokeDasharray={`${segment.length} ${circumference - segment.length}`}
+                      strokeDashoffset={-currentOffset}
+                    />
+                  );
+                });
+              })()}
+
+              <text
+                x="60"
+                y="56"
+                textAnchor="middle"
+                className="donut-total"
+              >
+                {stats.total}
+              </text>
+
+              <text
+                x="60"
+                y="70"
+                textAnchor="middle"
+                className="donut-label"
+              >
+                DESTINATIONS
+              </text>
+            </svg>
+          </div>
+
+          <div className="status-legend">
+            <div className="status-legend-item">
+              <span className="legend-dot bar-visited" />
+              <span>Visited</span>
+              <b>{stats.visited}</b>
+            </div>
+
+            <div className="status-legend-item">
+              <span className="legend-dot bar-planned" />
+              <span>Planned</span>
+              <b>{stats.planned}</b>
+            </div>
+
+            <div className="status-legend-item">
+              <span className="legend-dot bar-want_to_go" />
+              <span>Want to go</span>
+              <b>{stats.wantToGo}</b>
+            </div>
           </div>
         </div>
       </div>
