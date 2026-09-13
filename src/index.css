@@ -1773,7 +1773,7 @@ select.status-select:hover {
 .stacked-bar-track {
   display: flex;
   height: 20px;
-  min-width: 24px;
+  width: 100%;
   border: 1px solid var(--line);
   border-radius: 3px;
   overflow: hidden;

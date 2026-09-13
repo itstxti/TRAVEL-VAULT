@@ -1,13 +1,8 @@
 import React, { useMemo } from 'react';
+import { Destination } from '../types';
 import { tripDays } from '../utils';
 import { countryData, flag } from '../data';
 import { IconStampEmpty, IconCamera, IconNotebook, IconCalendar } from '../icons';
-import { Destination, Status } from '../types';
-
-
-const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
-const statusColors: Record<Status, string> = { want_to_go: '#8B8072', planned: '#B8860F', visited: '#2F6F63' };
-
 
 interface CountryStat {
   country: string;
@@ -184,7 +179,6 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
   }
 
   const maxStatus = Math.max(stats.visited, stats.planned, stats.wantToGo, 1);
-  const maxCountry = Math.max(...stats.countryBreakdown.map(c => c.total), 1);
   const maxCompanion = Math.max(...stats.companionFrequency.map(c => c.count), 1);
 
   return (
@@ -233,7 +227,7 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
               <div className="country-stat-row" key={c.country}>
                 <span className="country-flag">{flag(countryData(c.country)?.[1])}</span>
                 <span className="country-stat-name">{c.country}</span>
-                <div className="stacked-bar-track" style={{ width: `${(c.total / maxCountry) * 100}%` }}>
+                <div className="stacked-bar-track">
                   {c.visited > 0 && (
                     <div className="stacked-bar-seg bar-visited" style={{ flexGrow: c.visited }}>
                       {c.visited}
@@ -255,6 +249,11 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
                 </span>
               </div>
             ))}
+          </div>
+          <div className="country-legend">
+            <span><i className="legend-dot bar-visited" />Visited</span>
+            <span><i className="legend-dot bar-planned" />Planned</span>
+            <span><i className="legend-dot bar-want_to_go" />Want to go</span>
           </div>
         </div>
       </div>
