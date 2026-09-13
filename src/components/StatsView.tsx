@@ -734,9 +734,9 @@ export default function StatsView({
         </SectionTitle>
 
         <div className="stats-card">
-          <h3 className="stats-card-subtitle">
+          <p className="stats-card-subtitle">
             Most added countries
-          </h3>
+          </p>
           <div className="bar-chart">
             {topCountries.map(c => (
               <div

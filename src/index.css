@@ -1593,6 +1593,7 @@ select.status-select:hover {
   margin: 0 0 16px;
   font-size: 14px;
   font-weight: 400;
+  margin-bottom: 10px;
 }
 
 .stats-two-col {
