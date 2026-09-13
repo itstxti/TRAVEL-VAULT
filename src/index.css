@@ -2023,8 +2023,6 @@ select.status-select:hover {
   font-size: 14px;
   font-weight: 300;
   fill: var(--ink);
-  transform: rotate(90deg);
-  transform-origin: center;
 }
 
 .donut-label {
@@ -2032,8 +2030,6 @@ select.status-select:hover {
   font-size: 6px;
   letter-spacing: .08em;
   fill: var(--muted);
-  transform: rotate(90deg);
-  transform-origin: center;
 }
 
 .status-legend {
