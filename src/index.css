@@ -280,6 +280,10 @@ nav.tabs {
   margin-top: 10px;
 }
 
+.filter-select {
+  display: none;
+}
+
 .filter-chip.active {
   background: var(--ink);
   border-color: var(--ink);
@@ -2085,6 +2089,25 @@ select.status-select:hover {
   .stats-two-col {
     grid-template-columns: 1fr;
   }
+
+  .filter-chips {
+  display: none;
+}
+
+.filter-select {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
 
   .stats-primary-grid {
     grid-template-columns: repeat(2, 1fr);

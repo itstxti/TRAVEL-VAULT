@@ -216,15 +216,32 @@ export default function App() {
 
         {tab !== 'stats' && (
           <div className="filter-row">
-            {(['all', 'want_to_go', 'planned', 'visited'] as const).map(f => (
-              <button
-                key={f}
-                className={'filter-chip ' + (filter === f ? 'active' : '')}
-                onClick={() => setFilter(f)}
-              >
-                {f === 'all' ? 'All' : statusLabels[f]}
-              </button>
-            ))}
+            <div className="filter-chips">
+              {(['all', 'want_to_go', 'planned', 'visited'] as const).map(f => (
+                <button
+                  key={f}
+                  className={'filter-chip ' + (filter === f ? 'active' : '')}
+                  onClick={() => setFilter(f)}
+                >
+                  {f === 'all' ? 'All' : statusLabels[f]}
+                </button>
+              ))}
+            </div>
+
+            <select
+              className="filter-select"
+              value={filter}
+              onChange={e =>
+                setFilter(
+                  e.target.value as 'all' | 'want_to_go' | 'planned' | 'visited'
+                )
+              }
+            >
+              <option value="all">All</option>
+              <option value="want_to_go">{statusLabels.want_to_go}</option>
+              <option value="planned">{statusLabels.planned}</option>
+              <option value="visited">{statusLabels.visited}</option>
+            </select>
           </div>
         )}
       </div>
