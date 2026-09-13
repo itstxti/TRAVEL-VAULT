@@ -916,16 +916,16 @@ export default function StatsView({
 
             <OverviewCard
               value={
+                stats.latestTrip?.name ?? '—'
+              }
+              label="Latest trip"
+              detail={
                 stats.latestTrip
                   ? new Date(
                       stats.latestTrip.date +
                         'T00:00:00'
                     ).toLocaleDateString('en-GB')
-                  : '—'
-              }
-              label="Latest trip"
-              detail={
-                stats.latestTrip?.name
+                  : undefined
               }
             />
           </div>
@@ -950,15 +950,6 @@ export default function StatsView({
 
             <OverviewCard
               value={
-                stats.avgJournalEntriesPerDestination.toFixed(
-                  1
-                )
-              }
-              label="Avg. / destination"
-            />
-
-            <OverviewCard
-              value={
                 stats.mostJournalEntries?.name ??
                 '—'
               }
@@ -969,16 +960,17 @@ export default function StatsView({
                   : undefined
               }
             />
-          </div>
 
-          {stats.latestJournalDate && (
-            <p className="stats-footnote">
-              Latest entry:{' '}
-              <b>
-                {stats.latestJournalDate}
-              </b>
-            </p>
-          )}
+            <OverviewCard
+              value={
+                stats.avgJournalEntriesPerDestination.toFixed(
+                  1
+                )
+              }
+              label="Avg. / destination"
+            />
+
+          </div>
         </div>
 
         {/* Gallery */}
@@ -995,13 +987,6 @@ export default function StatsView({
             />
 
             <OverviewCard
-              value={stats.avgPhotosPerDestination.toFixed(
-                1
-              )}
-              label="Avg. / destination"
-            />
-
-            <OverviewCard
               value={
                 stats.mostPhotographed?.name ??
                 '—'
@@ -1012,6 +997,13 @@ export default function StatsView({
                   ? `${stats.mostPhotographed.count} photos`
                   : undefined
               }
+            />
+
+            <OverviewCard
+              value={stats.avgPhotosPerDestination.toFixed(
+                1
+              )}
+              label="Avg. / destination"
             />
           </div>
         </div>
