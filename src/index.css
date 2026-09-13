@@ -2003,6 +2003,19 @@ select.status-select:hover {
   border-radius: 2px;
 }
 
+.stats-card-detail {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 /* ─────────────────────────────
    Mobile
