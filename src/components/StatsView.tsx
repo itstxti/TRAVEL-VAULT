@@ -181,6 +181,16 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
   const maxStatus = Math.max(stats.visited, stats.planned, stats.wantToGo, 1);
   const maxCompanion = Math.max(...stats.companionFrequency.map(c => c.count), 1);
 
+  const topCountries = stats.countryBreakdown
+    .slice()
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5);
+
+  const maxCountry = Math.max(
+    ...topCountries.map(c => c.total),
+    1
+  );
+
   return (
     <section className="view active stats-view">
       <div className="stats-section">
@@ -220,40 +230,34 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
       </div>
 
       <div className="stats-section">
-        <SectionTitle>Countries</SectionTitle>
+        <SectionTitle>Top Countries</SectionTitle>
         <div className="stats-card">
-          <div className="country-stat-list">
-            {stats.countryBreakdown.map(c => (
-              <div className="bar-row" key={c.country}>
-                <span className="country-flag">{flag(countryData(c.country)?.[1])}</span>
-                <span className="country-stat-name">{c.country}</span>
-                <div className="stacked-bar-track">
-                  {c.visited > 0 && (
-                    <div className="stacked-bar-seg bar-visited" style={{ flexGrow: c.visited }}>
-                      {c.visited}
-                    </div>
-                  )}
-                  {c.planned > 0 && (
-                    <div className="stacked-bar-seg bar-planned" style={{ flexGrow: c.planned }}>
-                      {c.planned}
-                    </div>
-                  )}
-                  {c.wantToGo > 0 && (
-                    <div className="stacked-bar-seg bar-want_to_go" style={{ flexGrow: c.wantToGo }}>
-                      {c.wantToGo}
-                    </div>
-                  )}
+          <div className="bar-chart">
+            {stats.countryBreakdown
+              .slice()
+              .sort((a, b) => b.total - a.total)
+              .slice(0, 5)
+              .map(c => (
+                <div className="bar-row" key={c.country}>
+                  <span className="bar-label">
+                    <span className="country-flag">
+                      {flag(countryData(c.country)?.[1])}
+                    </span>
+                    {c.country}
+                  </span>
+
+                  <div className="bar-track">
+                    <div
+                      className="bar-fill"
+                      style={{
+                        width: `${(c.total / maxCountry) * 100}%`,
+                      }}
+                    />
+                  </div>
+
+                  <span className="bar-value">{c.total}</span>
                 </div>
-                <span className="country-stat-count">
-                  {c.total} destination{c.total !== 1 ? 's' : ''}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="country-legend">
-            <span><i className="legend-dot bar-visited" />Visited</span>
-            <span><i className="legend-dot bar-planned" />Planned</span>
-            <span><i className="legend-dot bar-want_to_go" />Want to go</span>
+              ))}
           </div>
         </div>
       </div>
