@@ -166,12 +166,8 @@ export default function App() {
       <div className="airmail-strip" />
       <header className="hero">
         <div>
-          <p className="brand-eyebrow">Personal travel log</p>
-
-          <div className="icon-toolbar">
-
-            <h1 className="brand-title">Travel <em>Vault</em></h1>
-
+          <div className="brand-row">
+            <p className="brand-eyebrow">Personal travel log</p>
             <button
               className="icon-btn"
               aria-label="Sign out"
@@ -181,6 +177,9 @@ export default function App() {
               <IconLogOut size={16} />
             </button>
           </div>
+
+          <h1 className="brand-title">Travel <em>Vault</em></h1>
+
           <p className="brand-sub">
             Keep track of where you want to go,
             what you've planned, and where you've already been.

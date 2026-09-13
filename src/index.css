@@ -102,11 +102,10 @@ h1.brand-title em {
   max-width: 46ch;
 }
 
-.header-actions {
+.brand-row {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  gap: 10px;
 }
 
 .icon-toolbar {
