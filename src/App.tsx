@@ -199,23 +199,33 @@ export default function App() {
         </div>
       </header>
 
-      <nav className="tabs">
-        {(['list', 'map', 'stats'] as const).map(t => (
-          <button key={t} className={'tab-btn ' + (tab === t ? 'active' : '')} onClick={() => setTab(t)}>
-            {t === 'list' ? 'List' : t === 'map' ? 'Map' : 'Stats'}
-          </button>
-        ))}
-      </nav>
-
-      {tab !== 'stats' && (
-        <div className="filter-row">
-          {(['all', 'want_to_go', 'planned', 'visited'] as const).map(f => (
-            <button key={f} className={'filter-chip ' + (filter === f ? 'active' : '')} onClick={() => setFilter(f)}>
-              {f === 'all' ? 'All' : statusLabels[f]}
+      <div className="tabs-toolbar">
+        <nav className="tabs">
+          {(['list', 'map', 'stats'] as const).map(t => (
+            <button
+              key={t}
+              className={'tab-btn ' + (tab === t ? 'active' : '')}
+              onClick={() => setTab(t)}
+            >
+              {t === 'list' ? 'List' : t === 'map' ? 'Map' : 'Stats'}
             </button>
           ))}
-        </div>
-      )}
+        </nav>
+
+        {tab !== 'stats' && (
+          <div className="filter-row">
+            {(['all', 'want_to_go', 'planned', 'visited'] as const).map(f => (
+              <button
+                key={f}
+                className={'filter-chip ' + (filter === f ? 'active' : '')}
+                onClick={() => setFilter(f)}
+              >
+                {f === 'all' ? 'All' : statusLabels[f]}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       <main>
         {tab === 'list' && (
