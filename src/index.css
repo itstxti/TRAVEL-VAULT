@@ -1757,15 +1757,15 @@ select.status-select:hover {
 }
 
 .bar-visited {
-  background: var(--teal);
+  background: #2A9D8F;
 }
 
 .bar-planned {
-  background: var(--gold);
+  background: #E9C46A;;
 }
 
 .bar-want_to_go {
-  background: var(--ink-soft);
+  background: #A8A8A8;
 }
 
 .bar-value {
