@@ -222,8 +222,8 @@ h1.brand-title em {
   align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
-  margin: 8px auto 0px;
-
+  margin-left: auto;
+  margin-right: auto;
 }
 
 nav.tabs {
@@ -265,6 +265,7 @@ nav.tabs {
   display: flex;
   align-items: flex-end;
   gap: 2px;
+  margin-bottom: 10px;
 }
 
 .filter-chip {
