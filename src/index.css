@@ -216,20 +216,21 @@ h1.brand-title em {
 }
 
 .tabs-toolbar {
+  max-width: 1100px;
+  margin: 8px auto 10px;
+  padding: 0 24px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 20px;
 }
 
 nav.tabs {
-  max-width: 1100px;
-  margin: 8px auto 0;
-  padding: 0 24px;
   display: flex;
   align-items: flex-end;
   gap: 2px;
 }
+
 
 .tab-btn {
   font-family: var(--font-mono);
@@ -260,13 +261,9 @@ nav.tabs {
 }
 
 .filter-row {
-  max-width: 1100px;
-  margin: 0px auto 10px;
-  padding: 0 24px;
   display: flex;
   align-items: flex-end;
   gap: 2px;
-  border-top: 1px solid #000;
 }
 
 .filter-chip {
