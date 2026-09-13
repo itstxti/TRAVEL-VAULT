@@ -264,7 +264,6 @@ nav.tabs {
   align-items: flex-end;
   gap: 2px;
   margin-bottom: 10px;
-  flex-wrap: wrap;
 }
 
 .filter-chip {
@@ -1596,39 +1595,20 @@ select.status-select:hover {
   gap: 28px;
 }
 
-@media (max-width: 768px) {
-  .stats-two-col {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-}
-
 .stats-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 12px;
   margin-bottom: 10px;
 }
 
 .stats-card-grid-narrow {
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
 }
 
 /* Primary overview metrics */
 .stats-primary-grid {
   grid-template-columns: repeat(4, 1fr);
-}
-
-@media (max-width: 768px) {
-  .stats-primary-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .stats-primary-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 .stats-card-accent-visited b {
@@ -1738,33 +1718,6 @@ select.status-select:hover {
   grid-template-columns: 90px minmax(0, 1fr) 34px;
   align-items: center;
   gap: 12px;
-}
-
-@media (max-width: 768px) {
-  .bar-row {
-    grid-template-columns: 70px minmax(0, 1fr) 34px;
-    gap: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .bar-row {
-    grid-template-columns: 1fr;
-    gap: 4px;
-  }
-
-  .bar-label {
-    font-size: 10px;
-  }
-
-  .bar-track {
-    height: 12px;
-  }
-
-  .bar-value {
-    text-align: left;
-    font-size: 11px;
-  }
 }
 
 .bar-label {
@@ -2148,72 +2101,5 @@ select.status-select:hover {
 
   .modal-body {
     padding: 16px 16px 22px;
-  }
-
-  /* Filtros mejorados para mobile */
-  .filter-row {
-    gap: 4px;
-  }
-
-  .filter-chip {
-    padding: 5px 10px;
-    font-size: 10px;
-    flex: 1;
-    min-width: 60px;
-    text-align: center;
-  }
-
-  /* Stats cards mejoradas para mobile */
-  .stats-card-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  .stats-card-grid-narrow {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  .stats-card b {
-    font-size: 20px;
-  }
-
-  .stats-card span {
-    font-size: 9px;
-  }
-
-  .stats-primary-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-
-  .stats-two-col {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .stats-view {
-    gap: 30px;
-  }
-
-  .stats-section {
-    padding-bottom: 16px;
-  }
-
-  .bar-row {
-    grid-template-columns: 60px minmax(0, 1fr) 28px;
-    gap: 6px;
-  }
-
-  .bar-label {
-    font-size: 9px;
-  }
-
-  .bar-track {
-    height: 12px;
-  }
-
-  .bar-value {
-    font-size: 10px;
   }
 }

@@ -702,6 +702,25 @@ export default function StatsView({
             </svg>
           </div>
 
+          <div className="status-legend">
+            <div className="status-legend-item">
+              <span className="legend-dot bar-visited" />
+              <span>Visited</span>
+              <b>{((stats.visited / stats.total) * 100).toFixed(0)}%</b>
+            </div>
+
+            <div className="status-legend-item">
+              <span className="legend-dot bar-planned" />
+              <span>Planned</span>
+              <b>{((stats.planned / stats.total) * 100).toFixed(0)}%</b>
+            </div>
+
+            <div className="status-legend-item">
+              <span className="legend-dot bar-want_to_go" />
+              <span>Want to go</span>
+              <b>{((stats.wantToGo / stats.total) * 100).toFixed(0)}%</b>
+            </div>
+          </div>
         </div>
 
         <div className="stats-secondary-row">
@@ -1070,6 +1089,23 @@ export default function StatsView({
                   </div>
                 )
               )}
+            </div>
+
+            <div className="country-legend">
+              <span>
+                <i className="legend-dot bar-visited" />
+                Visited
+              </span>
+
+              <span>
+                <i className="legend-dot bar-planned" />
+                Planned
+              </span>
+
+              <span>
+                <i className="legend-dot bar-want_to_go" />
+                Want to go
+              </span>
             </div>
 
           </div>
