@@ -278,11 +278,6 @@ export default function StatsView({
     .sort((a, b) => b.total - a.total)
     .slice(0, 5);
 
-  const maxCountry = Math.max(
-    ...topCountries.map(c => c.total),
-    1
-  );
-
   return (
     <section className="view active stats-view">
       <div className="stats-section">
@@ -383,9 +378,7 @@ export default function StatsView({
                 <div className="bar-track country-bar-track">
                   <div
                     className="country-bar-segments"
-                    style={{
-                      width: `${(c.total / maxCountry) * 100}%`,
-                    }}
+                    style={{ width: '100%' }}
                   >
                     {c.visited > 0 && (
                       <div
