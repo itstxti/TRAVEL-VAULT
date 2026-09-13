@@ -239,10 +239,7 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
               .slice(0, 5)
               .map(c => (
                 <div className="bar-row" key={c.country}>
-                  <span className="bar-label">
-                    {c.country}
-                  </span>
-
+                  <span className="bar-label">{c.country}</span>
                   <div className="bar-track">
                     <div
                       className="bar-fill"
