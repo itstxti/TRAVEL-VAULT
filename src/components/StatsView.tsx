@@ -1038,6 +1038,18 @@ export default function StatsView({
 
             <OverviewCard
               value={
+                topJournalCountry?.[0] ?? '—'
+              }
+              label="Top country"
+              detail={
+                topJournalCountry
+                  ? `${topJournalCountry[1]} entries`
+                  : undefined
+              }
+            />
+
+            <OverviewCard
+              value={
                 stats.destinationsWithJournal > 0
                   ? (
                       stats.journalEntries /
@@ -1048,17 +1060,6 @@ export default function StatsView({
               label="Avg. / destination"
             />
 
-            <OverviewCard
-              value={
-                topJournalCountry?.[0] ?? '—'
-              }
-              label="Top country"
-              detail={
-                topJournalCountry
-                  ? `${topJournalCountry[1]} entries`
-                  : undefined
-              }
-            />
           </div>
         </div>
 
@@ -1077,6 +1078,18 @@ export default function StatsView({
 
             <OverviewCard
               value={
+                topPhotoCountry?.[0] ?? '—'
+              }
+              label="Top country"
+              detail={
+                topPhotoCountry
+                  ? `${topPhotoCountry[1]} photos`
+                  : undefined
+              }
+            />
+
+            <OverviewCard
+              value={
                 stats.destinationsWithPhotos > 0
                   ? (
                       stats.photos /
@@ -1087,17 +1100,6 @@ export default function StatsView({
               label="Avg. / destination"
             />
 
-            <OverviewCard
-              value={
-                topPhotoCountry?.[0] ?? '—'
-              }
-              label="Top country"
-              detail={
-                topPhotoCountry
-                  ? `${topPhotoCountry[1]} photos`
-                  : undefined
-              }
-            />
           </div>
         </div>
 
