@@ -744,7 +744,7 @@ export default function StatsView({
         <SectionTitle>
           Countries
           <span className="stats-total">
-            {stats.countriesTotal}
+            ({stats.countriesTotal})
           </span>
         </SectionTitle>
 
