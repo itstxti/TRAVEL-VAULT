@@ -228,15 +228,33 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
               <div className="country-stat-row" key={c.country}>
                 <span className="country-flag">{flag(countryData(c.country)?.[1])}</span>
                 <span className="country-stat-name">{c.country}</span>
-                <div className="bar-track bar-track-small">
-                  <div className="bar-fill bar-visited" style={{ width: `${(c.total / maxCountry) * 100}%` }} />
+                <div className="stacked-bar-track" style={{ width: `${(c.total / maxCountry) * 100}%` }}>
+                  {c.visited > 0 && (
+                    <div className="stacked-bar-seg bar-visited" style={{ flexGrow: c.visited }}>
+                      {c.visited}
+                    </div>
+                  )}
+                  {c.planned > 0 && (
+                    <div className="stacked-bar-seg bar-planned" style={{ flexGrow: c.planned }}>
+                      {c.planned}
+                    </div>
+                  )}
+                  {c.wantToGo > 0 && (
+                    <div className="stacked-bar-seg bar-want_to_go" style={{ flexGrow: c.wantToGo }}>
+                      {c.wantToGo}
+                    </div>
+                  )}
                 </div>
                 <span className="country-stat-count">
                   {c.total} destination{c.total !== 1 ? 's' : ''}
-                  {c.visited > 0 && <em> · {c.visited} visited</em>}
                 </span>
               </div>
             ))}
+          </div>
+          <div className="country-legend">
+            <span><i className="legend-dot bar-visited" />Visited</span>
+            <span><i className="legend-dot bar-planned" />Planned</span>
+            <span><i className="legend-dot bar-want_to_go" />Want to go</span>
           </div>
         </div>
       </div>
