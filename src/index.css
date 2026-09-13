@@ -1768,18 +1768,6 @@ select.status-select:hover {
   background: var(--ink-soft);
 }
 
-.bar-fill.bar-visited {
-  background: var(--teal);
-}
-
-.bar-fill.bar-planned {
-  background: var(--gold);
-}
-
-.bar-fill.bar-want_to_go {
-  background: var(--ink-soft);
-}
-
 .bar-value {
   font-family: var(--font-mono);
   font-size: 12.5px;
