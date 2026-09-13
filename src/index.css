@@ -609,7 +609,7 @@ select.status-select:hover {
 
 .date-row {
   display: flex;
-  gap: 10px;
+  gap: 30px;
   justify-content: flex-start;
 }
 
