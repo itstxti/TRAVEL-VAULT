@@ -1725,7 +1725,7 @@ select.status-select:hover {
 
 .bar-row {
   display: grid;
-  grid-template-columns: 90px minmax(0, 1fr) 34px;
+  grid-template-columns: 60px minmax(0, 1fr) 14px;
   align-items: center;
   gap: 12px;
 }
@@ -2110,7 +2110,7 @@ select.status-select:hover {
   }
 
   .bar-row {
-    grid-template-columns: 74px minmax(0, 1fr) 30px;
+    grid-template-columns: 60px minmax(0, 1fr) 14px;
   }
 
   .destination-status-card {
