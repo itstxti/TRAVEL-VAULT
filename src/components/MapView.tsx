@@ -16,7 +16,7 @@ export default function MapView({ list }: { list: Destination[] }) {
       </div>
       {list.length === 0 ? (
         <div className="empty-state">
-          <h3>No destinations to show yet</h3>
+          <h1>No destinations to show yet</h1>
           <p>Add a destination to see it appear on the map.</p>
         </div>
       ) : (

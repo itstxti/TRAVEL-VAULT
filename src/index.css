@@ -636,6 +636,7 @@ select.status-select:hover {
 }
 
 .map-legend {
+  justify-content: center;
   display: flex;
   gap: 16px;
   margin-bottom: 12px;

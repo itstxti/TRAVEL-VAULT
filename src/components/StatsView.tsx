@@ -229,6 +229,13 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
         <SectionTitle>Countries</SectionTitle>
         <div className="stats-card">
           <div className="country-stat-list">
+
+            <div className="map-legend">
+                  {Object.entries(statusColors).map(([s, c]) => (
+                    <span key={s}><span className="legend-dot" style={{ background: c }} />{statusLabels[s as Status]}</span>
+                  ))}
+          </div>
+
             {stats.countryBreakdown.map(c => (
               <div className="country-stat-row" key={c.country}>
                 <span className="country-flag">{flag(countryData(c.country)?.[1])}</span>
@@ -256,11 +263,6 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
               </div>
             ))}
           </div>
-          <div className="map-legend">
-                  {Object.entries(statusColors).map(([s, c]) => (
-                    <span key={s}><span className="legend-dot" style={{ background: c }} />{statusLabels[s as Status]}</span>
-                  ))}
-                </div>
         </div>
       </div>
 
