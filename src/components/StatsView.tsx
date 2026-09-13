@@ -815,6 +815,7 @@ export default function StatsView({
           </div>
         </div>
 
+      {stats.visited > 2 && (      
         <div className="stats-card">
           <p className="stats-card-subtitle">
             Top 3 countries with the most visited cities
@@ -849,8 +850,9 @@ export default function StatsView({
               );
             })}
           </div>
-        </div>
+        </div>)}
 
+      {stats.planned > 2 && (
         <div className="stats-card">
           <p className="stats-card-subtitle">
             Top 3 countries with the most planned cities
@@ -885,43 +887,44 @@ export default function StatsView({
               );
             })}
           </div>
-        </div>
+        </div>)}
 
-        <div className="stats-card">
-          <p className="stats-card-subtitle">
-            Top 3 countries with the most wanted cities
-          </p>
+        {stats.wantToGo > 2 && (
+          <div className="stats-card">
+            <p className="stats-card-subtitle">
+              Top 3 countries with the most wanted cities
+            </p>
 
-          <div className="podium">
-            {topWantToGoCountries.map((c, index) => {
-              const rank = index + 1;
+            <div className="podium">
+              {topWantToGoCountries.map((c, index) => {
+                const rank = index + 1;
 
-              return (
-                <div
-                  className={`podium-item rank-${rank}`}
-                  key={c.country}
-                >
-                  <div className="medal">
-                    {rank === 1
-                      ? '🥇'
-                      : rank === 2
-                        ? '🥈'
-                        : '🥉'}
+                return (
+                  <div
+                    className={`podium-item rank-${rank}`}
+                    key={c.country}
+                  >
+                    <div className="medal">
+                      {rank === 1
+                        ? '🥇'
+                        : rank === 2
+                          ? '🥈'
+                          : '🥉'}
+                    </div>
+
+                    <h3>{c.country}</h3>
+
+                    <p>
+                      {c.wantToGo}{' '}
+                      {c.wantToGo === 1
+                        ? 'city'
+                        : 'cities'}
+                    </p>
                   </div>
-
-                  <h3>{c.country}</h3>
-
-                  <p>
-                    {c.wantToGo}{' '}
-                    {c.wantToGo === 1
-                      ? 'city'
-                      : 'cities'}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                );
+              })}
+            </div>
+          </div>)}
 
       </div>
 
