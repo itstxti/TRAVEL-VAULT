@@ -1,12 +1,7 @@
 import React, { useMemo } from 'react';
 import { Destination } from '../types';
 import { tripDays } from '../utils';
-import {
-  IconStampEmpty,
-  IconCamera,
-  IconNotebook,
-  IconCalendar,
-} from '../icons';
+import { IconStampEmpty } from '../icons';
 
 interface CountryStat {
   country: string;
@@ -932,7 +927,6 @@ export default function StatsView({
       {stats.tripCount > 0 && (
         <div className="stats-section">
           <SectionTitle>
-            <IconCalendar size={17} />
             Travel Activity
           </SectionTitle>
 
@@ -1002,7 +996,6 @@ export default function StatsView({
         {/* Journal */}
         <div className="stats-section">
           <SectionTitle>
-            <IconNotebook size={17} />
             Journal
           </SectionTitle>
 
@@ -1040,7 +1033,6 @@ export default function StatsView({
         {/* Gallery */}
         <div className="stats-section">
           <SectionTitle>
-            <IconCamera size={17} />
             Gallery
           </SectionTitle>
 
