@@ -492,21 +492,21 @@ function CompanionSummaryCard({
         {visited > 0 && (
           <span>
             <i className="legend-dot bar-visited" />
-            {((visited / total) * 100)}% visited
+            {((visited / total) * 100).toFixed(0)}% visited
           </span>
         )}
 
         {planned > 0 && (
           <span>
             <i className="legend-dot bar-planned" />
-            {((planned / total) * 100)}% planned
+            {((planned / total) * 100).toFixed(0)}% planned
           </span>
         )}
 
         {wantToGo > 0 && (
           <span>
             <i className="legend-dot bar-want_to_go" />
-            {((wantToGo / total) * 100)}% want to go
+            {((wantToGo / total) * 100).toFixed(0)}% want to go
           </span>
         )}
       </div>
@@ -979,7 +979,7 @@ export default function StatsView({
       </div>
 
       {/* Travel Companions */}
-      {stats.companionFrequency.length > 0 && (
+      {stats.total > 0 && (
         <div className="stats-section">
           <SectionTitle>
             Travel Companions
