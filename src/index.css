@@ -485,7 +485,7 @@ main {
 
 .dates-line {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 10px;
   color: var(--teal-dark);
   background: rgba(47, 111, 99, 0.08);
   display: inline-flex;
@@ -495,6 +495,8 @@ main {
   padding: 5px 9px;
   border-radius: 3px;
   border: 1px solid rgba(47, 111, 99, 0.25);
+  width: 100%;
+  justify-content: center;
 }
 
 .dates-line svg {
