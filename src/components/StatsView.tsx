@@ -706,19 +706,19 @@ export default function StatsView({
             <div className="status-legend-item">
               <span className="legend-dot bar-visited" />
               <span>Visited</span>
-              <b>{stats.visited}</b>
+              <b>{((stats.visited / stats.total) * 100).toFixed(0)}%</b>
             </div>
 
             <div className="status-legend-item">
               <span className="legend-dot bar-planned" />
               <span>Planned</span>
-              <b>{stats.planned}</b>
+              <b>{((stats.planned / stats.total) * 100).toFixed(0)}%</b>
             </div>
 
             <div className="status-legend-item">
               <span className="legend-dot bar-want_to_go" />
               <span>Want to go</span>
-              <b>{stats.wantToGo}</b>
+              <b>{((stats.wantToGo / stats.total) * 100).toFixed(0)}%</b>
             </div>
           </div>
         </div>
