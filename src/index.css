@@ -1791,11 +1791,11 @@ select.status-select:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 8px;
   padding: 15px 10px;
   border-radius: 8px 8px 0 0;
-  color: white;
+  color: #1b2a3d;
   text-align: center;
   width: 110px;
 }
