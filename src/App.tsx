@@ -9,6 +9,7 @@ import { useSession } from './components/AuthGate';
 import { debounce } from './utils';
 import List from './components/List';
 import MapView from './components/MapView';
+import StatsView from './components/StatsView';
 import DestinationModal from './components/DestinationModal';
 import GalleryModal from './components/GalleryModal';
 import JournalModal from './components/JournalModal';
@@ -22,7 +23,7 @@ export default function App() {
   // which account is signed in (see the loading effect further down).
   const [dest, setDest] = useState<Destination[]>([]);
   const [ready, setReady] = useState(false);
-  const [tab, setTab] = useState<'list' | 'map'>('list');
+  const [tab, setTab] = useState<'list' | 'map' | 'stats'>('list');
   const [filter, setFilter] = useState<'all' | Status>('all');
   const [modal, setModal] = useState(false);
   const [editing, setEditing] = useState<Destination | null>(null);
@@ -131,12 +132,6 @@ export default function App() {
   }, []);
 
   const list = useMemo(() => (filter === 'all' ? dest : dest.filter(d => d.status === filter)), [dest, filter]);
-  const stats = {
-    total: dest.length,
-    visited: dest.filter(d => d.status === 'visited').length,
-    planned: dest.filter(d => d.status === 'planned').length,
-    countries: new Set(dest.filter(d => d.status === 'visited').map(d => d.country)).size,
-  };
 
   const update = (d: Destination) => {
     setDest(x => {
@@ -189,16 +184,6 @@ export default function App() {
               <IconLogOut size={16} />
             </button>
           </div>
-          <div className="stats-row">
-            {([
-              ['Destinations', stats.total],
-              ['Visited', stats.visited],
-              ['Planned', stats.planned],
-              ['Countries', stats.countries],
-            ] as const).map(([l, n]) => (
-              <div className="stat-chip" key={l}><b>{n}</b><span>{l}</span></div>
-            ))}
-          </div>
           <div className="backup-row">
             {migration === 'running' && <span className="sync-status">Uploading your vault to the cloud…</span>}
             {migration === 'done' && <span className="sync-status">Initial cloud copy ✓</span>}
@@ -215,25 +200,29 @@ export default function App() {
       </header>
 
       <nav className="tabs">
-        {(['list', 'map'] as const).map(t => (
+        {(['list', 'map', 'stats'] as const).map(t => (
           <button key={t} className={'tab-btn ' + (tab === t ? 'active' : '')} onClick={() => setTab(t)}>
-            {t === 'list' ? 'List' : 'Map'}
+            {t === 'list' ? 'List' : t === 'map' ? 'Map' : 'Stats'}
           </button>
         ))}
       </nav>
 
-      <div className="filter-row">
-        {(['all', 'want_to_go', 'planned', 'visited'] as const).map(f => (
-          <button key={f} className={'filter-chip ' + (filter === f ? 'active' : '')} onClick={() => setFilter(f)}>
-            {f === 'all' ? 'All' : statusLabels[f]}
-          </button>
-        ))}
-      </div>
+      {tab !== 'stats' && (
+        <div className="filter-row">
+          {(['all', 'want_to_go', 'planned', 'visited'] as const).map(f => (
+            <button key={f} className={'filter-chip ' + (filter === f ? 'active' : '')} onClick={() => setFilter(f)}>
+              {f === 'all' ? 'All' : statusLabels[f]}
+            </button>
+          ))}
+        </div>
+      )}
 
       <main>
-        {tab === 'list'
-          ? <List list={list} update={update} remove={remove} openEdit={d => { setEditing(d); setModal(true); }} openGallery={d => setGalleryId(d.id)} openNotes={d => setNotesId(d.id)} />
-          : <MapView list={list} />}
+        {tab === 'list' && (
+          <List list={list} update={update} remove={remove} openEdit={d => { setEditing(d); setModal(true); }} openGallery={d => setGalleryId(d.id)} openNotes={d => setNotesId(d.id)} />
+        )}
+        {tab === 'map' && <MapView list={list} />}
+        {tab === 'stats' && <StatsView dest={dest} />}
       </main>
 
       <button className="fab" aria-label="Add destination" onClick={() => { setEditing(null); setModal(true); }}>+</button>
