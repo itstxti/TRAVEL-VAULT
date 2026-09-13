@@ -34,6 +34,11 @@ interface TripExtreme {
   days: number;
 }
 
+interface LatestTrip {
+  name: string;
+  date: string;
+}
+
 interface Stats {
   total: number;
   visited: number;
@@ -59,6 +64,7 @@ interface Stats {
   avgTripDays: number;
   longestTrip: TripExtreme | null;
   shortestTrip: TripExtreme | null;
+  latestTrip: LatestTrip | null;
 
   soloTrips: number;
   soloVisited: number;
@@ -107,6 +113,7 @@ function computeStats(dest: Destination[]): Stats {
 
   let longestTrip: TripExtreme | null = null;
   let shortestTrip: TripExtreme | null = null;
+  let latestTrip: LatestTrip | null = null;
 
   let soloTrips = 0;
   let soloVisited = 0;
@@ -219,17 +226,41 @@ function computeStats(dest: Destination[]): Stats {
       tripCount++;
       totalTripDays += days;
 
-      if (!longestTrip || days > longestTrip.days) {
+      if (
+        !longestTrip ||
+        days > longestTrip.days
+      ) {
         longestTrip = {
           name: d.name,
           days,
         };
       }
 
-      if (!shortestTrip || days < shortestTrip.days) {
+      if (
+        !shortestTrip ||
+        days < shortestTrip.days
+      ) {
         shortestTrip = {
           name: d.name,
           days,
+        };
+      }
+
+      /*
+       * Latest completed trip
+       *
+       * Based on the most recent trip end date.
+       */
+      if (
+        d.tripEnd &&
+        (
+          !latestTrip ||
+          d.tripEnd > latestTrip.date
+        )
+      ) {
+        latestTrip = {
+          name: d.name,
+          date: d.tripEnd,
         };
       }
     }
@@ -343,7 +374,7 @@ function computeStats(dest: Destination[]): Stats {
     avgPhotosPerDestination:
       visitedDestinationsWithPhotos > 0
         ? visitedPhotos /
-          tripCount
+          tripCount // All visited destinations are considered for this average
         : 0,
 
     mostPhotographed,
@@ -360,6 +391,7 @@ function computeStats(dest: Destination[]): Stats {
 
     longestTrip,
     shortestTrip,
+    latestTrip,
 
     soloTrips,
     soloVisited,
@@ -832,7 +864,9 @@ export default function StatsView({
               value={stats.avgTripDays.toFixed(1)}
               label="Avg. trip length"
             />
+          </div>
 
+          <div className="stats-card-grid">
             <OverviewCard
               value={
                 stats.longestTrip?.days ?? 0
@@ -850,6 +884,21 @@ export default function StatsView({
               label="Shortest trip"
               detail={
                 stats.shortestTrip?.name
+              }
+            />
+
+            <OverviewCard
+              value={
+                stats.latestTrip
+                  ? new Date(
+                      stats.latestTrip.date +
+                        'T00:00:00'
+                    ).toLocaleDateString('en-GB')
+                  : '—'
+              }
+              label="Latest trip"
+              detail={
+                stats.latestTrip?.name
               }
             />
           </div>
