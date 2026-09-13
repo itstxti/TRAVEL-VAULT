@@ -2129,12 +2129,12 @@ select.status-select:hover {
   }
 
   .donut-total {
-  font-size: 10px;
+  font-size: 14px;
 }
 
 .donut-label {
-  font-size: 4px;
-  letter-spacing: .05em;
+  font-size: 6%;
+  letter-spacing: .08em;
 }
 }
 
