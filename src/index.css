@@ -1691,7 +1691,7 @@ select.status-select:hover {
 .stats-card b {
   display: block;
   font-family: var(--font-mono);
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--teal-dark);
   line-height: 1.1;
@@ -2085,7 +2085,21 @@ select.status-select:hover {
    Mobile
    ───────────────────────────── */
 
+@media (max-width: 1075px) {
+  .stats-card-grid {
+    grid-auto-flow: column;
+  }
+}
+
 @media (max-width: 700px) {
+
+.stats-card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  }
+
+  .stats-card-grid-narrow {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  }
 
 .stats-card-grid{
   grid-auto-flow: column;
@@ -2159,6 +2173,16 @@ select.status-select:hover {
   font-size: 50%;
   letter-spacing: .08em;
 }
+
+  .stats-card b {
+    font-size: 15px;
+  }
+
+  .stats-card span {
+    font-size: 12px;
+    letter-spacing: .01em;
+}
+
 }
 
 @media (max-width:450px) {
