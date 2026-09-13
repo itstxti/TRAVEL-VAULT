@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { Destination } from '../types';
 import { tripDays } from '../utils';
@@ -85,7 +84,7 @@ interface Stats {
 function computeStats(dest: Destination[]): Stats {
   const countryMap = new Map<string, CountryStat>();
 
-  const companionCounts = new Map<
+  const companionCounts = new Map
     string,
     {
       total: number;
@@ -107,6 +106,7 @@ function computeStats(dest: Destination[]): Stats {
 
   let visitedPhotos = 0;
   let visitedDestinationsWithPhotos = 0;
+  let visitedJournalEntries = 0;
 
   let mostPhotographed: NamedCount | null = null;
   let mostJournalEntries: NamedCount | null = null;
@@ -210,6 +210,10 @@ function computeStats(dest: Destination[]): Stats {
           name: d.name,
           count: d.journal.length,
         };
+      }
+
+      if (d.status === 'visited') {
+        visitedJournalEntries += d.journal.length;
       }
 
       for (const entry of d.journal) {
@@ -387,16 +391,18 @@ function computeStats(dest: Destination[]): Stats {
     destinationsWithPhotos,
     destinationsWithJournal,
 
+    // Averages are per REALIZED trip (any destination with
+    // status === 'visited'), regardless of whether it has
+    // valid trip dates. This intentionally uses `visited`,
+    // not `tripCount` (which only counts dated trips).
     avgPhotosPerDestination:
-      visitedDestinationsWithPhotos > 0
-        ? visitedPhotos /
-          tripCount // Divide by the number of trips not the number of destinations with photos. DO NOT CHANGE THIS TO destinationsWithPhotos.
+      visited > 0
+        ? visitedPhotos / visited
         : 0,
 
     avgJournalEntriesPerDestination:
-      destinationsWithJournal > 0
-        ? journalEntries /
-          tripCount // Divide by the number of trips not the number of destinations with journal entries. DO NOT CHANGE THIS TO destinationsWithJournal.
+      visited > 0
+        ? visitedJournalEntries  / visited
         : 0,
 
     mostPhotographed,
@@ -566,70 +572,15 @@ export default function StatsView({
    * Top 5 countries
    */
   const topCountries = stats.countryBreakdown
-    .slice()
-    .sort(
-      (a, b) =>
-        b.total - a.total ||
-        a.country.localeCompare(b.country)
-    )
     .slice(0, 5);
 
   return (
     <section className="view active stats-view">
 
-      {/* Overview */}
+      {/* Overview (merged with status breakdown) */}
       <div className="stats-section">
         <SectionTitle>
           Overview
-        </SectionTitle>
-
-        <div className="stats-card-grid stats-primary-grid">
-          <OverviewCard
-            value={stats.total}
-            label="Destinations"
-          />
-
-          <OverviewCard
-            value={stats.visited}
-            label="Visited"
-            accent="visited"
-          />
-
-          <OverviewCard
-            value={stats.planned}
-            label="Planned"
-            accent="planned"
-          />
-
-          <OverviewCard
-            value={stats.wantToGo}
-            label="Want to go"
-            accent="want_to_go"
-          />
-        </div>
-
-        <div className="stats-secondary-row">
-          <MiniStat
-            value={stats.countriesTotal}
-            label="Countries"
-          />
-
-          <MiniStat
-            value={stats.photos}
-            label="Photos"
-          />
-
-          <MiniStat
-            value={stats.journalEntries}
-            label="Journal entries"
-          />
-        </div>
-      </div>
-
-      {/* Destination Status */}
-      <div className="stats-section">
-        <SectionTitle>
-          Destination Status
         </SectionTitle>
 
         <div className="stats-card destination-status-card">
@@ -770,6 +721,23 @@ export default function StatsView({
               <b>{stats.wantToGo}</b>
             </div>
           </div>
+        </div>
+
+        <div className="stats-secondary-row">
+          <MiniStat
+            value={stats.countriesTotal}
+            label="Countries"
+          />
+
+          <MiniStat
+            value={stats.photos}
+            label="Photos"
+          />
+
+          <MiniStat
+            value={stats.journalEntries}
+            label="Journal entries"
+          />
         </div>
       </div>
 
@@ -967,7 +935,7 @@ export default function StatsView({
                   1
                 )
               }
-              label="Avg. / destination"
+              label="Avg. / trip"
             />
 
           </div>
@@ -1003,7 +971,7 @@ export default function StatsView({
               value={stats.avgPhotosPerDestination.toFixed(
                 1
               )}
-              label="Avg. / destination"
+              label="Avg. / trip"
             />
           </div>
         </div>
@@ -1147,5 +1115,3 @@ export default function StatsView({
     </section>
   );
 }
-
-
