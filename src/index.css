@@ -1919,7 +1919,7 @@ select.status-select:hover {
 .donut-total {
   font-family: var(--font-display);
   font-size: 24px;
-  font-weight: 600;
+  font-weight: 300;
   fill: var(--ink);
   transform: rotate(90deg);
   transform-origin: center;
@@ -1956,7 +1956,7 @@ select.status-select:hover {
 .status-legend-item b {
   font-family: var(--font-display);
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 300;
   color: var(--ink);
 }
 
