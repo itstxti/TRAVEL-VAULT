@@ -2086,6 +2086,11 @@ select.status-select:hover {
    ───────────────────────────── */
 
 @media (max-width: 700px) {
+
+.stats-card-grid{
+  grid-auto-flow: column;
+}
+
   .stats-two-col {
     grid-template-columns: 1fr;
   }
