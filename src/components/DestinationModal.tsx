@@ -144,7 +144,7 @@ export default function DestinationModal({
 
             <div className="date-row">
               <div className="start-date">
-                <span>Start</span>
+                <span style={{ marginRight: '5px' }}>Start:</span>
                 <input
                   type="date"
                   value={start}
@@ -153,7 +153,7 @@ export default function DestinationModal({
               </div>
               <div className="start-date">
 
-                <span>End</span>
+                <span style={{ marginRight: '5px' }}>End:</span>
                 <input
                   type="date"
                   value={end}
