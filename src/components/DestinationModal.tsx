@@ -148,6 +148,7 @@ export default function DestinationModal({
                 <input
                   type="date"
                   value={start}
+                  style={{ borderRadius: '5px' }}
                   onChange={e => setStart(e.target.value)}
                 />
               </div>
@@ -156,7 +157,9 @@ export default function DestinationModal({
                 <span style={{ marginRight: '5px', fontSize: '12px' }}>End:</span>
                 <input
                   type="date"
+                  
                   value={end}
+                  style={{ borderRadius: '5px' }}
                   onChange={e => setEnd(e.target.value)}
                 />
               </div>
