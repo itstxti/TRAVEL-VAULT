@@ -2097,8 +2097,7 @@ select.status-select:hover {
 .filter-select {
   display: block;
   width: 100%;
-  margin-top: 10px;
-  padding: 9px 12px;
+  padding: 2px 5px;
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--paper);
@@ -2107,6 +2106,7 @@ select.status-select:hover {
   font-size: 11px;
   letter-spacing: .05em;
   text-transform: uppercase;
+  height: 25px;
 }
 
   .stats-primary-grid {
