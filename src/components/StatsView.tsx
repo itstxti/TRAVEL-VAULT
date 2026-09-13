@@ -84,7 +84,7 @@ interface Stats {
 function computeStats(dest: Destination[]): Stats {
   const countryMap = new Map<string, CountryStat>();
 
-  const companionCounts = new Map
+  const companionCounts = new Map<
     string,
     {
       total: number;
