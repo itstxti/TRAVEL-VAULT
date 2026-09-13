@@ -55,6 +55,7 @@ interface Stats {
   avgPhotosPerDestination: number;
 
   mostPhotographed: NamedCount | null;
+  mostJournaled: NamedCount | null;
   latestJournalDate: string | null;
 
   countryBreakdown: CountryStat[];
@@ -106,6 +107,7 @@ function computeStats(dest: Destination[]): Stats {
   let visitedDestinationsWithPhotos = 0;
 
   let mostPhotographed: NamedCount | null = null;
+  let mostJournaled: NamedCount | null = null;
   let latestJournalDate: string | null = null;
 
   let tripCount = 0;
@@ -181,9 +183,6 @@ function computeStats(dest: Destination[]): Stats {
 
       /*
        * Average photos per visited destination
-       *
-       * Only visited destinations with photos
-       * are considered.
        */
       if (d.status === 'visited') {
         visitedPhotos += d.photos.length;
@@ -198,6 +197,16 @@ function computeStats(dest: Destination[]): Stats {
       journalEntries += d.journal.length;
       destinationsWithJournal++;
 
+      if (
+        !mostJournaled ||
+        d.journal.length > mostJournaled.count
+      ) {
+        mostJournaled = {
+          name: d.name,
+          count: d.journal.length,
+        };
+      }
+
       for (const entry of d.journal) {
         if (
           !latestJournalDate ||
@@ -211,8 +220,8 @@ function computeStats(dest: Destination[]): Stats {
     /*
      * Trips
      *
-     * Only visited destinations with valid start/end dates
-     * are counted as completed trips.
+     * Only visited destinations with valid
+     * start/end dates are counted.
      */
     const days = tripDays(
       d.tripStart,
@@ -267,8 +276,6 @@ function computeStats(dest: Destination[]): Stats {
 
     /*
      * Solo / companion trips
-     *
-     * These include all destinations regardless of status.
      */
     if (d.companions.length) {
       tripsWithCompanions++;
@@ -296,12 +303,13 @@ function computeStats(dest: Destination[]): Stats {
      * Travel companions
      */
     for (const companion of d.companions) {
-      const current = companionCounts.get(companion) ?? {
-        total: 0,
-        visited: 0,
-        planned: 0,
-        wantToGo: 0,
-      };
+      const current =
+        companionCounts.get(companion) ?? {
+          total: 0,
+          visited: 0,
+          planned: 0,
+          wantToGo: 0,
+        };
 
       current.total++;
 
@@ -330,6 +338,55 @@ function computeStats(dest: Destination[]): Stats {
       b.total - a.total ||
       a.country.localeCompare(b.country)
   );
+
+  /*
+   * Journal / photo country statistics
+   */
+  const journalCountryCounts = new Map<
+    string,
+    number
+  >();
+
+  const photoCountryCounts = new Map<
+    string,
+    number
+  >();
+
+  for (const d of dest) {
+    const country = d.country || 'Unspecified';
+
+    if (d.journal.length) {
+      journalCountryCounts.set(
+        country,
+        (journalCountryCounts.get(country) ?? 0) +
+          d.journal.length
+      );
+    }
+
+    if (d.photos.length) {
+      photoCountryCounts.set(
+        country,
+        (photoCountryCounts.get(country) ?? 0) +
+          d.photos.length
+      );
+    }
+  }
+
+  const topJournalCountry =
+    [...journalCountryCounts.entries()]
+      .sort(
+        (a, b) =>
+          b[1] - a[1] ||
+          a[0].localeCompare(b[0])
+      )[0] ?? null;
+
+  const topPhotoCountry =
+    [...photoCountryCounts.entries()]
+      .sort(
+        (a, b) =>
+          b[1] - a[1] ||
+          a[0].localeCompare(b[0])
+      )[0] ?? null;
 
   /*
    * Travel companions sorted by total trips
@@ -373,11 +430,11 @@ function computeStats(dest: Destination[]): Stats {
 
     avgPhotosPerDestination:
       visitedDestinationsWithPhotos > 0
-        ? visitedPhotos /
-          tripCount // All visited destinations are considered for this average
+        ? visitedPhotos / tripCount
         : 0,
 
     mostPhotographed,
+    mostJournaled,
     latestJournalDate,
 
     countryBreakdown,
@@ -550,6 +607,58 @@ export default function StatsView({
         a.country.localeCompare(b.country)
     )
     .slice(0, 5);
+
+  /*
+   * Top Journal country
+   */
+  const journalCountryCounts = new Map<
+    string,
+    number
+  >();
+
+  /*
+   * Top Photo country
+   */
+  const photoCountryCounts = new Map<
+    string,
+    number
+  >();
+
+  for (const d of dest) {
+    const country = d.country || 'Unspecified';
+
+    if (d.journal.length) {
+      journalCountryCounts.set(
+        country,
+        (journalCountryCounts.get(country) ?? 0) +
+          d.journal.length
+      );
+    }
+
+    if (d.photos.length) {
+      photoCountryCounts.set(
+        country,
+        (photoCountryCounts.get(country) ?? 0) +
+          d.photos.length
+      );
+    }
+  }
+
+  const topJournalCountry =
+    [...journalCountryCounts.entries()]
+      .sort(
+        (a, b) =>
+          b[1] - a[1] ||
+          a[0].localeCompare(b[0])
+      )[0] ?? null;
+
+  const topPhotoCountry =
+    [...photoCountryCounts.entries()]
+      .sort(
+        (a, b) =>
+          b[1] - a[1] ||
+          a[0].localeCompare(b[0])
+      )[0] ?? null;
 
   return (
     <section className="view active stats-view">
@@ -869,36 +978,42 @@ export default function StatsView({
           <div className="stats-card-grid">
             <OverviewCard
               value={
-                stats.longestTrip?.days ?? 0
+                stats.longestTrip?.name ?? '—'
               }
               label="Longest trip"
               detail={
-                stats.longestTrip?.name
+                stats.longestTrip
+                  ? `${stats.longestTrip.days} days`
+                  : undefined
               }
             />
 
             <OverviewCard
               value={
-                stats.shortestTrip?.days ?? 0
+                stats.shortestTrip?.name ?? '—'
               }
               label="Shortest trip"
               detail={
-                stats.shortestTrip?.name
+                stats.shortestTrip
+                  ? `${stats.shortestTrip.days} days`
+                  : undefined
               }
             />
 
             <OverviewCard
               value={
+                stats.latestTrip?.name ?? '—'
+              }
+              label="Latest trip"
+              detail={
                 stats.latestTrip
                   ? new Date(
                       stats.latestTrip.date +
                         'T00:00:00'
-                    ).toLocaleDateString('en-GB')
-                  : '—'
-              }
-              label="Latest trip"
-              detail={
-                stats.latestTrip?.name
+                    ).toLocaleDateString(
+                      'en-GB'
+                    )
+                  : undefined
               }
             />
           </div>
@@ -908,6 +1023,7 @@ export default function StatsView({
       {/* Journal + Gallery */}
       <div className="stats-two-col">
 
+        {/* Journal */}
         <div className="stats-section">
           <SectionTitle>
             <IconNotebook size={17} />
@@ -922,22 +1038,31 @@ export default function StatsView({
 
             <OverviewCard
               value={
-                stats.destinationsWithJournal
+                stats.destinationsWithJournal > 0
+                  ? (
+                      stats.journalEntries /
+                      stats.tripCount //tiene que ser tripCount porque es el total de destinos visitados, no el total de destinos con journal
+                    ).toFixed(1)
+                  : '0.0'
               }
-              label="With entries"
+              label="Avg. / destination"
+            />
+
+            <OverviewCard
+              value={
+                topJournalCountry?.[0] ?? '—'
+              }
+              label="Top country"
+              detail={
+                topJournalCountry
+                  ? `${topJournalCountry[1]} entries`
+                  : undefined
+              }
             />
           </div>
-
-          {stats.latestJournalDate && (
-            <p className="stats-footnote">
-              Latest entry:{' '}
-              <b>
-                {stats.latestJournalDate}
-              </b>
-            </p>
-          )}
         </div>
 
+        {/* Gallery */}
         <div className="stats-section">
           <SectionTitle>
             <IconCamera size={17} />
@@ -951,24 +1076,29 @@ export default function StatsView({
             />
 
             <OverviewCard
-              value={stats.avgPhotosPerDestination.toFixed(
-                1
-              )}
+              value={
+                stats.destinationsWithPhotos > 0
+                  ? (
+                      stats.photos /
+                      stats.tripCount //tiene en cuenta el total de destinos visitados, no los que tienen fotos, por eso se divide entre tripCount
+                    ).toFixed(1)
+                  : '0.0'
+              }
               label="Avg. / destination"
             />
-          </div>
 
-          {stats.mostPhotographed && (
-            <p className="stats-footnote">
-              Most photographed:{' '}
-              <b>
-                {stats.mostPhotographed.name}
-              </b>{' '}
-              ·{' '}
-              {stats.mostPhotographed.count}{' '}
-              photos
-            </p>
-          )}
+            <OverviewCard
+              value={
+                topPhotoCountry?.[0] ?? '—'
+              }
+              label="Top country"
+              detail={
+                topPhotoCountry
+                  ? `${topPhotoCountry[1]} photos`
+                  : undefined
+              }
+            />
+          </div>
         </div>
 
       </div>
@@ -1110,3 +1240,4 @@ export default function StatsView({
     </section>
   );
 }
+
