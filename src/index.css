@@ -1791,6 +1791,35 @@ select.status-select:hover {
 /* ─────────────────────────────
    Travel companions
    ───────────────────────────── */
+.companion-summary-card {
+  text-align: center;
+}
+
+.companion-summary-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+}
+
+.companion-summary-breakdown span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 0;
+  font-size: 9px;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.companion-summary-breakdown .legend-dot {
+  width: 7px;
+  height: 7px;
+}
 
 .country-stat-list {
   display: flex;
@@ -1877,6 +1906,8 @@ select.status-select:hover {
   font-style: normal;
   color: var(--teal-dark);
 }
+
+
 
 /* Destination status donut */
 

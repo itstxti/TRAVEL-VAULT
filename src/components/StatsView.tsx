@@ -39,23 +39,37 @@ interface Stats {
   visited: number;
   planned: number;
   wantToGo: number;
+
   countriesTotal: number;
   countriesVisited: number;
+
   photos: number;
   journalEntries: number;
   destinationsWithPhotos: number;
   destinationsWithJournal: number;
   avgPhotosPerDestination: number;
+
   mostPhotographed: NamedCount | null;
   latestJournalDate: string | null;
+
   countryBreakdown: CountryStat[];
+
   tripCount: number;
   totalTripDays: number;
   avgTripDays: number;
   longestTrip: TripExtreme | null;
   shortestTrip: TripExtreme | null;
+
   soloTrips: number;
+  soloVisited: number;
+  soloPlanned: number;
+  soloWantToGo: number;
+
   tripsWithCompanions: number;
+  companionsVisited: number;
+  companionsPlanned: number;
+  companionsWantToGo: number;
+
   companionFrequency: CompanionStat[];
 }
 
@@ -96,7 +110,14 @@ function computeStats(dest: Destination[]): Stats {
   let shortestTrip: TripExtreme | null = null;
 
   let soloTrips = 0;
+  let soloVisited = 0;
+  let soloPlanned = 0;
+  let soloWantToGo = 0;
+
   let tripsWithCompanions = 0;
+  let companionsVisited = 0;
+  let companionsPlanned = 0;
+  let companionsWantToGo = 0;
 
   for (const d of dest) {
     /*
@@ -173,9 +194,14 @@ function computeStats(dest: Destination[]): Stats {
 
     /*
      * Trips
+     *
+     * A trip is counted here when it has valid start/end dates.
      */
-    const days = tripDays(d.tripStart, d.tripEnd);
-    
+    const days = tripDays(
+      d.tripStart,
+      d.tripEnd
+    );
+
     if (days !== null) {
       totalTripDays += days;
 
@@ -195,15 +221,31 @@ function computeStats(dest: Destination[]): Stats {
     }
 
     /*
-     * Travel companions
+     * Solo / companion trips
      *
-     * Count the destination as solo or with companions
-     * independently from whether trip dates are available.
+     * These are counted independently of trip dates so that
+     * the summary still reflects all registered destinations.
      */
     if (d.companions.length) {
       tripsWithCompanions++;
+
+      if (d.status === 'visited') {
+        companionsVisited++;
+      } else if (d.status === 'planned') {
+        companionsPlanned++;
+      } else {
+        companionsWantToGo++;
+      }
     } else {
       soloTrips++;
+
+      if (d.status === 'visited') {
+        soloVisited++;
+      } else if (d.status === 'planned') {
+        soloPlanned++;
+      } else {
+        soloWantToGo++;
+      }
     }
 
     /*
@@ -230,14 +272,19 @@ function computeStats(dest: Destination[]): Stats {
         current.wantToGo++;
       }
 
-      companionCounts.set(companion, current);
+      companionCounts.set(
+        companion,
+        current
+      );
     }
   }
 
   /*
    * Countries sorted by number of destinations
    */
-  const countryBreakdown = [...countryMap.values()].sort(
+  const countryBreakdown = [
+    ...countryMap.values(),
+  ].sort(
     (a, b) =>
       b.total - a.total ||
       a.country.localeCompare(b.country)
@@ -246,7 +293,9 @@ function computeStats(dest: Destination[]): Stats {
   /*
    * Travel companions sorted by total trips
    */
-  const companionFrequency = [...companionCounts.entries()]
+  const companionFrequency = [
+    ...companionCounts.entries(),
+  ]
     .map(([name, stats]) => ({
       name,
       total: stats.total,
@@ -263,15 +312,17 @@ function computeStats(dest: Destination[]): Stats {
 
   return {
     total: dest.length,
+
     visited,
     planned,
     wantToGo,
 
     countriesTotal: countryMap.size,
 
-    countriesVisited: countryBreakdown.filter(
-      c => c.visited > 0
-    ).length,
+    countriesVisited:
+      countryBreakdown.filter(
+        c => c.visited > 0
+      ).length,
 
     photos,
     journalEntries,
@@ -279,9 +330,10 @@ function computeStats(dest: Destination[]): Stats {
     destinationsWithPhotos,
     destinationsWithJournal,
 
-    avgPhotosPerDestination: destinationsWithPhotos
-      ? photos / destinationsWithPhotos
-      : 0,
+    avgPhotosPerDestination:
+      destinationsWithPhotos
+        ? photos / destinationsWithPhotos
+        : 0,
 
     mostPhotographed,
     latestJournalDate,
@@ -299,7 +351,14 @@ function computeStats(dest: Destination[]): Stats {
     shortestTrip,
 
     soloTrips,
+    soloVisited,
+    soloPlanned,
+    soloWantToGo,
+
     tripsWithCompanions,
+    companionsVisited,
+    companionsPlanned,
+    companionsWantToGo,
 
     companionFrequency,
   };
@@ -318,11 +377,58 @@ function OverviewCard({
     <div
       className={
         'stats-card' +
-        (accent ? ` stats-card-accent-${accent}` : '')
+        (accent
+          ? ` stats-card-accent-${accent}`
+          : '')
       }
     >
       <b>{value}</b>
       <span>{label}</span>
+    </div>
+  );
+}
+
+function CompanionSummaryCard({
+  total,
+  label,
+  visited,
+  planned,
+  wantToGo,
+}: {
+  total: number;
+  label: string;
+  visited: number;
+  planned: number;
+  wantToGo: number;
+}) {
+  return (
+    <div className="stats-card companion-summary-card">
+      <b>{total}</b>
+
+      <span>{label}</span>
+
+      <div className="companion-summary-breakdown">
+        {visited > 0 && (
+          <span>
+            <i className="legend-dot bar-visited" />
+            {visited} visited
+          </span>
+        )}
+
+        {planned > 0 && (
+          <span>
+            <i className="legend-dot bar-planned" />
+            {planned} planned
+          </span>
+        )}
+
+        {wantToGo > 0 && (
+          <span>
+            <i className="legend-dot bar-want_to_go" />
+            {wantToGo} want to go
+          </span>
+        )}
+      </div>
     </div>
   );
 }
@@ -373,8 +479,8 @@ export default function StatsView({
           <h1>Nothing to measure yet</h1>
 
           <p>
-            Add a few destinations and your travel statistics
-            will show up here.
+            Add a few destinations and your travel
+            statistics will show up here.
           </p>
         </div>
       </section>
@@ -497,43 +603,57 @@ export default function StatsView({
                   {
                     value: stats.visited,
                     length: visitedLength,
-                    className: 'donut-visited',
+                    className:
+                      'donut-visited',
                   },
                   {
                     value: stats.planned,
                     length: plannedLength,
-                    className: 'donut-planned',
+                    className:
+                      'donut-planned',
                   },
                   {
                     value: stats.wantToGo,
                     length: wantToGoLength,
-                    className: 'donut-want-to-go',
+                    className:
+                      'donut-want-to-go',
                   },
                 ];
 
-                return segments.map(segment => {
-                  const currentOffset = offset;
+                return segments.map(
+                  segment => {
+                    const currentOffset =
+                      offset;
 
-                  offset += segment.length;
+                    offset += segment.length;
 
-                  if (segment.value === 0) {
-                    return null;
+                    if (
+                      segment.value === 0
+                    ) {
+                      return null;
+                    }
+
+                    return (
+                      <circle
+                        key={
+                          segment.className
+                        }
+                        cx="60"
+                        cy="60"
+                        r="45"
+                        fill="none"
+                        className={
+                          segment.className
+                        }
+                        strokeWidth="14"
+                        strokeDasharray={`${segment.length} ${circumference - segment.length}`}
+                        strokeDashoffset={
+                          -currentOffset
+                        }
+                      />
+                    );
                   }
-
-                  return (
-                    <circle
-                      key={segment.className}
-                      cx="60"
-                      cy="60"
-                      r="45"
-                      fill="none"
-                      className={segment.className}
-                      strokeWidth="14"
-                      strokeDasharray={`${segment.length} ${circumference - segment.length}`}
-                      strokeDashoffset={-currentOffset}
-                    />
-                  );
-                });
+                );
               })()}
 
               <text
@@ -598,13 +718,18 @@ export default function StatsView({
                 <div className="bar-track country-bar-track">
                   <div
                     className="country-bar-segments"
-                    style={{ width: '100%' }}
+                    style={{
+                      width: '100%',
+                    }}
                   >
                     {c.visited > 0 && (
                       <div
                         className="country-bar-segment bar-visited"
                         style={{
-                          width: `${(c.visited / c.total) * 100}%`,
+                          width: `${(c.visited /
+                              c.total) *
+                            100
+                            }%`,
                         }}
                       />
                     )}
@@ -613,7 +738,10 @@ export default function StatsView({
                       <div
                         className="country-bar-segment bar-planned"
                         style={{
-                          width: `${(c.planned / c.total) * 100}%`,
+                          width: `${(c.planned /
+                              c.total) *
+                            100
+                            }%`,
                         }}
                       />
                     )}
@@ -622,7 +750,10 @@ export default function StatsView({
                       <div
                         className="country-bar-segment bar-want_to_go"
                         style={{
-                          width: `${(c.wantToGo / c.total) * 100}%`,
+                          width: `${(c.wantToGo /
+                              c.total) *
+                            100
+                            }%`,
                         }}
                       />
                     )}
@@ -680,12 +811,16 @@ export default function StatsView({
             />
 
             <OverviewCard
-              value={stats.longestTrip?.days ?? 0}
+              value={
+                stats.longestTrip?.days ?? 0
+              }
               label="Longest trip"
             />
 
             <OverviewCard
-              value={stats.shortestTrip?.days ?? 0}
+              value={
+                stats.shortestTrip?.days ?? 0
+              }
               label="Shortest trip"
             />
           </div>
@@ -696,8 +831,11 @@ export default function StatsView({
                 {stats.longestTrip && (
                   <>
                     Longest:{' '}
-                    <b>{stats.longestTrip.name}</b>{' '}
-                    ({stats.longestTrip.days} days)
+                    <b>
+                      {stats.longestTrip.name}
+                    </b>{' '}
+                    ({stats.longestTrip.days}{' '}
+                    days)
                   </>
                 )}
 
@@ -708,8 +846,11 @@ export default function StatsView({
                 {stats.shortestTrip && (
                   <>
                     Shortest:{' '}
-                    <b>{stats.shortestTrip.name}</b>{' '}
-                    ({stats.shortestTrip.days} days)
+                    <b>
+                      {stats.shortestTrip.name}
+                    </b>{' '}
+                    ({stats.shortestTrip.days}{' '}
+                    days)
                   </>
                 )}
               </p>
@@ -733,7 +874,9 @@ export default function StatsView({
             />
 
             <OverviewCard
-              value={stats.destinationsWithJournal}
+              value={
+                stats.destinationsWithJournal
+              }
               label="With entries"
             />
           </div>
@@ -741,7 +884,9 @@ export default function StatsView({
           {stats.latestJournalDate && (
             <p className="stats-footnote">
               Latest entry:{' '}
-              <b>{stats.latestJournalDate}</b>
+              <b>
+                {stats.latestJournalDate}
+              </b>
             </p>
           )}
         </div>
@@ -759,7 +904,9 @@ export default function StatsView({
             />
 
             <OverviewCard
-              value={stats.avgPhotosPerDestination.toFixed(1)}
+              value={stats.avgPhotosPerDestination.toFixed(
+                1
+              )}
               label="Avg. / destination"
             />
           </div>
@@ -767,8 +914,12 @@ export default function StatsView({
           {stats.mostPhotographed && (
             <p className="stats-footnote">
               Most photographed:{' '}
-              <b>{stats.mostPhotographed.name}</b> ·{' '}
-              {stats.mostPhotographed.count} photos
+              <b>
+                {stats.mostPhotographed.name}
+              </b>{' '}
+              ·{' '}
+              {stats.mostPhotographed.count}{' '}
+              photos
             </p>
           )}
         </div>
@@ -786,68 +937,103 @@ export default function StatsView({
 
             <div
               className="stats-card-grid stats-card-grid-narrow"
-              style={{ marginBottom: 16 }}
+              style={{
+                marginBottom: 16,
+              }}
             >
-              <OverviewCard
-                value={stats.soloTrips}
+              <CompanionSummaryCard
+                total={stats.soloTrips}
                 label="Solo trips"
+                visited={
+                  stats.soloVisited
+                }
+                planned={
+                  stats.soloPlanned
+                }
+                wantToGo={
+                  stats.soloWantToGo
+                }
               />
 
-              <OverviewCard
-                value={stats.tripsWithCompanions}
+              <CompanionSummaryCard
+                total={
+                  stats.tripsWithCompanions
+                }
                 label="With companions"
+                visited={
+                  stats.companionsVisited
+                }
+                planned={
+                  stats.companionsPlanned
+                }
+                wantToGo={
+                  stats.companionsWantToGo
+                }
               />
             </div>
 
             <div className="bar-chart">
-              {stats.companionFrequency.map(c => (
-                <div
-                  className="bar-row"
-                  key={c.name}
-                >
-                  <span className="bar-label">
-                    {c.name}
-                  </span>
+              {stats.companionFrequency.map(
+                c => (
+                  <div
+                    className="bar-row"
+                    key={c.name}
+                  >
+                    <span className="bar-label">
+                      {c.name}
+                    </span>
 
-                  <div className="bar-track country-bar-track">
-                    <div
-                      className="country-bar-segments"
-                      style={{ width: '100%' }}
-                    >
-                      {c.visited > 0 && (
-                        <div
-                          className="country-bar-segment bar-visited"
-                          style={{
-                            width: `${(c.visited / c.total) * 100}%`,
-                          }}
-                        />
-                      )}
+                    <div className="bar-track country-bar-track">
+                      <div
+                        className="country-bar-segments"
+                        style={{
+                          width: '100%',
+                        }}
+                      >
+                        {c.visited > 0 && (
+                          <div
+                            className="country-bar-segment bar-visited"
+                            style={{
+                              width: `${(c.visited /
+                                  c.total) *
+                                100
+                                }%`,
+                            }}
+                          />
+                        )}
 
-                      {c.planned > 0 && (
-                        <div
-                          className="country-bar-segment bar-planned"
-                          style={{
-                            width: `${(c.planned / c.total) * 100}%`,
-                          }}
-                        />
-                      )}
+                        {c.planned > 0 && (
+                          <div
+                            className="country-bar-segment bar-planned"
+                            style={{
+                              width: `${(c.planned /
+                                  c.total) *
+                                100
+                                }%`,
+                            }}
+                          />
+                        )}
 
-                      {c.wantToGo > 0 && (
-                        <div
-                          className="country-bar-segment bar-want_to_go"
-                          style={{
-                            width: `${(c.wantToGo / c.total) * 100}%`,
-                          }}
-                        />
-                      )}
+                        {c.wantToGo > 0 && (
+                          <div
+                            className="country-bar-segment bar-want_to_go"
+                            style={{
+                              width: `${(c.wantToGo /
+                                  c.total) *
+                                100
+                                }%`,
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
 
-                  <span className="bar-value">
-                    {c.total}
-                  </span>
-                </div>
-              ))}
+                    <span className="bar-value">
+                      {c.total}
+                    </span>
+                  </div>
+                )
+              )}
             </div>
 
             <div className="country-legend">
