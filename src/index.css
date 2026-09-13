@@ -1669,7 +1669,7 @@ select.status-select:hover {
 
 .stats-card b {
   display: block;
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 26px;
   font-weight: 600;
   color: var(--teal-dark);
@@ -1917,8 +1917,8 @@ select.status-select:hover {
 }
 
 .donut-total {
-  font-family: var(--font-display);
-  font-size: 24px;
+  font-family: var(--font-mono);
+  font-size: 14px;
   font-weight: 300;
   fill: var(--ink);
   transform: rotate(90deg);
@@ -1955,7 +1955,7 @@ select.status-select:hover {
 
 .status-legend-item b {
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 10px;
   font-weight: 300;
   color: var(--ink);
 }
