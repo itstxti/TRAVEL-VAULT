@@ -1676,6 +1676,7 @@ select.status-select:hover {
   border-radius: var(--radius);
   padding: 16px;
   box-shadow: 3px 3px 0 rgba(27, 42, 61, 0.18);
+  margin-bottom: 10px;
 }
 
 .stats-card-grid>.stats-card {
@@ -1783,7 +1784,7 @@ select.status-select:hover {
   align-items: flex-end;
   justify-content: center;
   gap: 10px;
-  height: 220px;
+  height: 170px;
 }
 
 .podium-item {
