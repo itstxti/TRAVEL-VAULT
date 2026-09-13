@@ -148,7 +148,7 @@ export default function DestinationModal({
                 <input
                   type="date"
                   value={start}
-                  style={{ borderRadius: '5px' }}
+                  style={{ borderRadius: '5px', width: '100px' }}
                   onChange={e => setStart(e.target.value)}
                 />
               </div>
@@ -159,7 +159,7 @@ export default function DestinationModal({
                   type="date"
                   
                   value={end}
-                  style={{ borderRadius: '5px' }}
+                  style={{ borderRadius: '5px', width: '100px' }}
                   onChange={e => setEnd(e.target.value)}
                 />
               </div>
