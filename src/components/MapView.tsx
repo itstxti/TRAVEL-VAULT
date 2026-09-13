@@ -7,6 +7,8 @@ import {
 } from 'react-leaflet';
 import L from 'leaflet';
 import { Destination, Status } from '../types';
+import { IconStampEmpty } from '../icons';
+
 
 const statusLabels: Record<Status, string> = {
   want_to_go: 'Want to go',
@@ -29,6 +31,7 @@ export default function MapView({
     <section className="view active">
       {list.length === 0 ? (
         <div className="empty-state">
+          <IconStampEmpty className="empty-state-icon" />         
           <h1>No destinations to show yet</h1>
           <p>
             Add a destination to see it appear on the map.
