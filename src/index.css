@@ -2161,9 +2161,13 @@ select.status-select:hover {
 }
 }
 
-@media (max-width:600px) {
+@media (max-width:450px) {
   header.hero {
     padding: 28px 16px 18px;
+  }
+
+  .stats-card b {
+    font-size: 15px;
   }
 
   .header-actions {
