@@ -141,9 +141,18 @@ function computeStats(dest: Destination[]): Stats {
   };
 }
 
-function OverviewCard({ value, label }: { value: number | string; label: string }) {
+function OverviewCard({ value, label, accent }: { value: number | string; label: string; accent?: 'visited' | 'planned' | 'want_to_go' }) {
   return (
-    <div className="stats-card">
+    <div className={'stats-card' + (accent ? ` stats-card-accent-${accent}` : '')}>
+      <b>{value}</b>
+      <span>{label}</span>
+    </div>
+  );
+}
+
+function MiniStat({ value, label }: { value: number | string; label: string }) {
+  return (
+    <div className="stats-mini-stat">
       <b>{value}</b>
       <span>{label}</span>
     </div>
@@ -177,14 +186,16 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
     <section className="view active stats-view">
       <div className="stats-section">
         <SectionTitle>Overview</SectionTitle>
-        <div className="stats-card-grid">
+        <div className="stats-card-grid stats-primary-grid">
           <OverviewCard value={stats.total} label="Destinations" />
-          <OverviewCard value={stats.visited} label="Visited" />
-          <OverviewCard value={stats.planned} label="Planned" />
-          <OverviewCard value={stats.wantToGo} label="Want to go" />
-          <OverviewCard value={stats.countriesTotal} label="Countries" />
-          <OverviewCard value={stats.photos} label="Photos" />
-          <OverviewCard value={stats.journalEntries} label="Journal entries" />
+          <OverviewCard value={stats.visited} label="Visited" accent="visited" />
+          <OverviewCard value={stats.planned} label="Planned" accent="planned" />
+          <OverviewCard value={stats.wantToGo} label="Want to go" accent="want_to_go" />
+        </div>
+        <div className="stats-secondary-row">
+          <MiniStat value={stats.countriesTotal} label="Countries" />
+          <MiniStat value={stats.photos} label="Photos" />
+          <MiniStat value={stats.journalEntries} label="Journal entries" />
         </div>
       </div>
 

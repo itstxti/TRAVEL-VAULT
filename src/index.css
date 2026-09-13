@@ -1563,7 +1563,11 @@ select.status-select:hover {
 .stats-view {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 46px;
+}
+
+.stats-section {
+  padding-top: 2px;
 }
 
 .stats-section-title {
@@ -1574,14 +1578,14 @@ select.status-select:hover {
   font-size: 22px;
   font-weight: 600;
   border-bottom: 2px solid var(--ink);
-  padding-bottom: 6px;
-  margin-bottom: 14px;
+  padding-bottom: 8px;
+  margin-bottom: 18px;
 }
 
 .stats-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 28px;
 }
 
 .stats-card-grid {
@@ -1592,6 +1596,64 @@ select.status-select:hover {
 
 .stats-card-grid-narrow {
   grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+}
+
+/* Primary overview metrics: the four status counts, color-matched to the
+   bar chart below so the two sections read as one story instead of two
+   unrelated lists of numbers. */
+.stats-primary-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.stats-card-accent-visited b {
+  color: var(--teal-dark);
+}
+
+.stats-card-accent-planned b {
+  color: var(--gold);
+}
+
+.stats-card-accent-want_to_go b {
+  color: var(--ink-soft);
+}
+
+/* Secondary overview metrics: deliberately quieter than the primary status
+   cards above (no border/shadow, smaller number) so they read as supporting
+   context, not four more things of equal importance to scan. */
+.stats-secondary-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  border-top: 1px dashed var(--line);
+  padding-top: 12px;
+}
+
+.stats-mini-stat {
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+  padding: 2px 10px;
+  border-left: 1px dashed var(--line);
+}
+
+.stats-mini-stat:first-child {
+  border-left: none;
+}
+
+.stats-mini-stat b {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.stats-mini-stat span {
+  font-size: 9.5px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .stats-card {
@@ -1732,6 +1794,20 @@ select.status-select:hover {
 @media (max-width:700px) {
   .stats-two-col {
     grid-template-columns: 1fr;
+  }
+
+  .stats-primary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stats-mini-stat {
+    border-left: none;
+    border-top: 1px dashed var(--line);
+    padding-top: 8px;
+  }
+
+  .stats-mini-stat:first-child {
+    border-top: none;
   }
 
   .country-stat-row {
