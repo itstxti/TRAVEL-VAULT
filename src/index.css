@@ -1954,7 +1954,7 @@ select.status-select:hover {
 }
 
 .status-legend-item b {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 300;
   color: var(--ink);
