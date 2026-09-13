@@ -192,12 +192,18 @@ function computeStats(dest: Destination[]): Stats {
           days,
         };
       }
+    }
 
-      if (d.companions.length) {
-        tripsWithCompanions++;
-      } else {
-        soloTrips++;
-      }
+    /*
+     * Travel companions
+     *
+     * Count the destination as solo or with companions
+     * independently from whether trip dates are available.
+     */
+    if (d.companions.length) {
+      tripsWithCompanions++;
+    } else {
+      soloTrips++;
     }
 
     /*
@@ -686,28 +692,28 @@ export default function StatsView({
 
           {(stats.longestTrip ||
             stats.shortestTrip) && (
-            <p className="stats-footnote">
-              {stats.longestTrip && (
-                <>
-                  Longest:{' '}
-                  <b>{stats.longestTrip.name}</b>{' '}
-                  ({stats.longestTrip.days} days)
-                </>
-              )}
+              <p className="stats-footnote">
+                {stats.longestTrip && (
+                  <>
+                    Longest:{' '}
+                    <b>{stats.longestTrip.name}</b>{' '}
+                    ({stats.longestTrip.days} days)
+                  </>
+                )}
 
-              {stats.longestTrip &&
-                stats.shortestTrip &&
-                ' · '}
+                {stats.longestTrip &&
+                  stats.shortestTrip &&
+                  ' · '}
 
-              {stats.shortestTrip && (
-                <>
-                  Shortest:{' '}
-                  <b>{stats.shortestTrip.name}</b>{' '}
-                  ({stats.shortestTrip.days} days)
-                </>
-              )}
-            </p>
-          )}
+                {stats.shortestTrip && (
+                  <>
+                    Shortest:{' '}
+                    <b>{stats.shortestTrip.name}</b>{' '}
+                    ({stats.shortestTrip.days} days)
+                  </>
+                )}
+              </p>
+            )}
         </div>
       )}
 
