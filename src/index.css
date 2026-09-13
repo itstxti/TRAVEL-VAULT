@@ -2167,8 +2167,13 @@ select.status-select:hover {
   }
 
   .stats-card b {
-    font-size: 15px;
+    font-size: 12px;
   }
+
+  .stats-card span {
+    font-size: 9px;
+    letter-spacing: .01em;
+}
 
   .header-actions {
     align-items: flex-start;
