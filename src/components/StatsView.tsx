@@ -73,10 +73,6 @@ interface Stats {
   companionFrequency: CompanionStat[];
 }
 
-// Single pass over `dest` (and each destination's own photos/journal arrays,
-// which is unavoidable since that's where the data lives). Everything the
-// page needs comes out of this one reduce instead of the dozen+ separate
-// .filter()/.map() calls a naive version would run over the same array.
 function computeStats(dest: Destination[]): Stats {
   const countryMap = new Map<string, CountryStat>();
 
@@ -99,6 +95,9 @@ function computeStats(dest: Destination[]): Stats {
 
   let destinationsWithPhotos = 0;
   let destinationsWithJournal = 0;
+
+  let visitedPhotos = 0;
+  let visitedDestinationsWithPhotos = 0;
 
   let mostPhotographed: NamedCount | null = null;
   let latestJournalDate: string | null = null;
@@ -148,7 +147,6 @@ function computeStats(dest: Destination[]): Stats {
 
     if (d.status === 'visited') {
       c.visited++;
-      tripCount++;
     } else if (d.status === 'planned') {
       c.planned++;
     } else {
@@ -173,6 +171,16 @@ function computeStats(dest: Destination[]): Stats {
           count: d.photos.length,
         };
       }
+
+      /*
+       * Average photos per destination
+       *
+       * Only completed/visited destinations are considered.
+       */
+      if (d.status === 'visited') {
+        visitedPhotos += d.photos.length;
+        visitedDestinationsWithPhotos++;
+      }
     }
 
     /*
@@ -195,14 +203,19 @@ function computeStats(dest: Destination[]): Stats {
     /*
      * Trips
      *
-     * A trip is counted here when it has valid start/end dates.
+     * Only visited destinations with valid start/end dates
+     * are counted as completed trips.
      */
     const days = tripDays(
       d.tripStart,
       d.tripEnd
     );
 
-    if (days !== null) {
+    if (
+      d.status === 'visited' &&
+      days !== null
+    ) {
+      tripCount++;
       totalTripDays += days;
 
       if (!longestTrip || days > longestTrip.days) {
@@ -223,8 +236,7 @@ function computeStats(dest: Destination[]): Stats {
     /*
      * Solo / companion trips
      *
-     * These are counted independently of trip dates so that
-     * the summary still reflects all registered destinations.
+     * These include all destinations regardless of status.
      */
     if (d.companions.length) {
       tripsWithCompanions++;
@@ -250,9 +262,6 @@ function computeStats(dest: Destination[]): Stats {
 
     /*
      * Travel companions
-     *
-     * Each companion keeps track of the total number of trips
-     * and the status composition of those trips.
      */
     for (const companion of d.companions) {
       const current = companionCounts.get(companion) ?? {
@@ -331,8 +340,9 @@ function computeStats(dest: Destination[]): Stats {
     destinationsWithJournal,
 
     avgPhotosPerDestination:
-      destinationsWithPhotos
-        ? photos / destinationsWithPhotos
+      visitedDestinationsWithPhotos > 0
+        ? visitedPhotos /
+          visitedDestinationsWithPhotos
         : 0,
 
     mostPhotographed,
@@ -726,10 +736,11 @@ export default function StatsView({
                       <div
                         className="country-bar-segment bar-visited"
                         style={{
-                          width: `${(c.visited /
+                          width: `${
+                            (c.visited /
                               c.total) *
                             100
-                            }%`,
+                          }%`,
                         }}
                       />
                     )}
@@ -738,10 +749,11 @@ export default function StatsView({
                       <div
                         className="country-bar-segment bar-planned"
                         style={{
-                          width: `${(c.planned /
+                          width: `${
+                            (c.planned /
                               c.total) *
                             100
-                            }%`,
+                          }%`,
                         }}
                       />
                     )}
@@ -750,10 +762,11 @@ export default function StatsView({
                       <div
                         className="country-bar-segment bar-want_to_go"
                         style={{
-                          width: `${(c.wantToGo /
+                          width: `${
+                            (c.wantToGo /
                               c.total) *
                             100
-                            }%`,
+                          }%`,
                         }}
                       />
                     )}
@@ -827,34 +840,34 @@ export default function StatsView({
 
           {(stats.longestTrip ||
             stats.shortestTrip) && (
-              <p className="stats-footnote">
-                {stats.longestTrip && (
-                  <>
-                    Longest:{' '}
-                    <b>
-                      {stats.longestTrip.name}
-                    </b>{' '}
-                    ({stats.longestTrip.days}{' '}
-                    days)
-                  </>
-                )}
+            <p className="stats-footnote">
+              {stats.longestTrip && (
+                <>
+                  Longest:{' '}
+                  <b>
+                    {stats.longestTrip.name}
+                  </b>{' '}
+                  ({stats.longestTrip.days}{' '}
+                  days)
+                </>
+              )}
 
-                {stats.longestTrip &&
-                  stats.shortestTrip &&
-                  ' · '}
+              {stats.longestTrip &&
+                stats.shortestTrip &&
+                ' · '}
 
-                {stats.shortestTrip && (
-                  <>
-                    Shortest:{' '}
-                    <b>
-                      {stats.shortestTrip.name}
-                    </b>{' '}
-                    ({stats.shortestTrip.days}{' '}
-                    days)
-                  </>
-                )}
-              </p>
-            )}
+              {stats.shortestTrip && (
+                <>
+                  Shortest:{' '}
+                  <b>
+                    {stats.shortestTrip.name}
+                  </b>{' '}
+                  ({stats.shortestTrip.days}{' '}
+                  days)
+                </>
+              )}
+            </p>
+          )}
         </div>
       )}
 
@@ -994,10 +1007,11 @@ export default function StatsView({
                           <div
                             className="country-bar-segment bar-visited"
                             style={{
-                              width: `${(c.visited /
+                              width: `${
+                                (c.visited /
                                   c.total) *
                                 100
-                                }%`,
+                              }%`,
                             }}
                           />
                         )}
@@ -1006,10 +1020,11 @@ export default function StatsView({
                           <div
                             className="country-bar-segment bar-planned"
                             style={{
-                              width: `${(c.planned /
+                              width: `${
+                                (c.planned /
                                   c.total) *
                                 100
-                                }%`,
+                              }%`,
                             }}
                           />
                         )}
@@ -1018,10 +1033,11 @@ export default function StatsView({
                           <div
                             className="country-bar-segment bar-want_to_go"
                             style={{
-                              width: `${(c.wantToGo /
+                              width: `${
+                                (c.wantToGo /
                                   c.total) *
                                 100
-                                }%`,
+                              }%`,
                             }}
                           />
                         )}
