@@ -1720,11 +1720,16 @@ select.status-select:hover {
   color: var(--ink-soft);
 }
 
-.bar-track {
+/*.bar-track {
   height: 16px;
   background: var(--paper-dark);
   border: 1px solid var(--line);
   border-radius: 3px;
+  overflow: hidden;
+}*/
+
+.bar-track {
+  display: flex;
   overflow: hidden;
 }
 
@@ -1732,10 +1737,15 @@ select.status-select:hover {
   height: 9px;
 }
 
-.bar-fill {
+/*.bar-fill {
   height: 100%;
   border-radius: 2px 0 0 2px;
   transition: width .3s ease;
+}*/
+
+.bar-fill {
+  flex-shrink: 0;
+  height: 100%;
 }
 
 .bar-fill.bar-visited {

@@ -240,18 +240,51 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
               .map(c => (
                 <div className="bar-row" key={c.country}>
                   <span className="bar-label">{c.country}</span>
-                  <div className="bar-track">
-                    <div
-                      className="bar-fill"
-                      style={{
-                        width: `${(c.total / maxCountry) * 100}%`,
-                      }}
-                    />
+
+                  <div className="bar-track bar-track-country">
+                    {c.visited > 0 && (
+                      <div
+                        className="bar-fill bar-visited"
+                        style={{
+                          width: `${(c.visited / c.total) * 100}%`,
+                        }}
+                      />
+                    )}
+
+                    {c.planned > 0 && (
+                      <div
+                        className="bar-fill bar-planned"
+                        style={{
+                          width: `${(c.planned / c.total) * 100}%`,
+                        }}
+                      />
+                    )}
+
+                    {c.wantToGo > 0 && (
+                      <div
+                        className="bar-fill bar-want_to_go"
+                        style={{
+                          width: `${(c.wantToGo / c.total) * 100}%`,
+                        }}
+                      />
+                    )}
                   </div>
 
                   <span className="bar-value">{c.total}</span>
                 </div>
               ))}
+          </div>
+
+          <div className="country-legend">
+            <span>
+              <i className="legend-dot bar-visited" />Visited
+            </span>
+            <span>
+              <i className="legend-dot bar-planned" />Planned
+            </span>
+            <span>
+              <i className="legend-dot bar-want_to_go" />Want to go
+            </span>
           </div>
         </div>
       </div>
