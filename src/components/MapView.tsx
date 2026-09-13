@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { Destination, Status } from '../types';
 
 const statusLabels: Record<Status, string> = { want_to_go: 'Want to go', planned: 'Planned', visited: 'Visited' };
-const statusColors: Record<Status, string> = { want_to_go: '#8B8072', planned: '#B8860F', visited: '#2F6F63' };
+const statusColors: Record<Status, string> = { want_to_go: '#A8A8A8', planned: '#E9C46A', visited: '#2A9D8F' };
 
 export default function MapView({ list }: { list: Destination[] }) {
   return (
