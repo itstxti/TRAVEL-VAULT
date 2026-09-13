@@ -812,23 +812,6 @@ export default function StatsView({
               </div>
             ))}
           </div>
-
-          <div className="country-legend">
-            <span>
-              <i className="legend-dot bar-visited" />
-              Visited
-            </span>
-
-            <span>
-              <i className="legend-dot bar-planned" />
-              Planned
-            </span>
-
-            <span>
-              <i className="legend-dot bar-want_to_go" />
-              Want to go
-            </span>
-          </div>
         </div>
       </div>
 
