@@ -402,7 +402,7 @@ function computeStats(dest: Destination[]): Stats {
 
     avgJournalEntriesPerDestination:
       visited > 0
-        ? visitedJournalEntries  / visited
+        ? visitedJournalEntries / visited
         : 0,
 
     mostPhotographed,
@@ -722,32 +722,21 @@ export default function StatsView({
             </div>
           </div>
         </div>
-
-        <div className="stats-secondary-row">
-          <MiniStat
-            value={stats.countriesTotal}
-            label="Countries"
-          />
-
-          <MiniStat
-            value={stats.photos}
-            label="Photos"
-          />
-
-          <MiniStat
-            value={stats.journalEntries}
-            label="Journal entries"
-          />
-        </div>
       </div>
 
       {/* Top Countries */}
       <div className="stats-section">
         <SectionTitle>
-          Top Countries
+          Countries
+          <span className="stats-total">
+            {stats.countriesTotal}
+          </span>
         </SectionTitle>
 
         <div className="stats-card">
+          <h3 className="stats-card-subtitle">
+            Most added countries
+          </h3>
           <div className="bar-chart">
             {topCountries.map(c => (
               <div
@@ -769,11 +758,10 @@ export default function StatsView({
                       <div
                         className="country-bar-segment bar-visited"
                         style={{
-                          width: `${
-                            (c.visited /
+                          width: `${(c.visited /
                               c.total) *
                             100
-                          }%`,
+                            }%`,
                         }}
                       />
                     )}
@@ -782,11 +770,10 @@ export default function StatsView({
                       <div
                         className="country-bar-segment bar-planned"
                         style={{
-                          width: `${
-                            (c.planned /
+                          width: `${(c.planned /
                               c.total) *
                             100
-                          }%`,
+                            }%`,
                         }}
                       />
                     )}
@@ -795,11 +782,10 @@ export default function StatsView({
                       <div
                         className="country-bar-segment bar-want_to_go"
                         style={{
-                          width: `${
-                            (c.wantToGo /
+                          width: `${(c.wantToGo /
                               c.total) *
                             100
-                          }%`,
+                            }%`,
                         }}
                       />
                     )}
@@ -873,9 +859,9 @@ export default function StatsView({
               detail={
                 stats.latestTrip
                   ? new Date(
-                      stats.latestTrip.date +
-                        'T00:00:00'
-                    ).toLocaleDateString('en-GB')
+                    stats.latestTrip.date +
+                    'T00:00:00'
+                  ).toLocaleDateString('en-GB')
                   : undefined
               }
             />
@@ -1029,11 +1015,10 @@ export default function StatsView({
                           <div
                             className="country-bar-segment bar-visited"
                             style={{
-                              width: `${
-                                (c.visited /
+                              width: `${(c.visited /
                                   c.total) *
                                 100
-                              }%`,
+                                }%`,
                             }}
                           />
                         )}
@@ -1042,11 +1027,10 @@ export default function StatsView({
                           <div
                             className="country-bar-segment bar-planned"
                             style={{
-                              width: `${
-                                (c.planned /
+                              width: `${(c.planned /
                                   c.total) *
                                 100
-                              }%`,
+                                }%`,
                             }}
                           />
                         )}
@@ -1055,11 +1039,10 @@ export default function StatsView({
                           <div
                             className="country-bar-segment bar-want_to_go"
                             style={{
-                              width: `${
-                                (c.wantToGo /
+                              width: `${(c.wantToGo /
                                   c.total) *
                                 100
-                              }%`,
+                                }%`,
                             }}
                           />
                         )}
