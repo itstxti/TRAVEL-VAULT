@@ -1756,6 +1756,18 @@ select.status-select:hover {
   height: 100%;
 }
 
+.bar-visited {
+  background: var(--teal-dark);
+}
+
+.bar-planned {
+  background: var(--teal);
+}
+
+.bar-want_to_go {
+  background: var(--gray);
+}
+
 .bar-fill.bar-visited {
   background: var(--teal);
 }
