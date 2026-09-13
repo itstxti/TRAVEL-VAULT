@@ -1589,6 +1589,12 @@ select.status-select:hover {
   margin-bottom: 18px;
 }
 
+.stats-card-subtitle {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
 .stats-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
