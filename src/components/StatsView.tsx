@@ -146,6 +146,7 @@ function computeStats(dest: Destination[]): Stats {
     c.total++;
 
     if (d.status === 'visited') {
+      tripCount++;
       c.visited++;
     } else if (d.status === 'planned') {
       c.planned++;
@@ -215,7 +216,6 @@ function computeStats(dest: Destination[]): Stats {
       d.status === 'visited' &&
       days !== null
     ) {
-      tripCount++;
       totalTripDays += days;
 
       if (!longestTrip || days > longestTrip.days) {
@@ -342,7 +342,7 @@ function computeStats(dest: Destination[]): Stats {
     avgPhotosPerDestination:
       visitedDestinationsWithPhotos > 0
         ? visitedPhotos /
-          visitedDestinationsWithPhotos
+          tripCount
         : 0,
 
     mostPhotographed,
