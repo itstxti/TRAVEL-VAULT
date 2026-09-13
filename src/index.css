@@ -2148,10 +2148,6 @@ select.status-select:hover {
     grid-template-columns: 18px 1fr 100px auto;
   }
 
-  .bar-row {
-    grid-template-columns: 60px minmax(0, 1fr) 14px;
-  }
-
   .destination-status-card {
     flex-direction: column;
     gap: 24px;
@@ -2190,6 +2186,10 @@ select.status-select:hover {
 @media (max-width:450px) {
   header.hero {
     padding: 28px 16px 18px;
+  }
+
+  .bar-row {
+    grid-template-columns: 50px minmax(0, 1fr) 14px;
   }
 
   .stats-card b {
@@ -2233,4 +2233,23 @@ select.status-select:hover {
   .modal-body {
     padding: 16px 16px 22px;
   }
+}
+
+@media (max-width: 315px) {
+  .stats-card-grid {
+    grid-template-columns: repeat(auto-fit, minmax(30px, 1fr));
+  }
+
+  .stats-card-grid-narrow {
+    grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+  }
+
+    .stats-card b {
+    font-size: 9px;
+  }
+
+  .stats-card span {
+    font-size: 6px;
+    letter-spacing: .01em;
+}
 }
