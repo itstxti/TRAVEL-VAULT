@@ -815,10 +815,10 @@ export default function StatsView({
           </div>
         </div>
 
-      {stats.visited > 2 && (      
+      {topVisitedCountries.length > 1 && (      
         <div className="stats-card">
           <p className="stats-card-subtitle">
-            Top 3 countries with the most visited cities
+            Top countries with the most visited cities
           </p>
 
           <div className="podium">
@@ -852,10 +852,10 @@ export default function StatsView({
           </div>
         </div>)}
 
-      {stats.planned > 2 && (
+      {topPlannedCountries.length > 1 && (
         <div className="stats-card">
           <p className="stats-card-subtitle">
-            Top 3 countries with the most planned cities
+            Top countries with the most planned cities
           </p>
 
           <div className="podium">
@@ -889,10 +889,10 @@ export default function StatsView({
           </div>
         </div>)}
 
-        {stats.wantToGo > 2 && (
+        {topWantToGoCountries.length > 1 && (
           <div className="stats-card">
             <p className="stats-card-subtitle">
-              Top 3 countries with the most wanted cities
+              Top countries with the most wanted cities
             </p>
 
             <div className="podium">
