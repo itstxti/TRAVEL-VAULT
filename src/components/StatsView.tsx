@@ -127,6 +127,7 @@ function computeStats(dest: Destination[]): Stats {
 
     if (d.status === 'visited') {
       c.visited++;
+      tripCount++;
     } else if (d.status === 'planned') {
       c.planned++;
     } else {
@@ -174,8 +175,6 @@ function computeStats(dest: Destination[]): Stats {
      * Trips
      */
     const days = tripDays(d.tripStart, d.tripEnd);
-
-    tripCount++;
     
     if (days !== null) {
       totalTripDays += days;
