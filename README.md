@@ -5,23 +5,25 @@ A React + TypeScript travel planner for saving destinations, planning trips, and
 
 ## Features
 
-| Module | What it does |
-|---|---|
-| Destinations | Add cities or countries with a status: Want to go, Planned, Visited |
-| List view | Filter destinations by status, see all of them at a glance |
-| Map view | See every destination plotted on an interactive map |
-| Location search | Type a place name and pick from geocoded suggestions to auto-fill coordinates |
-| Trip details | Track companions and trip start/end dates per destination |
-| Journal | Add dated journal entries to any destination |
-| Gallery | Attach photos to a destination and browse them in a lightbox |
-| Stats | Running totals for destinations, visited, planned, and countries visited |
+| Module              | What it does                                                                                 |
+| ------------------- | -------------------------------------------------------------------------------------------- |
+| **Destinations**    | Add cities or countries and assign a status: Want to Go, Planned, or Visited                 |
+| **List View**       | Browse all destinations and filter them by status                                            |
+| **Map View**        | Visualize all destinations on an interactive map                                             |
+| **Location Search** | Search for a place and select a geocoded suggestion to automatically fill in its coordinates |
+| **Trip Details**    | Track travel companions and trip start/end dates for each destination                        |
+| **Journal**         | Add dated journal entries to any destination                                                 |
+| **Gallery**         | Attach photos to destinations and browse them in a lightbox                                  |
+| **Statistics**      | View live totals for destinations, visited and planned trips, and countries visited          |
 
-## Stack
+## Tech Stack
 
-— React 18 + TypeScript<br>
-— Vite<br>
-— Supabase<br>
-— Google OAuth + email/password
+— **Frontend:** React, TypeScript<br>
+— **Build Tool:** Vite<br>
+— **Backend & Database:** Supabase, PostgreSQL<br>
+— **Authentication:** Supabase Auth, Google OAuth<br>
+— **Maps:** Leaflet, React Leaflet<br>
+— **Deployment:** Vercel
 
 ## License
 
