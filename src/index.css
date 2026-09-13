@@ -104,8 +104,8 @@ h1.brand-title em {
 
 .header-actions {
   display: flex;
-  flex-direction: column;
   align-items: flex-end;
+  justify-content: space-between;
   gap: 10px;
 }
 
@@ -122,7 +122,7 @@ h1.brand-title em {
   align-items: center;
   justify-content: center;
   border: 1px solid var(--ink);
-  border-radius: 3px;
+  border-radius: 25px;
   background: var(--card);
   color: var(--ink);
   cursor: pointer;
