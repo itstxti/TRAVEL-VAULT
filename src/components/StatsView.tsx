@@ -931,52 +931,50 @@ export default function StatsView({
           <SectionTitle>
             Travel Activity
           </SectionTitle>
-          <div className="stats-card">
 
-            <div className="stats-card-grid">
-              <OverviewCard
-                value={stats.totalTripDays}
-                label="Total days"
-              />
+          <div className="stats-card-grid">
+            <OverviewCard
+              value={stats.totalTripDays}
+              label="Total days"
+            />
 
-              <OverviewCard
-                value={stats.tripCount}
-                label="Trips"
-              />
+            <OverviewCard
+              value={stats.tripCount}
+              label="Trips"
+            />
 
-              <OverviewCard
-                value={stats.avgTripDays.toFixed(1)}
-                label="Avg. trip length"
-              />
-            </div>
+            <OverviewCard
+              value={stats.avgTripDays.toFixed(1)}
+              label="Avg. trip length"
+            />
+          </div>
 
-            <div className="stats-card-grid">
-              <OverviewCard
-                value={
-                  stats.longestTrip?.name ?? '—'
-                }
-                label={`Longest trip (${stats.longestTrip?.days ?? 0} days)`}
-              />
+          <div className="stats-card-grid">
+            <OverviewCard
+              value={
+                stats.longestTrip?.name ?? '—'
+              }
+              label={`Longest trip (${stats.longestTrip?.days ?? 0} days)`}
+            />
 
-              <OverviewCard
-                value={
-                  stats.shortestTrip?.name ?? '—'
-                }
-                label={`Shortest trip (${stats.shortestTrip?.days ?? 0} days)`}
-              />
+            <OverviewCard
+              value={
+                stats.shortestTrip?.name ?? '—'
+              }
+              label={`Shortest trip (${stats.shortestTrip?.days ?? 0} days)`}
+            />
 
-              <OverviewCard
-                value={
-                  stats.latestTrip?.name ?? '—'
-                }
-                label={`Latest trip (${stats.latestTrip
-                  ? new Date(
-                    stats.latestTrip.date + 'T00:00:00'
-                  ).toLocaleDateString('en-GB')
-                  : '—'
-                  })`}
-              />
-            </div>
+            <OverviewCard
+              value={
+                stats.latestTrip?.name ?? '—'
+              }
+              label={`Latest trip (${stats.latestTrip
+                ? new Date(
+                  stats.latestTrip.date + 'T00:00:00'
+                ).toLocaleDateString('en-GB')
+                : '—'
+                })`}
+            />
           </div>
         </div>
       )}
@@ -989,32 +987,30 @@ export default function StatsView({
           <SectionTitle>
             Journal
           </SectionTitle>
-          <div className="stats-card">
 
-            <div className="stats-card-grid stats-card-grid-narrow">
-              <OverviewCard
-                value={stats.journalEntries}
-                label="Entries"
-              />
+          <div className="stats-card-grid stats-card-grid-narrow">
+            <OverviewCard
+              value={stats.journalEntries}
+              label="Entries"
+            />
 
-              <OverviewCard
-                value={
-                  stats.mostJournalEntries?.name ??
-                  '—'
-                }
-                label={`Top city (${stats.mostJournalEntries?.count ?? 0} entries)`}
-              />
+            <OverviewCard
+              value={
+                stats.mostJournalEntries?.name ??
+                '—'
+              }
+              label={`Top city (${stats.mostJournalEntries?.count ?? 0} entries)`}
+            />
 
-              <OverviewCard
-                value={
-                  stats.avgJournalEntriesPerDestination.toFixed(
-                    1
-                  )
-                }
-                label="Avg. / trip"
-              />
+            <OverviewCard
+              value={
+                stats.avgJournalEntriesPerDestination.toFixed(
+                  1
+                )
+              }
+              label="Avg. / trip"
+            />
 
-            </div>
           </div>
         </div>
 
@@ -1023,28 +1019,27 @@ export default function StatsView({
           <SectionTitle>
             Gallery
           </SectionTitle>
-          <div className="stats-card">
-            <div className="stats-card-grid stats-card-grid-narrow">
-              <OverviewCard
-                value={stats.photos}
-                label="Photos"
-              />
 
-              <OverviewCard
-                value={
-                  stats.mostPhotographed?.name ??
-                  '—'
-                }
-                label={`Top city (${stats.mostPhotographed?.count ?? 0} photos)`}
-              />
+          <div className="stats-card-grid stats-card-grid-narrow">
+            <OverviewCard
+              value={stats.photos}
+              label="Photos"
+            />
 
-              <OverviewCard
-                value={stats.avgPhotosPerDestination.toFixed(
-                  1
-                )}
-                label="Avg. / trip"
-              />
-            </div>
+            <OverviewCard
+              value={
+                stats.mostPhotographed?.name ??
+                '—'
+              }
+              label={`Top city (${stats.mostPhotographed?.count ?? 0} photos)`}
+            />
+
+            <OverviewCard
+              value={stats.avgPhotosPerDestination.toFixed(
+                1
+              )}
+              label="Avg. / trip"
+            />
           </div>
         </div>
 
