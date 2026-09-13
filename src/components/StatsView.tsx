@@ -574,6 +574,21 @@ export default function StatsView({
   const topCountries = stats.countryBreakdown
     .slice(0, 5);
 
+  const topVisitedCountries = [...stats.countryBreakdown]
+    .filter(c => c.visited > 0)
+    .sort((a, b) => b.visited - a.visited)
+    .slice(0, 3);
+
+  const topPlannedCountries = [...stats.countryBreakdown]
+    .filter(c => c.planned > 0)
+    .sort((a, b) => b.planned - a.planned)
+    .slice(0, 3);
+
+  const topWantToGoCountries = [...stats.countryBreakdown]
+    .filter(c => c.wantToGo > 0)
+    .sort((a, b) => b.wantToGo - a.wantToGo)
+    .slice(0, 3);
+
   return (
     <section className="view active stats-view">
 
@@ -759,7 +774,7 @@ export default function StatsView({
                         className="country-bar-segment bar-visited"
                         style={{
                           width: `${(c.visited /
-                              c.total) *
+                            c.total) *
                             100
                             }%`,
                         }}
@@ -771,7 +786,7 @@ export default function StatsView({
                         className="country-bar-segment bar-planned"
                         style={{
                           width: `${(c.planned /
-                              c.total) *
+                            c.total) *
                             100
                             }%`,
                         }}
@@ -783,7 +798,7 @@ export default function StatsView({
                         className="country-bar-segment bar-want_to_go"
                         style={{
                           width: `${(c.wantToGo /
-                              c.total) *
+                            c.total) *
                             100
                             }%`,
                         }}
@@ -799,6 +814,115 @@ export default function StatsView({
             ))}
           </div>
         </div>
+
+        <div className="stats-card">
+          <p className="stats-card-subtitle">
+            Top 3 countries with the most visited cities
+          </p>
+
+          <div className="podium">
+            {topVisitedCountries.map((c, index) => {
+              const rank = index + 1;
+
+              return (
+                <div
+                  className={`podium-item rank-${rank}`}
+                  key={c.country}
+                >
+                  <div className="medal">
+                    {rank === 1
+                      ? '🥇'
+                      : rank === 2
+                        ? '🥈'
+                        : '🥉'}
+                  </div>
+
+                  <h3>{c.country}</h3>
+
+                  <p>
+                    {c.visited}{' '}
+                    {c.visited === 1
+                      ? 'city'
+                      : 'cities'}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="stats-card">
+          <p className="stats-card-subtitle">
+            Top 3 countries with the most planned cities
+          </p>
+
+          <div className="podium">
+            {topPlannedCountries.map((c, index) => {
+              const rank = index + 1;
+
+              return (
+                <div
+                  className={`podium-item rank-${rank}`}
+                  key={c.country}
+                >
+                  <div className="medal">
+                    {rank === 1
+                      ? '🥇'
+                      : rank === 2
+                        ? '🥈'
+                        : '🥉'}
+                  </div>
+
+                  <h3>{c.country}</h3>
+
+                  <p>
+                    {c.planned}{' '}
+                    {c.planned === 1
+                      ? 'city'
+                      : 'cities'}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="stats-card">
+          <p className="stats-card-subtitle">
+            Top 3 countries with the most wanted cities
+          </p>
+
+          <div className="podium">
+            {topWantToGoCountries.map((c, index) => {
+              const rank = index + 1;
+
+              return (
+                <div
+                  className={`podium-item rank-${rank}`}
+                  key={c.country}
+                >
+                  <div className="medal">
+                    {rank === 1
+                      ? '🥇'
+                      : rank === 2
+                        ? '🥈'
+                        : '🥉'}
+                  </div>
+
+                  <h3>{c.country}</h3>
+
+                  <p>
+                    {c.wantToGo}{' '}
+                    {c.wantToGo === 1
+                      ? 'city'
+                      : 'cities'}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
 
       {/* Travel Activity */}
@@ -1016,7 +1140,7 @@ export default function StatsView({
                             className="country-bar-segment bar-visited"
                             style={{
                               width: `${(c.visited /
-                                  c.total) *
+                                c.total) *
                                 100
                                 }%`,
                             }}
@@ -1028,7 +1152,7 @@ export default function StatsView({
                             className="country-bar-segment bar-planned"
                             style={{
                               width: `${(c.planned /
-                                  c.total) *
+                                c.total) *
                                 100
                                 }%`,
                             }}
@@ -1040,7 +1164,7 @@ export default function StatsView({
                             className="country-bar-segment bar-want_to_go"
                             style={{
                               width: `${(c.wantToGo /
-                                  c.total) *
+                                c.total) *
                                 100
                                 }%`,
                             }}
