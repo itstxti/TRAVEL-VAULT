@@ -953,11 +953,6 @@ export default function StatsView({
                 stats.longestTrip?.name ?? '—'
               }
               label={`Longest trip (${stats.longestTrip?.days ?? 0} days)`}
-              detail={
-                stats.longestTrip
-                  ? `${stats.longestTrip.days} days`
-                  : undefined
-              }
             />
 
             <OverviewCard
