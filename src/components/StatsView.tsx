@@ -224,7 +224,7 @@ export default function StatsView({ dest }: { dest: Destination[] }) {
         <div className="stats-card">
           <div className="country-stat-list">
             {stats.countryBreakdown.map(c => (
-              <div className="country-stat-row" key={c.country}>
+              <div className="bar-row" key={c.country}>
                 <span className="country-flag">{flag(countryData(c.country)?.[1])}</span>
                 <span className="country-stat-name">{c.country}</span>
                 <div className="stacked-bar-track">
