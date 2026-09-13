@@ -810,79 +810,79 @@ export default function StatsView({
           </div>
         </div>
 
-      {topVisitedCountries.length > 1 && (      
-        <div className="stats-card">
-          <p className="stats-card-subtitle">
-            Top countries with the most visited cities
-          </p>
+        {topVisitedCountries.length > 1 && (
+          <div className="stats-card">
+            <p className="stats-card-subtitle">
+              Top countries with the most visited cities
+            </p>
 
-          <div className="podium">
-            {topVisitedCountries.map((c, index) => {
-              const rank = index + 1;
+            <div className="podium">
+              {topVisitedCountries.map((c, index) => {
+                const rank = index + 1;
 
-              return (
-                <div
-                  className={`podium-item rank-${rank}`}
-                  key={c.country}
-                >
-                  <div className="medal">
-                    {rank === 1
-                      ? '🥇'
-                      : rank === 2
-                        ? '🥈'
-                        : '🥉'}
+                return (
+                  <div
+                    className={`podium-item rank-${rank}`}
+                    key={c.country}
+                  >
+                    <div className="medal">
+                      {rank === 1
+                        ? '🥇'
+                        : rank === 2
+                          ? '🥈'
+                          : '🥉'}
+                    </div>
+
+                    <h3>{c.country}</h3>
+
+                    <p>
+                      {c.visited}{' '}
+                      {c.visited === 1
+                        ? 'city'
+                        : 'cities'}
+                    </p>
                   </div>
+                );
+              })}
+            </div>
+          </div>)}
 
-                  <h3>{c.country}</h3>
+        {topPlannedCountries.length > 1 && (
+          <div className="stats-card">
+            <p className="stats-card-subtitle">
+              Top countries with the most planned cities
+            </p>
 
-                  <p>
-                    {c.visited}{' '}
-                    {c.visited === 1
-                      ? 'city'
-                      : 'cities'}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>)}
+            <div className="podium">
+              {topPlannedCountries.map((c, index) => {
+                const rank = index + 1;
 
-      {topPlannedCountries.length > 1 && (
-        <div className="stats-card">
-          <p className="stats-card-subtitle">
-            Top countries with the most planned cities
-          </p>
+                return (
+                  <div
+                    className={`podium-item rank-${rank}`}
+                    key={c.country}
+                  >
+                    <div className="medal">
+                      {rank === 1
+                        ? '🥇'
+                        : rank === 2
+                          ? '🥈'
+                          : '🥉'}
+                    </div>
 
-          <div className="podium">
-            {topPlannedCountries.map((c, index) => {
-              const rank = index + 1;
+                    <h3>{c.country}</h3>
 
-              return (
-                <div
-                  className={`podium-item rank-${rank}`}
-                  key={c.country}
-                >
-                  <div className="medal">
-                    {rank === 1
-                      ? '🥇'
-                      : rank === 2
-                        ? '🥈'
-                        : '🥉'}
+                    <p>
+                      {c.planned}{' '}
+                      {c.planned === 1
+                        ? 'city'
+                        : 'cities'}
+                    </p>
                   </div>
-
-                  <h3>{c.country}</h3>
-
-                  <p>
-                    {c.planned}{' '}
-                    {c.planned === 1
-                      ? 'city'
-                      : 'cities'}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>)}
+                );
+              })}
+            </div>
+          </div>)}
 
         {topWantToGoCountries.length > 1 && (
           <div className="stats-card">
@@ -952,7 +952,7 @@ export default function StatsView({
               value={
                 stats.longestTrip?.name ?? '—'
               }
-              label="Longest trip"
+              label={`Longest trip (${stats.longestTrip?.days ?? 0} days)`}
               detail={
                 stats.longestTrip
                   ? `${stats.longestTrip.days} days`
@@ -964,27 +964,19 @@ export default function StatsView({
               value={
                 stats.shortestTrip?.name ?? '—'
               }
-              label="Shortest trip"
-              detail={
-                stats.shortestTrip
-                  ? `${stats.shortestTrip.days} days`
-                  : undefined
-              }
+              label={`Shortest trip (${stats.shortestTrip?.days ?? 0} days)`}
             />
 
             <OverviewCard
               value={
                 stats.latestTrip?.name ?? '—'
               }
-              label="Latest trip"
-              detail={
-                stats.latestTrip
+              label={`Latest trip (${stats.latestTrip
                   ? new Date(
-                    stats.latestTrip.date +
-                    'T00:00:00'
+                    stats.latestTrip.date + 'T00:00:00'
                   ).toLocaleDateString('en-GB')
-                  : undefined
-              }
+                  : '—'
+                })`}
             />
           </div>
         </div>
@@ -1010,12 +1002,7 @@ export default function StatsView({
                 stats.mostJournalEntries?.name ??
                 '—'
               }
-              label="Top city"
-              detail={
-                stats.mostJournalEntries
-                  ? `${stats.mostJournalEntries.count} entries`
-                  : undefined
-              }
+              label={`Top city (${stats.mostJournalEntries?.count ?? 0} entries)`}
             />
 
             <OverviewCard
@@ -1047,12 +1034,7 @@ export default function StatsView({
                 stats.mostPhotographed?.name ??
                 '—'
               }
-              label="Top city"
-              detail={
-                stats.mostPhotographed
-                  ? `${stats.mostPhotographed.count} photos`
-                  : undefined
-              }
+              label={`Top city (${stats.mostPhotographed?.count ?? 0} photos)`}
             />
 
             <OverviewCard
