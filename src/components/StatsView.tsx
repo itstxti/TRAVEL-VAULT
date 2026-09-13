@@ -34,6 +34,18 @@ interface TripExtreme {
   days: number;
 }
 
+/* Added: a named event on the trip timeline (first / most recent trip). */
+interface TripDate {
+  name: string;
+  date: string;
+}
+
+/* Added: a single year's worth of trip activity. */
+interface YearActivity {
+  year: number;
+  count: number;
+}
+
 interface Stats {
   total: number;
   visited: number;
@@ -71,6 +83,22 @@ interface Stats {
   companionsWantToGo: number;
 
   companionFrequency: CompanionStat[];
+
+  /* Added: extra derived stats, computed alongside the existing ones without touching them. */
+  completionRate: number;
+  documentedDestinations: number;
+  documentationRate: number;
+
+  uniqueCompanions: number;
+  avgCompanionsPerTrip: number;
+
+  topCountry: { country: string; count: number } | null;
+
+  firstTrip: TripDate | null;
+  mostRecentTrip: TripDate | null;
+
+  tripsByYear: YearActivity[];
+  busiestYear: YearActivity | null;
 }
 
 function computeStats(dest: Destination[]): Stats {
@@ -118,6 +146,18 @@ function computeStats(dest: Destination[]): Stats {
   let companionsPlanned = 0;
   let companionsWantToGo = 0;
 
+  /* Added: accumulators for the new stats below. */
+  let destinationsDocumented = 0;
+  let totalCompanionSlots = 0;
+
+  let topCountryName: string | null = null;
+  let topCountryVisited = 0;
+
+  let firstTrip: TripDate | null = null;
+  let mostRecentTrip: TripDate | null = null;
+
+  const tripsByYearMap = new Map<number, number>();
+
   for (const d of dest) {
     /*
      * Destination status
@@ -155,6 +195,12 @@ function computeStats(dest: Destination[]): Stats {
     }
 
     countryMap.set(key, c);
+
+    /* Added: track the country with the most visited destinations. */
+    if (d.status === 'visited' && c.visited > topCountryVisited) {
+      topCountryVisited = c.visited;
+      topCountryName = key;
+    }
 
     /*
      * Photos
@@ -201,6 +247,11 @@ function computeStats(dest: Destination[]): Stats {
       }
     }
 
+    /* Added: how many destinations have *any* photos or journal entries. */
+    if (d.photos.length || d.journal.length) {
+      destinationsDocumented++;
+    }
+
     /*
      * Trips
      *
@@ -230,6 +281,23 @@ function computeStats(dest: Destination[]): Stats {
           name: d.name,
           days,
         };
+      }
+    }
+
+    /* Added: first / most recent trip, and trips-by-year, from tripStart. */
+    if (d.status === 'visited' && d.tripStart) {
+      if (!firstTrip || d.tripStart < firstTrip.date) {
+        firstTrip = { name: d.name, date: d.tripStart };
+      }
+
+      if (!mostRecentTrip || d.tripStart > mostRecentTrip.date) {
+        mostRecentTrip = { name: d.name, date: d.tripStart };
+      }
+
+      const year = Number(d.tripStart.slice(0, 4));
+
+      if (!Number.isNaN(year)) {
+        tripsByYearMap.set(year, (tripsByYearMap.get(year) ?? 0) + 1);
       }
     }
 
@@ -286,6 +354,9 @@ function computeStats(dest: Destination[]): Stats {
         current
       );
     }
+
+    /* Added: total companion "slots" across every destination, for the average below. */
+    totalCompanionSlots += d.companions.length;
   }
 
   /*
@@ -318,6 +389,16 @@ function computeStats(dest: Destination[]): Stats {
         a.name.localeCompare(b.name)
     )
     .slice(0, 8);
+
+  /* Added: yearly activity, sorted chronologically, plus the busiest year. */
+  const tripsByYear: YearActivity[] = [...tripsByYearMap.entries()]
+    .map(([year, count]) => ({ year, count }))
+    .sort((a, b) => a.year - b.year);
+
+  const busiestYear = tripsByYear.reduce<YearActivity | null>(
+    (best, entry) => (!best || entry.count > best.count ? entry : best),
+    null
+  );
 
   return {
     total: dest.length,
@@ -371,6 +452,28 @@ function computeStats(dest: Destination[]): Stats {
     companionsWantToGo,
 
     companionFrequency,
+
+    /* Added */
+    completionRate: dest.length ? (visited / dest.length) * 100 : 0,
+    documentedDestinations: destinationsDocumented,
+    documentationRate: dest.length
+      ? (destinationsDocumented / dest.length) * 100
+      : 0,
+
+    uniqueCompanions: companionCounts.size,
+    avgCompanionsPerTrip: tripsWithCompanions
+      ? totalCompanionSlots / tripsWithCompanions
+      : 0,
+
+    topCountry: topCountryName
+      ? { country: topCountryName, count: topCountryVisited }
+      : null,
+
+    firstTrip,
+    mostRecentTrip,
+
+    tripsByYear,
+    busiestYear,
   };
 }
 
@@ -1069,6 +1172,132 @@ export default function StatsView({
               </span>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* Added: Travel Insights */}
+      <div className="stats-section">
+        <SectionTitle>
+          Travel Insights
+        </SectionTitle>
+
+        <div className="stats-card-grid">
+          <OverviewCard
+            value={`${stats.completionRate.toFixed(0)}%`}
+            label="Completion rate"
+          />
+
+          <OverviewCard
+            value={`${stats.documentationRate.toFixed(0)}%`}
+            label="Documented"
+          />
+
+          <OverviewCard
+            value={stats.uniqueCompanions}
+            label="Travel companions"
+          />
+
+          <OverviewCard
+            value={stats.avgCompanionsPerTrip.toFixed(1)}
+            label="Avg. companions / trip"
+          />
+        </div>
+
+        {stats.topCountry && (
+          <p className="stats-footnote">
+            Most visited country:{' '}
+            <b>{stats.topCountry.country}</b>{' '}
+            ({stats.topCountry.count} visited)
+          </p>
+        )}
+      </div>
+
+      {/* Added: Travel Timeline */}
+      {(stats.firstTrip || stats.mostRecentTrip) && (
+        <div className="stats-section">
+          <SectionTitle>
+            Travel Timeline
+          </SectionTitle>
+
+          <div className="stats-card">
+            {stats.firstTrip && (
+              <p className="stats-footnote">
+                First trip:{' '}
+                <b>{stats.firstTrip.name}</b>{' '}
+                ({stats.firstTrip.date})
+              </p>
+            )}
+
+            {stats.mostRecentTrip && (
+              <p className="stats-footnote">
+                Most recent trip:{' '}
+                <b>{stats.mostRecentTrip.name}</b>{' '}
+                ({stats.mostRecentTrip.date})
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Added: Yearly Activity */}
+      {stats.tripsByYear.length > 0 && (
+        <div className="stats-section">
+          <SectionTitle>
+            Yearly Activity
+          </SectionTitle>
+
+          <div className="stats-card">
+            <div className="bar-chart">
+              {stats.tripsByYear.map(y => {
+                const max = stats.busiestYear
+                  ? stats.busiestYear.count
+                  : y.count;
+
+                return (
+                  <div
+                    className="bar-row"
+                    key={y.year}
+                  >
+                    <span className="bar-label">
+                      {y.year}
+                    </span>
+
+                    <div className="bar-track country-bar-track">
+                      <div
+                        className="country-bar-segments"
+                        style={{
+                          width: '100%',
+                        }}
+                      >
+                        <div
+                          className="country-bar-segment bar-visited"
+                          style={{
+                            width: `${
+                              (y.count / max) *
+                              100
+                            }%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <span className="bar-value">
+                      {y.count}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            {stats.busiestYear && (
+              <p className="stats-footnote">
+                Busiest year:{' '}
+                <b>{stats.busiestYear.year}</b>{' '}
+                ({stats.busiestYear.count}{' '}
+                trips)
+              </p>
+            )}
           </div>
         </div>
       )}
