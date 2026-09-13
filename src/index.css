@@ -278,6 +278,7 @@ nav.tabs {
   border-radius: 999px;
   cursor: pointer;
   margin-top: 10px;
+  margin-left: 5px;
 }
 
 .filter-select {
