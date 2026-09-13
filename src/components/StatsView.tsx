@@ -614,6 +614,7 @@ export default function StatsView({
                       fill="none"
                       stroke="var(--paper-dark)"
                       strokeWidth="14"
+                      transform="rotate(-90 60 60)"
                     />
                   );
                 }
@@ -686,6 +687,7 @@ export default function StatsView({
                         strokeDashoffset={
                           -currentOffset
                         }
+                        transform="rotate(-90 60 60)"
                       />
                     );
                   }
