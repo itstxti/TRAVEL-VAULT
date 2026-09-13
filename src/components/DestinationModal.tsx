@@ -143,19 +143,24 @@ export default function DestinationModal({
             <label>Trip dates</label>
 
             <div className="date-row">
-              <span>Start</span>
-              <input
-                type="date"
-                value={start}
-                onChange={e => setStart(e.target.value)}
-              />
+              <div className="start-date">
+                <span>Start</span>
+                <input
+                  type="date"
+                  value={start}
+                  onChange={e => setStart(e.target.value)}
+                />
+              </div>
+              <div className="start-date">
 
-              <span>End</span>
-              <input
-                type="date"
-                value={end}
-                onChange={e => setEnd(e.target.value)}
-              />
+                <span>End</span>
+                <input
+                  type="date"
+                  value={end}
+                  onChange={e => setEnd(e.target.value)}
+                />
+              </div>
+
             </div>
           </div>
 
