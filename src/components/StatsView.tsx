@@ -175,8 +175,9 @@ function computeStats(dest: Destination[]): Stats {
      */
     const days = tripDays(d.tripStart, d.tripEnd);
 
+    tripCount++;
+    
     if (days !== null) {
-      tripCount++;
       totalTripDays += days;
 
       if (!longestTrip || days > longestTrip.days) {
