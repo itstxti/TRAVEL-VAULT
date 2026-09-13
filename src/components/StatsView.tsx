@@ -345,9 +345,7 @@ export default function StatsView({
                   <div className="bar-track">
                     <div
                       className={`bar-fill bar-${statusKey}`}
-                      style={{
-                        width: `${(value / maxStatus) * 100}%`,
-                      }}
+                      style={{ width: '100%' }}
                     />
                   </div>
 
@@ -471,28 +469,28 @@ export default function StatsView({
 
           {(stats.longestTrip ||
             stats.shortestTrip) && (
-            <p className="stats-footnote">
-              {stats.longestTrip && (
-                <>
-                  Longest:{' '}
-                  <b>{stats.longestTrip.name}</b>{' '}
-                  ({stats.longestTrip.days} days)
-                </>
-              )}
+              <p className="stats-footnote">
+                {stats.longestTrip && (
+                  <>
+                    Longest:{' '}
+                    <b>{stats.longestTrip.name}</b>{' '}
+                    ({stats.longestTrip.days} days)
+                  </>
+                )}
 
-              {stats.longestTrip &&
-                stats.shortestTrip &&
-                ' · '}
+                {stats.longestTrip &&
+                  stats.shortestTrip &&
+                  ' · '}
 
-              {stats.shortestTrip && (
-                <>
-                  Shortest:{' '}
-                  <b>{stats.shortestTrip.name}</b>{' '}
-                  ({stats.shortestTrip.days} days)
-                </>
-              )}
-            </p>
-          )}
+                {stats.shortestTrip && (
+                  <>
+                    Shortest:{' '}
+                    <b>{stats.shortestTrip.name}</b>{' '}
+                    ({stats.shortestTrip.days} days)
+                  </>
+                )}
+              </p>
+            )}
         </div>
       )}
 
