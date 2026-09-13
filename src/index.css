@@ -1599,6 +1599,7 @@ select.status-select:hover {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 12px;
+  margin-bottom: 10px;
 }
 
 .stats-card-grid-narrow {
