@@ -271,7 +271,7 @@ nav.tabs {
   font-size: 11px;
   letter-spacing: .05em;
   text-transform: uppercase;
-  background: transparent;
+  background: #f8f0e1;
   border: 1px solid var(--line);
   color: var(--ink-soft);
   padding: 6px 12px;
@@ -2121,7 +2121,7 @@ select.status-select:hover {
   padding: 2px 5px;
   border: 1px solid var(--line);
   border-radius: 6px;
-  background: var(--paper);
+  background: #f8f0e1;
   color: var(--ink-soft);
   font-family: var(--font-mono);
   font-size: 11px;
