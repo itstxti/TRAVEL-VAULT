@@ -14,7 +14,7 @@
   --radius: 4px;
   --font-display: 'Fraunces', serif;
   --font-body: 'Inter', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-mono: 'IBM Plex Mono', sans-serif;
 }
 
 * {
