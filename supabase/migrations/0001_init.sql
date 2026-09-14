@@ -43,6 +43,18 @@ create table if not exists photos (
 create index if not exists destinations_user_idx on destinations(user_id);
 create index if not exists journal_entries_destination_idx on journal_entries(destination_id);
 create index if not exists photos_destination_idx on photos(destination_id);
+create index if not exists destinations_deleted_at_idx
+  on destinations(deleted_at)
+  where deleted_at is not null;
+
+create index if not exists journal_entries_deleted_at_idx
+  on journal_entries(deleted_at)
+  where deleted_at is not null;
+
+create index if not exists photos_deleted_at_idx
+  on photos(deleted_at)
+  where deleted_at is not null;
+
 
 -- updated_at siempre lo pone el servidor, nunca el cliente (evita bugs de reloj
 -- desincronizado entre dispositivos cuando se implemente el sync en la fase 4).
