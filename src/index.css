@@ -833,7 +833,7 @@ select.status-select:hover {
 
 .auth-card {
   width: 320px;
-  max-width: 100%;
+  max-width: 80%;
   text-align: left;
 }
 
