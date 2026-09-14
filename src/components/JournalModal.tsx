@@ -3,6 +3,11 @@ import { Destination, JournalEntry } from '../types';
 import { id, formatDate } from '../utils';
 import { IconTrash, IconClose, IconNotebook } from '../icons';
 
+// Keep entries reasonable in size — matches the check constraint added in
+// supabase/migrations/0002_hardening.sql, so the client fails fast instead
+// of round-tripping to the server just to be rejected there.
+const MAX_ENTRY_LENGTH = 5000;
+
 export default function JournalModal({
   dest, close, update,
 }: {
@@ -12,8 +17,9 @@ export default function JournalModal({
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
 
   const add = () => {
-    if (!text.trim()) return;
-    const entry: JournalEntry = { id: id(), date, text: text.trim() };
+    const trimmed = text.trim().slice(0, MAX_ENTRY_LENGTH);
+    if (!trimmed) return;
+    const entry: JournalEntry = { id: id(), date, text: trimmed };
     update({ ...dest, journal: [...dest.journal, entry] });
     setText('');
   };
@@ -55,7 +61,13 @@ export default function JournalModal({
               <label style={{ fontSize: '16px' }}>Add entry</label>
               <input type="date" value={date} onChange={e => setDate(e.target.value)} />
             </div>
-            <textarea value={text} onChange={e => setText(e.target.value)} placeholder="What do you remember about this place?" />
+            <textarea
+              value={text}
+              maxLength={MAX_ENTRY_LENGTH}
+              onChange={e => setText(e.target.value)}
+              placeholder="What do you remember about this place?"
+            />
+            <p className="hint" style={{ textAlign: 'right' }}>{text.length}/{MAX_ENTRY_LENGTH}</p>
             <div className="modal-footer">
               <button className="btn btn-primary" onClick={add} disabled={!text.trim()}>Add note</button>
             </div>
