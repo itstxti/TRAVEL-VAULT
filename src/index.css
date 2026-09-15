@@ -1162,7 +1162,6 @@ select.status-select:hover {
   padding: 10px 10px 34px;
   border-radius: 2px;
   box-shadow: 0 3px 10px rgba(27, 42, 61, 0.18), 0 1px 0 rgba(27, 42, 61, 0.06);
-  transform: rotate(var(--tilt, -1.4deg));
   transition: transform .18s ease, box-shadow .18s ease, opacity .2s ease;
 }
 
