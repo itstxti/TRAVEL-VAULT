@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Destination, Photo } from '../types';
 import { id } from '../utils';
 import { putPhoto, deletePhoto } from '../storage';
@@ -93,7 +93,11 @@ export default function GalleryModal({
                       <button
                         className="del-photo"
                         aria-label="Delete photo"
-                        onClick={() => { deletePhoto(p.id); update({ ...dest, photos: dest.photos.filter(x => x.id !== p.id) }); }}
+                        onClick={() => {
+                          if (!confirm('Delete this photo? This can\'t be undone.')) return;
+                          deletePhoto(p.id);
+                          update({ ...dest, photos: dest.photos.filter(x => x.id !== p.id) });
+                        }}
                       >
                         <IconClose size={12} />
                       </button>

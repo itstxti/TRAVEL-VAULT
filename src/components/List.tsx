@@ -1,4 +1,3 @@
-import React from 'react';
 import { Destination } from '../types';
 import { countryData, flag } from '../data';
 import { IconStampEmpty } from '../icons';

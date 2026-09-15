@@ -1,4 +1,3 @@
-import React from 'react';
 import { Destination, Status } from '../types';
 import { formatDate, tripDays } from '../utils';
 import { IconCalendar, IconCamera, IconNotebook, IconEdit } from '../icons';
@@ -30,10 +29,16 @@ export default function Card({
         <div className="companions-line"><b>With:</b> {d.companions.join(', ')}</div>
       )}
 
-      {d.tripStart && (
+      {(d.tripStart || d.tripEnd) && (
         <div className="dates-line">
           <IconCalendar />
-          {formatDate(d.tripStart)} – {formatDate(d.tripEnd)} · {tripDays(d.tripStart, d.tripEnd)} days
+          {d.tripStart && d.tripEnd ? (
+            <>{formatDate(d.tripStart)} – {formatDate(d.tripEnd)} · {tripDays(d.tripStart, d.tripEnd)} days</>
+          ) : d.tripStart ? (
+            <>From {formatDate(d.tripStart)}</>
+          ) : (
+            <>Until {formatDate(d.tripEnd)}</>
+          )}
         </div>
       )}
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Destination, Status, Photo } from './types';
 import { load, save, hydrate } from './storage';
 import { migrateIfNeeded, MigrationStatus } from './migrate';
@@ -96,7 +96,7 @@ export default function App() {
         flushPush();
       }
     } catch (e) {
-      console.error('No se pudieron traer cambios remotos', e);
+      console.error('Could not pull remote changes', e);
     } finally {
       pulling.current = false;
     }
@@ -138,7 +138,7 @@ export default function App() {
       const prev = x.find(v => v.id === d.id);
       if (prev) {
         const removedPhotoIds = prev.photos.filter(p => !d.photos.some(np => np.id === p.id)).map(p => p.id);
-        removedPhotoIds.forEach(id => pushDeletePhoto(id).catch(e => console.error('No se pudo borrar la foto en Supabase', e)));
+        removedPhotoIds.forEach(id => pushDeletePhoto(id).catch(e => console.error('Could not delete photo from Supabase', e)));
       }
       return x.map(v => (v.id === d.id ? d : v));
     });
@@ -152,9 +152,6 @@ export default function App() {
     deletedIds.current.add(d.id);
     flushPush();
   };
-
-  const importRef = useRef<HTMLInputElement>(null);
-
 
   // Gallery/notes are looked up by id from `dest` on every render, so the
   // modals always reflect the latest state (no stale copies).
@@ -196,6 +193,7 @@ export default function App() {
               </span>
             )}
             {pushStatus === 'pushing' && <span className="sync-status">Syncing…</span>}
+            {pushStatus === 'synced' && <span className="sync-status">All changes saved ✓</span>}
             {pushStatus === 'error' && <span className="sync-status sync-status-error">Changes pending upload</span>}
           </div>
         </div>
@@ -247,11 +245,20 @@ export default function App() {
       </div>
 
       <main>
-        {tab === 'list' && (
-          <List list={list} update={update} remove={remove} openEdit={d => { setEditing(d); setModal(true); }} openGallery={d => setGalleryId(d.id)} openNotes={d => setNotesId(d.id)} />
+        {!ready ? (
+          <div className="empty-state">
+            <IconSpinner size={30} className="empty-state-icon" />
+            <h1>Loading your vault…</h1>
+          </div>
+        ) : (
+          <>
+            {tab === 'list' && (
+              <List list={list} update={update} remove={remove} openEdit={d => { setEditing(d); setModal(true); }} openGallery={d => setGalleryId(d.id)} openNotes={d => setNotesId(d.id)} />
+            )}
+            {tab === 'map' && <MapView list={list} />}
+            {tab === 'stats' && <StatsView dest={dest} />}
+          </>
         )}
-        {tab === 'map' && <MapView list={list} />}
-        {tab === 'stats' && <StatsView dest={dest} />}
       </main>
 
       <button className="fab" aria-label="Add destination" onClick={() => { setEditing(null); setModal(true); }}>+</button>

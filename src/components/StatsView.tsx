@@ -509,21 +509,6 @@ function CompanionSummaryCard({
   );
 }
 
-function MiniStat({
-  value,
-  label,
-}: {
-  value: number | string;
-  label: string;
-}) {
-  return (
-    <div className="stats-mini-stat">
-      <b>{value}</b>
-      <span>{label}</span>
-    </div>
-  );
-}
-
 function SectionTitle({
   children,
 }: {

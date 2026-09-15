@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Destination, Status } from '../types';
 import { COUNTRIES, countryData } from '../data';
 import { id, debounce } from '../utils';
@@ -50,7 +50,7 @@ export default function DestinationModal({
   useEffect(() => { runSearch(query); }, [query, runSearch]);
 
   const pickResult = (r: GeocodeResult) => {
-    setName(n => r.city);
+    setName(r.city);
     setCountry(r.country || country);
     setLat(r.lat); setLng(r.lng); setZoom(11);
     setResults([]); setQuery(''); setSearchState('idle');
@@ -83,6 +83,17 @@ export default function DestinationModal({
     setLng(newLng);
     runReverse(newLat, newLng);
   };
+
+  // A trip end date before its start date is never valid, regardless of
+  // status (even a "want to go" entry shouldn't be saved with a backwards
+  // range). Only flag it once both dates are present — a single date on
+  // its own is fine (e.g. only the start is known yet).
+  const dateError = useMemo(() => {
+    if (!start || !end) return null;
+    return end < start ? 'The end date can\'t be before the start date.' : null;
+  }, [start, end]);
+
+  const canSave = name.trim().length > 0 && !dateError;
 
   return (
     <div className="overlay active" onMouseDown={e => e.target === e.currentTarget && close()}>
@@ -157,7 +168,8 @@ export default function DestinationModal({
                 <span style={{ marginRight: '5px', fontSize: '12px' }}>End:</span>
                 <input
                   type="date"
-                  
+                  min={start || undefined}
+                  aria-invalid={!!dateError}
                   value={end}
                   style={{ borderRadius: '5px', width: '100px' }}
                   onChange={e => setEnd(e.target.value)}
@@ -165,6 +177,7 @@ export default function DestinationModal({
               </div>
 
             </div>
+            {dateError && <p className="hint hint-notfound" role="alert">{dateError}</p>}
           </div>
 
           <div className="field">
@@ -176,7 +189,8 @@ export default function DestinationModal({
             <button className="btn btn-ghost" onClick={close}>Cancel</button>
             <button
               className="btn btn-primary"
-              disabled={!name.trim()}
+              disabled={!canSave}
+              title={dateError ?? undefined}
               onClick={() => onSave({
                 id: value?.id || id(),
                 name, country, type: 'city', status,

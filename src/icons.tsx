@@ -1,5 +1,3 @@
-import React from 'react';
-
 type IconProps = { size?: number; className?: string };
 const base = (size: number) => ({
   width: size, height: size, viewBox: '0 0 24 24', fill: 'none' as const,

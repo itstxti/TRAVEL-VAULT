@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Destination, JournalEntry } from '../types';
 import { id, formatDate } from '../utils';
 import { IconTrash, IconClose, IconNotebook } from '../icons';
@@ -46,7 +46,10 @@ export default function JournalModal({
                     className="journal-del-btn"
                     aria-label="Delete note"
                     title="Delete note"
-                    onClick={() => update({ ...dest, journal: dest.journal.filter(x => x.id !== entry.id) })}
+                    onClick={() => {
+                      if (!confirm('Delete this note? This can\'t be undone.')) return;
+                      update({ ...dest, journal: dest.journal.filter(x => x.id !== entry.id) });
+                    }}
                   >
                     <IconTrash size={13} />
                   </button>

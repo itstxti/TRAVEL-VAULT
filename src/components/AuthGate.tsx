@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../supabaseClient';
+import { IconSpinner } from '../icons';
 
 export function useSession() {
   const [session, setSession] = useState<Session | null>(null);
@@ -266,7 +267,19 @@ export default function AuthGate({ children }: { children: React.ReactNode }) {
   const { session, loading, recovery, clearRecovery } = useSession();
   const [mode, setMode] = useState<Mode>('signin');
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <div
+        className="hero"
+        style={{
+          minHeight: '100vh', display: 'flex', flexDirection: 'column',
+          justifyContent: 'center', alignItems: 'center', gap: 12,
+        }}
+      >
+        <IconSpinner size={28} />
+      </div>
+    );
+  }
 
   if (session && recovery) {
     return <ResetPasswordScreen onDone={clearRecovery} />;
