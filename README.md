@@ -18,7 +18,7 @@ A React + TypeScript travel app for planning trips, documenting experiences, and
 
 ## Tech Stack
 
-<div>
+<div align="center">
 
 |      **Category**      |                                                                                     **Technologies**                                                                                     |
 | :--------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
