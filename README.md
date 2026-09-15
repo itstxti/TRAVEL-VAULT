@@ -1,11 +1,14 @@
 <div align="center">
   
 # TRAVEL VAULT
+
+<div align="center">
+
 A React + TypeScript travel app for planning trips, documenting experiences, and tracking the places you've visited.
 
-![status](https://img.shields.io/badge/status-portfolio_project-blue) ![deps](https://img.shields.io/badge/dependencies-react_%2B_leaflet-lightgrey) ![license](https://img.shields.io/badge/license-MIT-green)
+![status](https://img.shields.io/badge/status-portfolio_project-blue) ![license](https://img.shields.io/badge/license-MIT-green)
 
-
+</div>
 
 ## Features
 
@@ -111,8 +114,7 @@ A React + TypeScript travel app for planning trips, documenting experiences, and
   </tr>
 </table>
 
-## License
+<a href="https://travel-vault-tau.vercel.app">
+  <strong>Visit TRAVEL VAULT →</strong>
+</a>
 
-MIT — see [LICENSE](./LICENSE).
-
-</div>
