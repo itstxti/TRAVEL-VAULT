@@ -12,36 +12,28 @@ A React + TypeScript travel app for planning trips, documenting experiences, and
 
 <table>
   <tr>
-    <td align="center"><strong>Destinations</strong></td>
-    <td align="center">Add cities or countries and assign a status: Want to Go, Planned, or Visited</td>
+    <td align="center"><strong>Manage Destinations</strong></td>
+    <td align="center">Add cities or countries and mark them as Want to Go, Planned, or Visited</td>
   </tr>
   <tr>
-    <td align="center"><strong>List View</strong></td>
-    <td align="center">Browse all destinations and filter them by status</td>
+    <td align="center"><strong>Explore the Map</strong></td>
+    <td align="center">Visualize your destinations on an interactive map</td>
   </tr>
   <tr>
-    <td align="center"><strong>Map View</strong></td>
-    <td align="center">Visualize all destinations on an interactive map</td>
+    <td align="center"><strong>Plan Trips</strong></td>
+    <td align="center">Add travel companions and start/end dates to your trips</td>
   </tr>
   <tr>
-    <td align="center"><strong>Location Search</strong></td>
-    <td align="center">Search for a place and select a geocoded suggestion to automatically fill in its coordinates</td>
+    <td align="center"><strong>Write a Journal</strong></td>
+    <td align="center">Create dated journal entries for your trips</td>
   </tr>
   <tr>
-    <td align="center"><strong>Trip Details</strong></td>
-    <td align="center">Track travel companions and trip start/end dates for each destination</td>
+    <td align="center"><strong>Save Photos</strong></td>
+    <td align="center">Attach photos to destinations and view them in a lightbox gallery</td>
   </tr>
   <tr>
-    <td align="center"><strong>Journal</strong></td>
-    <td align="center">Add dated journal entries to any destination</td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Gallery</strong></td>
-    <td align="center">Attach photos to destinations and browse them in a lightbox</td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Statistics</strong></td>
-    <td align="center">View live totals for destinations, visited and planned trips, and countries visited</td>
+    <td align="center"><strong>Track Statistics</strong></td>
+    <td align="center">View your travel activity, destinations, countries visited, and more</td>
   </tr>
 </table>
 
