@@ -1,9 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Destination, Status } from '../types';
-import { COUNTRIES, countryData } from '../data';
 import { id, debounce } from '../utils';
-import { searchPlace, reverseGeocode, GeocodeResult } from '../geocode';
-import { IconSearch, IconSpinner, IconClose } from '../icons';
+import {
+  searchPlace,
+  reverseGeocode,
+  GeocodeResult,
+} from '../geocode';
+import {
+  IconSearch,
+  IconSpinner,
+  IconClose,
+} from '../icons';
 import LocationPicker from './LocationPicker';
 
 const statusLabels: Record<Status, string> = {
@@ -12,7 +19,12 @@ const statusLabels: Record<Status, string> = {
   visited: 'Visited',
 };
 
-type SearchState = 'idle' | 'searching' | 'found' | 'notfound' | 'error';
+type SearchState =
+  | 'idle'
+  | 'searching'
+  | 'found'
+  | 'notfound'
+  | 'error';
 
 export default function DestinationModal({
   value,
@@ -25,26 +37,58 @@ export default function DestinationModal({
 }) {
   const [name, setName] = useState(value?.name || '');
   const [country, setCountry] = useState(value?.country || '');
+
   const [status, setStatus] = useState<Status>(
     value?.status || 'want_to_go'
   );
-  const [start, setStart] = useState(value?.tripStart || '');
-  const [end, setEnd] = useState(value?.tripEnd || '');
+
+  const [start, setStart] = useState(
+    value?.tripStart || ''
+  );
+
+  const [end, setEnd] = useState(
+    value?.tripEnd || ''
+  );
+
   const [companions, setCompanions] = useState(
     value?.companions.join(', ') || ''
   );
-  const [lat, setLat] = useState(value?.lat ?? 20);
-  const [lng, setLng] = useState(value?.lng ?? 0);
-  const [zoom, setZoom] = useState(value ? 6 : 2);
 
-  // A destination loaded for editing is already considered valid.
-  // A new destination must be validated through search or the map.
-  const [locationValidated, setLocationValidated] = useState(!!value);
+  const [lat, setLat] = useState(
+    value?.lat ?? 20
+  );
 
-  const [query, setQuery] = useState('');
-  const [searchState, setSearchState] = useState<SearchState>('idle');
-  const [results, setResults] = useState<GeocodeResult[]>([]);
-  const abortRef = useRef<AbortController | null>(null);
+  const [lng, setLng] = useState(
+    value?.lng ?? 0
+  );
+
+  const [zoom, setZoom] = useState(
+    value ? 6 : 2
+  );
+
+  // Existing destinations already have a valid location.
+  // New destinations must select a place from search
+  // or successfully resolve a location from the map.
+  const [locationValidated, setLocationValidated] =
+    useState(!!value);
+
+  const [query, setQuery] = useState(
+    value
+      ? `${value.name}, ${value.country}`
+      : ''
+  );
+
+  const [searchState, setSearchState] =
+    useState<SearchState>(
+      value ? 'found' : 'idle'
+    );
+
+  const [results, setResults] = useState<
+    GeocodeResult[]
+  >([]);
+
+  const abortRef =
+    useRef<AbortController | null>(null);
 
   const runSearch = useRef(
     debounce(async (q: string) => {
@@ -56,18 +100,32 @@ export default function DestinationModal({
 
       abortRef.current?.abort();
 
-      const controller = new AbortController();
+      const controller =
+        new AbortController();
+
       abortRef.current = controller;
 
       setSearchState('searching');
 
       try {
-        const hits = await searchPlace(q, controller.signal);
+        const hits = await searchPlace(
+          q,
+          controller.signal
+        );
+
         setResults(hits);
-        setSearchState(hits.length ? 'found' : 'notfound');
+
+        setSearchState(
+          hits.length
+            ? 'found'
+            : 'notfound'
+        );
       } catch (e) {
-        if ((e as any)?.name !== 'AbortError') {
+        if (
+          (e as any)?.name !== 'AbortError'
+        ) {
           setSearchState('error');
+          setResults([]);
         }
       }
     }, 550)
@@ -77,86 +135,109 @@ export default function DestinationModal({
     runSearch(query);
   }, [query, runSearch]);
 
-  const pickResult = (r: GeocodeResult) => {
+  const pickResult = (
+    r: GeocodeResult
+  ) => {
     setName(r.city);
-    setCountry(r.country || country);
+    setCountry(r.country || '');
+
     setLat(r.lat);
     setLng(r.lng);
     setZoom(11);
 
-    // The city comes directly from the geocoding result.
-    setLocationValidated(true);
+    setLocationValidated(
+      Boolean(r.city && r.country)
+    );
+
+    // Keep the selected place visible
+    // in the search field.
+    setQuery(r.label);
 
     setResults([]);
-    setQuery('');
-    setSearchState('idle');
+    setSearchState('found');
   };
 
-  const onCountryChange = (v: string) => {
-    setCountry(v);
-
-    const c = countryData(v);
-
-    if (c) {
-      setLat(c[2]);
-      setLng(c[3]);
-      setZoom(5);
-    }
-
-    // Changing the country means the existing city/location
-    // can no longer be considered validated.
-    setLocationValidated(false);
-  };
-
-  const reverseAbortRef = useRef<AbortController | null>(null);
+  const reverseAbortRef =
+    useRef<AbortController | null>(null);
 
   const runReverse = useRef(
-    debounce(async (revLat: number, revLng: number) => {
-      reverseAbortRef.current?.abort();
+    debounce(
+      async (
+        revLat: number,
+        revLng: number
+      ) => {
+        reverseAbortRef.current?.abort();
 
-      const controller = new AbortController();
-      reverseAbortRef.current = controller;
+        const controller =
+          new AbortController();
 
-      try {
-        const {
-          city,
-          country: revCountry,
-        } = await reverseGeocode(
-          revLat,
-          revLng,
-          controller.signal
-        );
+        reverseAbortRef.current =
+          controller;
 
-        if (city) {
-          setName(city);
-          setLocationValidated(true);
+        try {
+          const {
+            city,
+            country: revCountry,
+          } = await reverseGeocode(
+            revLat,
+            revLng,
+            controller.signal
+          );
+
+          if (
+            city &&
+            revCountry
+          ) {
+            setName(city);
+            setCountry(revCountry);
+
+            setQuery(
+              `${city}, ${revCountry}`
+            );
+
+            setLocationValidated(true);
+          } else {
+            setLocationValidated(false);
+          }
+        } catch (e) {
+          if (
+            (e as any)?.name !==
+            'AbortError'
+          ) {
+            console.error(
+              'Error obtaining location:',
+              e
+            );
+
+            setLocationValidated(false);
+          }
         }
-
-        if (revCountry) {
-          setCountry(revCountry);
-        }
-      } catch (e) {
-        if ((e as any)?.name !== 'AbortError') {
-          console.error('Error obtaining location:', e);
-        }
-      }
-    }, 400)
+      },
+      400
+    )
   ).current;
 
-  const handleLocationChange = (newLat: number, newLng: number) => {
+  const handleLocationChange = (
+    newLat: number,
+    newLng: number
+  ) => {
     setLat(newLat);
     setLng(newLng);
 
-    // The map position is being changed, so wait for reverse
-    // geocoding to confirm the actual location.
+    // The coordinates changed, so wait for
+    // reverse geocoding to validate the new place.
     setLocationValidated(false);
 
-    runReverse(newLat, newLng);
+    runReverse(
+      newLat,
+      newLng
+    );
   };
 
-  // A trip end date before its start date is never valid.
   const dateError = useMemo(() => {
-    if (!start || !end) return null;
+    if (!start || !end) {
+      return null;
+    }
 
     return end < start
       ? "The end date can't be before the start date."
@@ -164,20 +245,26 @@ export default function DestinationModal({
   }, [start, end]);
 
   const canSave =
-    name.trim().length > 0 &&
     locationValidated &&
+    name.trim().length > 0 &&
+    country.trim().length > 0 &&
     !dateError;
 
   return (
     <div
       className="overlay active"
       onMouseDown={e =>
-        e.target === e.currentTarget && close()
+        e.target === e.currentTarget &&
+        close()
       }
     >
       <div className="modal">
         <div className="modal-header">
-          <h2>{value ? 'Edit destination' : 'New destination'}</h2>
+          <h2>
+            {value
+              ? 'Edit destination'
+              : 'New destination'}
+          </h2>
 
           <button
             className="modal-close"
@@ -189,8 +276,11 @@ export default function DestinationModal({
         </div>
 
         <div className="modal-body">
+          {/* Search */}
           <div className="field">
-            <label>Search for a place</label>
+            <label>
+              Search for a place
+            </label>
 
             <div className="search-box">
               <IconSearch
@@ -200,30 +290,41 @@ export default function DestinationModal({
 
               <input
                 value={query}
-                onChange={e => setQuery(e.target.value)}
+                onChange={e =>
+                  setQuery(e.target.value)
+                }
                 placeholder="Try a city, landmark or region…"
               />
 
-              {searchState === 'searching' && (
-                <IconSpinner className="search-box-spinner" />
+              {searchState ===
+                'searching' && (
+                <IconSpinner
+                  className="search-box-spinner"
+                />
               )}
             </div>
 
-            {searchState === 'searching' && (
+            {searchState ===
+              'searching' && (
               <p className="hint hint-searching">
                 Searching…
               </p>
             )}
 
-            {searchState === 'notfound' && (
+            {searchState ===
+              'notfound' && (
               <p className="hint hint-notfound">
-                No matches found. Try a different spelling.
+                No matches found. Try a
+                different spelling.
               </p>
             )}
 
-            {searchState === 'error' && (
+            {searchState ===
+              'error' && (
               <p className="hint hint-notfound">
-                Search failed. You can still set the pin on the map below.
+                Search failed. Try again
+                or select a location on
+                the map below.
               </p>
             )}
 
@@ -233,7 +334,9 @@ export default function DestinationModal({
                   <li key={i}>
                     <button
                       type="button"
-                      onClick={() => pickResult(r)}
+                      onClick={() =>
+                        pickResult(r)
+                      }
                     >
                       {r.label}
                     </button>
@@ -243,81 +346,83 @@ export default function DestinationModal({
             )}
           </div>
 
+          {/* Location information */}
           <div className="field-row">
             <div className="field">
-              <label>Country</label>
-
-              <input
-                value={country}
-                list="country-list"
-                onChange={e =>
-                  onCountryChange(e.target.value)
-                }
-                placeholder="e.g. France, Japan…"
-              />
-
-              <datalist id="country-list">
-                {COUNTRIES.map(c => (
-                  <option key={c[1]} value={c[0]} />
-                ))}
-              </datalist>
-            </div>
-
-            <div className="field">
-              <label>City</label>
+              <label>
+                City
+              </label>
 
               <input
                 value={name}
-                onChange={e => {
-                  setName(e.target.value);
-
-                  // Manual changes invalidate the previous
-                  // geocoded location.
-                  setLocationValidated(false);
-                }}
-                placeholder="e.g. Kyoto, Lisbon…"
+                readOnly
+                placeholder="Select a place above"
               />
+            </div>
 
-              {!locationValidated && name.trim() && (
-                <p className="hint hint-notfound">
-                  Select a place from the search results or set its location on the map.
-                </p>
-              )}
+            <div className="field">
+              <label>
+                Country
+              </label>
+
+              <input
+                value={country}
+                readOnly
+                placeholder="Select a place above"
+              />
             </div>
           </div>
 
+          {/* Status */}
           <div className="field">
-            <label>Status</label>
+            <label>
+              Status
+            </label>
 
             <select
               aria-label="Status"
               value={status}
               onChange={e =>
-                setStatus(e.target.value as Status)
+                setStatus(
+                  e.target.value as Status
+                )
               }
             >
-              {Object.entries(statusLabels).map(([v, l]) => (
-                <option value={v} key={v}>
+              {Object.entries(
+                statusLabels
+              ).map(([v, l]) => (
+                <option
+                  value={v}
+                  key={v}
+                >
                   {l}
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Companions */}
           <div className="field">
-            <label>Traveling with (optional)</label>
+            <label>
+              Traveling with (optional)
+            </label>
 
             <input
               value={companions}
               onChange={e =>
-                setCompanions(e.target.value)
+                setCompanions(
+                  e.target.value
+                )
               }
               placeholder="Comma-separated names"
             />
           </div>
 
+          {/* Trip dates */}
           <div className="field">
-            <label>Trip dates</label>
+            <label>
+              Trip dates
+            </label>
 
             <div className="date-row">
               <div className="start-date">
@@ -338,7 +443,9 @@ export default function DestinationModal({
                     width: '100px',
                   }}
                   onChange={e =>
-                    setStart(e.target.value)
+                    setStart(
+                      e.target.value
+                    )
                   }
                 />
               </div>
@@ -355,15 +462,21 @@ export default function DestinationModal({
 
                 <input
                   type="date"
-                  min={start || undefined}
-                  aria-invalid={!!dateError}
+                  min={
+                    start || undefined
+                  }
+                  aria-invalid={
+                    !!dateError
+                  }
                   value={end}
                   style={{
                     borderRadius: '5px',
                     width: '100px',
                   }}
                   onChange={e =>
-                    setEnd(e.target.value)
+                    setEnd(
+                      e.target.value
+                    )
                   }
                 />
               </div>
@@ -379,17 +492,31 @@ export default function DestinationModal({
             )}
           </div>
 
+          {/* Map */}
           <div className="field">
-            <label>Location on the map</label>
+            <label>
+              Location on the map
+            </label>
 
             <LocationPicker
               lat={lat}
               lng={lng}
               zoom={zoom}
-              onChange={handleLocationChange}
+              onChange={
+                handleLocationChange
+              }
             />
+
+            {!locationValidated && (
+              <p className="hint hint-notfound">
+                Select a place from the
+                search results or choose a
+                valid location on the map.
+              </p>
+            )}
           </div>
 
+          {/* Footer */}
           <div className="modal-footer">
             <button
               className="btn btn-ghost"
@@ -409,21 +536,28 @@ export default function DestinationModal({
               }
               onClick={() =>
                 onSave({
-                  id: value?.id || id(),
+                  id:
+                    value?.id || id(),
                   name: name.trim(),
-                  country: country.trim(),
+                  country:
+                    country.trim(),
                   type: 'city',
                   status,
-                  companions: companions
-                    .split(',')
-                    .map(x => x.trim())
-                    .filter(Boolean),
+                  companions:
+                    companions
+                      .split(',')
+                      .map(x =>
+                        x.trim()
+                      )
+                      .filter(Boolean),
                   tripStart: start,
                   tripEnd: end,
                   lat,
                   lng,
-                  journal: value?.journal || [],
-                  photos: value?.photos || [],
+                  journal:
+                    value?.journal || [],
+                  photos:
+                    value?.photos || [],
                 })
               }
             >
