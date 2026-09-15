@@ -1,35 +1,87 @@
+<div align="center">
+  
 # TRAVEL VAULT
 A React + TypeScript travel app for planning trips, documenting experiences, and tracking the places you've visited.
 
 ![status](https://img.shields.io/badge/status-portfolio_project-blue) ![deps](https://img.shields.io/badge/dependencies-react_%2B_leaflet-lightgrey) ![license](https://img.shields.io/badge/license-MIT-green)
 
+
+
 ## Features
 
-| Module              | What it does                                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------- |
-| **Destinations**    | Add cities or countries and assign a status: Want to Go, Planned, or Visited                 |
-| **List View**       | Browse all destinations and filter them by status                                            |
-| **Map View**        | Visualize all destinations on an interactive map                                             |
-| **Location Search** | Search for a place and select a geocoded suggestion to automatically fill in its coordinates |
-| **Trip Details**    | Track travel companions and trip start/end dates for each destination                        |
-| **Journal**         | Add dated journal entries to any destination                                                 |
-| **Gallery**         | Attach photos to destinations and browse them in a lightbox                                  |
-| **Statistics**      | View live totals for destinations, visited and planned trips, and countries visited          |
+
+<table>
+  <tr>
+    <td align="center"><strong>Destinations</strong></td>
+    <td align="center">Add cities or countries and assign a status: Want to Go, Planned, or Visited</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>List View</strong></td>
+    <td align="center">Browse all destinations and filter them by status</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Map View</strong></td>
+    <td align="center">Visualize all destinations on an interactive map</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Location Search</strong></td>
+    <td align="center">Search for a place and select a geocoded suggestion to automatically fill in its coordinates</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Trip Details</strong></td>
+    <td align="center">Track travel companions and trip start/end dates for each destination</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Journal</strong></td>
+    <td align="center">Add dated journal entries to any destination</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Gallery</strong></td>
+    <td align="center">Attach photos to destinations and browse them in a lightbox</td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Statistics</strong></td>
+    <td align="center">View live totals for destinations, visited and planned trips, and countries visited</td>
+  </tr>
+</table>
+
 
 ## Tech Stack
 
-<div align="center">
-
-|      **Category**      |                                                                                     **Technologies**                                                                                     |
-| :--------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|      **Frontend**      |      ![React](https://img.shields.io/badge/React-20232A?logo=react\&logoColor=61DAFB) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript\&logoColor=white)     |
-|     **Build Tool**     |                                                       ![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite\&logoColor=white)                                                       |
-| **Backend & Database** | ![Supabase](https://img.shields.io/badge/Supabase-181818?logo=supabase\&logoColor=3ECF8E) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql\&logoColor=white) |
-|       **Testing**      |                                                    ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=vitest\&logoColor=white)                                                    |
-|     **Deployment**     |                                                    ![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel\&logoColor=white)                                                    |
-
-</div>
-
+<table>
+  <tr>
+    <td align="center"><strong>Frontend</strong></td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB">
+      <img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Build Tool</strong></td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Backend & Database</strong></td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Supabase-181818?logo=supabase&logoColor=3ECF8E">
+      <img src="https://img.shields.io/badge/PostgreSQL-316192?logo=postgresql&logoColor=white">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Testing</strong></td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=white">
+    </td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Deployment</strong></td>
+    <td align="center">
+      <img src="https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white">
+    </td>
+  </tr>
+</table>
 
 ## Screenshots
 
@@ -70,3 +122,5 @@ A React + TypeScript travel app for planning trips, documenting experiences, and
 ## License
 
 MIT — see [LICENSE](./LICENSE).
+
+</div>
