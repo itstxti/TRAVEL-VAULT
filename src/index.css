@@ -2185,8 +2185,12 @@ select.status-select:hover {
 
 @media (max-width: 700px) {
 
-  
-.stats-card-grid {
+  .fab {
+    width: 40px;
+    height: 40px;
+  }
+
+  .stats-card-grid {
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
   }
 
@@ -2194,32 +2198,32 @@ select.status-select:hover {
     grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   }
 
-.stats-card-grid{
-  grid-auto-flow: column;
-}
+  .stats-card-grid {
+    grid-auto-flow: column;
+  }
 
   .stats-two-col {
     grid-template-columns: 1fr;
   }
 
   .filter-chips {
-  display: none;
-}
+    display: none;
+  }
 
-.filter-select {
-  display: block;
-  width: 100%;
-  padding: 2px 5px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: #f8f0e1;
-  color: var(--ink-soft);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  height: 25px;
-}
+  .filter-select {
+    display: block;
+    width: 100%;
+    padding: 2px 5px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #f8f0e1;
+    color: var(--ink-soft);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    height: 25px;
+  }
 
   .stats-primary-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -2255,13 +2259,13 @@ select.status-select:hover {
   }
 
   .donut-total {
-  font-size: 14px;
-}
+    font-size: 14px;
+  }
 
-.donut-label {
-  font-size: 50%;
-  letter-spacing: .08em;
-}
+  .donut-label {
+    font-size: 50%;
+    letter-spacing: .08em;
+  }
 
   .stats-card b {
     font-size: 15px;
@@ -2270,7 +2274,7 @@ select.status-select:hover {
   .stats-card span {
     font-size: 12px;
     letter-spacing: .01em;
-}
+  }
 
   .legal-page {
     padding: 20px 14px 50px;
@@ -2308,7 +2312,7 @@ select.status-select:hover {
   .stats-card span {
     font-size: 9px;
     letter-spacing: .01em;
-}
+  }
 
   .header-actions {
     align-items: flex-start;
@@ -2353,12 +2357,12 @@ select.status-select:hover {
     grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
   }
 
-    .stats-card b {
+  .stats-card b {
     font-size: 9px;
   }
 
   .stats-card span {
     font-size: 6px;
     letter-spacing: .01em;
-}
+  }
 }
