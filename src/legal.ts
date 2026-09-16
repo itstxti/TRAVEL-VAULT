@@ -11,9 +11,9 @@
 // ones that can't be derived from the source.
 export const OPERATOR = {
   /** Legal name of the individual or company operating the service. */
-  name: 'TODO: Tatiana H. Garcia Vergara',
+  name: 'Tatiana H. Garcia Vergara',
   /** Contact email for privacy requests and general enquiries. */
-  email: 'TODO: tatianagarciavergara@gmail.com',
+  email: 'tatianagarciavergara@gmail.com',
   /** Country the operator is established in. Drives governing law below. */
   country: 'Spain',
   /**
@@ -21,7 +21,7 @@ export const OPERATOR = {
    * Spain. If you don't want to publish a home address, use a registered
    * office, a co-working address, or an apartado de correos.
    */
-  address: 'TODO: C. del Capitán Blanco Argibay, 134, Tetuán, 28029 Madrid, España',
+  address: 'C. del Capitán Blanco Argibay, 134, Tetuán, 28029 Madrid, España',
 } as const;
 
 export const LAST_UPDATED = 'September 16, 2026';
