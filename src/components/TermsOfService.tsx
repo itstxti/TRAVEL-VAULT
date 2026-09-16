@@ -1,3 +1,5 @@
+import { OPERATOR, LAST_UPDATED, MINIMUM_AGE, PURGE_GRACE_PERIOD_DAYS } from '../legal';
+
 type TermsOfServiceProps = {
   onBack: () => void;
 };
@@ -12,150 +14,211 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
       <article className="legal-content">
         <p className="brand-eyebrow">Travel Vault</p>
         <h1>Terms of Service</h1>
-        <p className="legal-updated">Last updated: September 16, 2026</p>
+        <p className="legal-updated">Last updated: {LAST_UPDATED}</p>
 
         <section>
-          <h2>1. About Travel Vault</h2>
+          <h2>1. Who provides this service</h2>
           <p>
-            Travel Vault is a personal travel journaling application designed
-            to help users organize and record their travel experiences.
+            Travel Vault is a personal travel journalling application operated by{' '}
+            {OPERATOR.name}
+            {OPERATOR.address ? `, ${OPERATOR.address}` : ''} ({OPERATOR.country}
+            ), contactable at{' '}
+            <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a>.
+          </p>
+          <p>
+            It is a personal, non-commercial project, not a company product. It
+            is provided free of charge: there is no subscription, no payment and
+            nothing to cancel.
           </p>
         </section>
 
         <section>
           <h2>2. Accounts</h2>
           <p>
-            You are responsible for maintaining the security of the account
-            used to access Travel Vault and for all activity carried out
-            through your account.
+            You need an account to use Travel Vault. You can register with an
+            email address and password, or with a Google account. You must be at
+            least {MINIMUM_AGE} years old.
+          </p>
+          <p>
+            Keep your credentials to yourself and let us know at{' '}
+            <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a> if you
+            think someone else has access to your account.
           </p>
         </section>
 
         <section>
-          <h2>3. User Content</h2>
+          <h2>3. Your content</h2>
           <p>
-            You retain responsibility for the destinations, photos, journal
-            entries and other content that you add to Travel Vault.
+            The destinations, photos, journal entries and other content you add
+            remain yours. You grant no licence over them beyond what is
+            technically needed to store, sync and display them back to you, and
+            they are not used for any other purpose.
           </p>
           <p>
-            By using the service, you confirm that you have the necessary
-            rights to upload and use that content.
-          </p>
-        </section>
-
-        <section>
-          <h2>4. Acceptable Use</h2>
-          <p>
-            You agree not to use Travel Vault for unlawful purposes, to
-            interfere with the service, to attempt unauthorized access, or to
-            upload content that violates applicable law or the rights of
-            others.
+            You are responsible for having the right to upload what you upload,
+            including where content shows or describes other people.
           </p>
         </section>
 
         <section>
-          <h2>5. Third-Party Services</h2>
+          <h2>4. Acceptable use</h2>
           <p>
-            Travel Vault uses third-party services including Google, Supabase,
-            Vercel and OpenStreetMap/Nominatim. Their availability and terms
-            may be outside the control of Travel Vault.
+            Do not use Travel Vault for unlawful purposes, to attempt
+            unauthorized access to other accounts or to the infrastructure, to
+            disrupt the service, or to store content that is unlawful or
+            infringes the rights of others.
+          </p>
+          <p>
+            Because place search runs against the free OpenStreetMap Nominatim
+            service, automated or high-volume querying through Travel Vault is
+            also not permitted, as it would breach that service's usage policy.
           </p>
         </section>
 
         <section>
-          <h2>6. Maps and Geographic Information</h2>
+          <h2>5. Third-party services and map data</h2>
           <p>
-            Geographic information and map results are provided through
-            third-party services and may contain inaccuracies or become
-            unavailable.
+            Travel Vault depends on Supabase, Vercel, Google and
+            OpenStreetMap/Nominatim, as described in the Privacy Policy. Their
+            availability and terms are outside our control, and an outage at any
+            of them can make Travel Vault unavailable.
+          </p>
+          <p>
+            Map tiles and geocoding results come from OpenStreetMap. Map data is
+            © OpenStreetMap contributors and is made available under the Open
+            Database Licence (ODbL). Geographic results are approximate and may
+            be inaccurate, incomplete or out of date; do not rely on them for
+            navigation or for any safety-critical purpose.
           </p>
         </section>
 
         <section>
-          <h2>7. Availability</h2>
+          <h2>6. Availability and changes to the service</h2>
           <p>
-            Travel Vault is provided on an as-available basis. Features may
-            occasionally be unavailable because of maintenance, technical
-            problems or issues affecting third-party services.
+            Travel Vault is provided on an as-available basis and may be
+            unavailable because of maintenance, technical problems or
+            third-party outages. Because this is a personal project, it may also
+            be changed or discontinued. If the service is going to be shut down,
+            reasonable advance notice will be sent to your account email so that
+            you can request a copy of your data first.
           </p>
         </section>
 
         <section>
-          <h2>8. Data and Backups</h2>
+          <h2>7. Data, deletion and backups</h2>
           <p>
-            Although reasonable measures are taken to protect stored
-            information, no online service can guarantee that data will never
-            be lost or become unavailable. You remain responsible for keeping
-            copies of important information where appropriate.
+            Reasonable measures are taken to protect stored information, but no
+            online service can guarantee that data is never lost. Keep your own
+            copies of anything you cannot afford to lose.
+          </p>
+          <p>
+            Deleting content in the app removes it from the app on all your
+            devices immediately. As explained in the Privacy Policy, the
+            server-side copy is erased automatically within{' '}
+            {PURGE_GRACE_PERIOD_DAYS} days, including the underlying photo
+            file; if you need it erased sooner, contact{' '}
+            <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a>.
           </p>
         </section>
 
         <section>
-          <h2>9. Intellectual Property</h2>
+          <h2>8. Intellectual property and licence</h2>
           <p>
-            The Travel Vault application, including its original design,
-            source code and branding, belongs to its respective owner unless
-            otherwise stated.
+            The Travel Vault source code is published by its author under the
+            MIT Licence, which permits you to use, copy, modify and redistribute
+            the code subject to the conditions in the LICENSE file, including
+            retaining the copyright notice. Copyright in the code remains with
+            its author.
+          </p>
+          <p>
+            The MIT Licence covers the source code only. It is not permission to
+            use the hosted service in ways these terms prohibit, and it does not
+            transfer any rights in other users' content.
           </p>
         </section>
 
         <section>
-          <h2>10. Privacy</h2>
+          <h2>9. Privacy</h2>
           <p>
-            Use of Travel Vault is also subject to the Travel Vault Privacy
-            Policy.
+            Use of Travel Vault is also governed by the Travel Vault Privacy
+            Policy, which forms part of these terms.
           </p>
         </section>
 
         <section>
-          <h2>11. Disclaimer</h2>
+          <h2>10. Warranties</h2>
           <p>
-            Travel Vault is provided for personal organizational and journaling
-            purposes. No guarantee is made that the service will always be
-            error-free, uninterrupted or suitable for every particular use.
+            Travel Vault is supplied free of charge for personal organizational
+            and journalling purposes, and is not guaranteed to be error-free,
+            uninterrupted or fit for any particular purpose. Nothing in this
+            section removes rights that consumer protection law gives you and
+            that cannot be waived by agreement.
           </p>
         </section>
 
         <section>
-          <h2>12. Limitation of Liability</h2>
+          <h2>11. Liability</h2>
           <p>
-            To the extent permitted by applicable law, Travel Vault shall not
-            be liable for indirect, incidental or consequential losses arising
-            from the use of or inability to use the service.
+            To the extent permitted by law, and given that the service is
+            provided free of charge, we are not liable for indirect or
+            consequential loss, loss of profit, or loss of data beyond what
+            reasonable backup practice on your side would have prevented.
+          </p>
+          <p>
+            Nothing in these terms excludes or limits liability for death or
+            personal injury caused by negligence, for fraud or wilful
+            misconduct, for gross negligence, or for any other liability that
+            cannot lawfully be excluded. If you are a consumer, the mandatory
+            protections of consumer law apply in full and terms that would be
+            unfair within the meaning of that law do not bind you.
           </p>
         </section>
 
         <section>
-          <h2>13. Suspension and Termination</h2>
+          <h2>12. Suspension and termination</h2>
           <p>
-            Access to Travel Vault may be suspended or terminated where
-            necessary to protect the service, its users or comply with legal
-            obligations.
+            You can stop using Travel Vault at any time and ask for your account
+            to be deleted. We may suspend or terminate access where necessary to
+            protect the service or its users, or to comply with legal
+            obligations. Except where immediate action is required or the law
+            prevents it, you will be told the reason and given the chance to
+            retrieve your data.
           </p>
         </section>
 
         <section>
-          <h2>14. Changes to These Terms</h2>
+          <h2>13. Changes to these terms</h2>
           <p>
-            These Terms of Service may be updated from time to time. Updated
-            terms will be published on this page.
+            These terms may be updated, and the updated version will be
+            published on this page. Material changes will be notified to your
+            account email before they take effect. Continuing to use the service
+            after that point means you accept the new terms; if you do not,
+            stop using the service and request deletion of your account.
           </p>
         </section>
 
         <section>
-          <h2>15. Governing Law</h2>
+          <h2>14. Governing law and disputes</h2>
           <p>
-            These terms are governed by the laws of Spain, subject to any
-            mandatory consumer protection rules that may apply.
+            These terms are governed by the laws of {OPERATOR.country}. If you
+            are a consumer resident in the European Union, this choice cannot
+            deprive you of the protection of the mandatory rules of your country
+            of residence, and you may bring proceedings in the courts of that
+            country.
+          </p>
+          <p>
+            Please contact us first at{' '}
+            <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a> — most
+            issues can be settled that way. Consumers may also seek help from
+            their national consumer protection authority.
           </p>
         </section>
 
         <section>
-          <h2>16. Contact</h2>
+          <h2>15. Contact</h2>
           <p>
-            For questions regarding these Terms of Service, contact the Travel
-            Vault administrator through the contact information provided with
-            the service.
+            {OPERATOR.name} —{' '}
+            <a href={`mailto:${OPERATOR.email}`}>{OPERATOR.email}</a>
           </p>
         </section>
       </article>
