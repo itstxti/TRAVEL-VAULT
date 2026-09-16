@@ -83,35 +83,40 @@ A React + TypeScript travel app for planning trips, documenting experiences, and
 <table>
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/b5f70d89-90b4-4c1f-b1f6-d4872147c470" alt="Destinations and interactive map" width="500">
+      <img width="500" alt="Destinations list" src="https://github.com/user-attachments/assets/f1cc218d-54dc-4926-a425-41a0698c87e7" />
       <br>
       <sub>Destinations list</sub>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/56b35c32-f847-479c-b449-a1f4516e5690" alt="Destination list and filters" width="500">
+      <img width="500" alt="Destination map" src="https://github.com/user-attachments/assets/7980907c-3568-4c1f-a76c-f2ac5cb80fcd" />
       <br>
       <sub>Destination map</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/af0604f6-f11a-4984-9cdb-c927a6b4bd78" alt="Trip details" width="500">
-      <br>
+      <img width="500" alt="Travel journal" src="https://github.com/user-attachments/assets/0d26a028-6cb9-4bfd-8b9b-004fd473d38b" />
+       <br>
       <sub>Travel journal</sub>
     </td>
     <td align="center">
-      <img src="https://github.com/user-attachments/assets/1257b4cc-1894-48a7-a0c2-09a2cfdd931d" alt="Journal and gallery" width="500">
+ <img width="500" alt="Photo gallery" src="https://github.com/user-attachments/assets/0f4a4d71-be39-4e99-a2ca-bc42e263b2a5" />
       <br>
       <sub>Photo gallery</sub>
     </td>
   </tr>
-  <tr>
-    <td colspan="2" align="center">
-      <img src="https://github.com/user-attachments/assets/1bd39069-cd12-49b7-9186-526acb352743" alt="Travel statistics" width="500">
-      <br>
-      <sub>Travel statistics</sub>
-    </td>
-  </tr>
+<tr>
+  <td align="center">
+    <img width="500" alt="Travel statistics overview" src="https://github.com/user-attachments/assets/6e906560-b25f-4730-93dc-e30f48ab39d8" />
+    <br>
+    <sub>Travel statistics overview</sub>
+  </td>
+  <td align="center">
+    <img width="500" alt="Travel statistics details" src="https://github.com/user-attachments/assets/5c5f66bb-0b4b-4d70-a9b9-0d5ad3610bd3" />
+    <br>
+    <sub>Travel statistics details</sub>
+  </td>
+</tr>
 </table>
 
 <a href="https://travel-vault-tau.vercel.app">
