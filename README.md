@@ -119,7 +119,12 @@ A React + TypeScript travel app for planning trips, documenting experiences, and
 </tr>
 </table>
 
+## Live Demo
+
+<div align="center">
+
 <a href="https://travel-vault-tau.vercel.app">
   <strong>Visit TRAVEL VAULT →</strong>
 </a>
 
+</div>
