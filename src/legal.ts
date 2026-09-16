@@ -13,7 +13,7 @@ export const OPERATOR = {
   /** Legal name of the individual or company operating the service. */
   name: 'TODO: Tatiana H. Garcia Vergara',
   /** Contact email for privacy requests and general enquiries. */
-  email: 'TODO: tatianagarciavergara@example.com',
+  email: 'TODO: tatianagarciavergara@gmail.com',
   /** Country the operator is established in. Drives governing law below. */
   country: 'Spain',
   /**
