@@ -620,8 +620,8 @@ select.status-select:hover {
   position: fixed;
   right: 26px;
   bottom: 26px;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background: var(--red);
   color: var(--paper);
@@ -2184,11 +2184,6 @@ select.status-select:hover {
 }
 
 @media (max-width: 700px) {
-
-  .fab {
-    width: 40px;
-    height: 40px;
-  }
 
   .stats-card-grid {
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
