@@ -4,7 +4,7 @@
 
 <div align="center">
 
-A React + TypeScript travel app for planning trips, documenting experiences, and tracking the places you've visited.
+A travel app for planning trips, documenting experiences, and tracking the places you've visited.
 
 ![status](https://img.shields.io/badge/status-portfolio_project-blue) ![license](https://img.shields.io/badge/license-MIT-green)
 
